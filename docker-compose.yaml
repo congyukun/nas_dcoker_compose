@@ -1,0 +1,96 @@
+services:
+  alist:
+    image: 'xhofe/alist:latest'
+    container_name: alist
+    volumes:
+      - './alist/data:/opt/alist/data'
+    ports:
+      - '5244:5244'
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=022
+    restart: always
+    networks:
+      - nas_network
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    volumes:
+      - './jellyfin/config:/config'
+      - './jellyfin/cache:/cache'
+      - '/vol2/1000/media:/media'
+    ports:
+      - '8096:8096'
+      - '8920:8920'
+      - '7360:7359/udp'
+      - '1901:1900/udp'
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+    devices:
+      - /dev/dri:/dev/dri  # 硬件加速支持
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    networks:
+      - nas_network
+
+  aria2:
+    image: p3terx/aria2-pro
+    container_name: aria2
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+      - RPC_SECRET=yukun  # 请修改这个密钥
+      - RPC_PORT=6800
+    volumes:
+      - './aria2/config:/config'
+      - '/vol1/1000/download:/downloads'
+    ports:
+      - '6800:6800'
+    restart: always
+    networks:
+      - nas_network
+
+  ariang:
+    image: p3terx/ariang
+    container_name: ariang
+    ports:
+      - '6880:6880'
+    restart: always
+    networks:
+      - nas_network
+
+  aipan:
+    image: unilei/aipan-netdisk-search:latest
+    container_name: aipan
+    ports:
+      - "8082:3000"
+    environment:
+      - TZ=Asia/Shanghai
+    restart: always
+    networks:
+      - nas_network
+
+  panel:
+    image: koryking/1panel:latest
+    container_name: panel
+    ports:
+      - '8081:8080'
+    volumes:
+      - './1panel/data:/data'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    environment:
+      - TZ=Asia/Shanghai
+    privileged: true
+    restart: always
+    networks:
+      - nas_network
+
+networks:
+  nas_network:
+    driver: bridge
