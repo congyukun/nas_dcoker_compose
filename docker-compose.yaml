@@ -38,6 +38,41 @@ services:
     networks:
       - nas_network
 
+  nastool:
+    image: nastool/nas-tools:latest
+    container_name: nastool
+    volumes:
+      - './nastool/config:/config'
+      - '/vol1/1000/download:/downloads'
+      - '/vol2/1000/media:/media'
+    ports:
+      - '3000:3000'
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=022
+      - TZ=Asia/Shanghai
+      - NASTOOL_AUTO_UPDATE=true
+    restart: always
+    networks:
+      - nas_network
+
+  istore:
+    image: linkease/istore:latest
+    container_name: istore
+    volumes:
+      - './istore/data:/istore'
+    ports:
+      - '3003:3003'
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+    privileged: true
+    restart: always
+    networks:
+      - nas_network
+
   aria2:
     image: p3terx/aria2-pro
     container_name: aria2
