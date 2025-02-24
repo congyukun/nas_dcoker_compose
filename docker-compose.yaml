@@ -30,8 +30,9 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Asia/Shanghai
-    devices:
-      - /dev/dri:/dev/dri # 硬件加速支持
+    # 移除硬件加速设备映射
+    # devices:
+    #   - /dev/dri:/dev/dri  # 硬件加速支持
     security_opt:
       - no-new-privileges:true
     restart: always
