@@ -113,6 +113,22 @@ services:
     networks:
       - nas_network
 
+  moviepilot:
+    image: jxxghp/moviepilot:latest
+    container_name: moviepilot
+    volumes:
+      - './moviepilot/config:/config'
+      - '/vol2/1000/media:/media'
+    ports:
+      - '9000:9000'
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+    restart: always
+    networks:
+      - nas_network
+
 
 networks:
   nas_network:
