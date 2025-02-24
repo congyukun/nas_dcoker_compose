@@ -56,6 +56,13 @@ services:
     restart: always
     networks:
       - nas_network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: '512M'
+    depends_on:
+      - jellyfin
 
   istore:
     image: linkease/istore:latest
