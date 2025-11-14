@@ -1,151 +1,240 @@
 services:
-  alist:
-    image: "xhofe/alist:latest"
-    container_name: alist
-    volumes:
-      - "./alist/data:/opt/alist/data"
-    ports:
-      - "5244:5244"
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - UMASK=022
-    restart: always
-    networks:
-      - nas_network
 
+  ################################### 一、影视核心（自动化+播放+整理）###################################
+  # 1. Qbittorrent 下载器
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=501
+      - PGID=20
+      - TZ=Asia/Shanghai
+      - WEBUI_PORT=8080
+    volumes:
+      - ./data/qbittorrent/downloads:/downloads
+      - ./data/qbittorrent/config:/config
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # 2. MoviePilot-v2（影视自动化核心）
+  moviepilot:
+    image: johngong/moviepilot:latest
+    container_name: moviepilot
+    environment:
+      - TZ=Asia/Shanghai
+      - MP_PORT=3000
+      - MP_DATA=/config
+      - AUTO_DELETE_TORRENT=7 # 7天自动删种子
+    volumes:
+      - ./storage/media:/media
+      - ./data/moviepilot/config:/config
+      - ./data/qbittorrent/downloads:/downloads
+    ports:
+      - 3000:3000
+    depends_on:
+      - qbittorrent
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # 3. Nastools（备选自动化工具）
+  nastools:
+    image: jxxghp/nastools:latest
+    container_name: nastools
+    environment:
+      - TZ=Asia/Shanghai
+      - NASTOOLS_CONFIG=/config/config.yaml
+      - AUTO_REMOVE_TORRENT=7
+    volumes:
+      - ./storage/media:/media
+      - ./data/nastools/config:/config
+      - ./data/qbittorrent/downloads:/downloads
+    ports:
+      - 3001:3000
+    depends_on:
+      - qbittorrent
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # 4. Jellyfin（VideoToolbox硬件加速）
   jellyfin:
     image: jellyfin/jellyfin:latest
     container_name: jellyfin
-    volumes:
-      - "./jellyfin/config:/config"
-      - "./jellyfin/cache:/cache"
-      - "/vol2/1000/media:/media"
-    ports:
-      - "8096:8096"
-      - "8920:8920"
-      - "7360:7359/udp"
-      - "1901:1900/udp"
     environment:
-      - PUID=1000
-      - PGID=1000
       - TZ=Asia/Shanghai
-    # 移除硬件加速设备映射
-    # devices:
-    #   - /dev/dri:/dev/dri  # 硬件加速支持
-    security_opt:
-      - no-new-privileges:true
-    restart: always
-    networks:
-      - nas_network
-
-  nastool:
-    image: nastool/nas-tools:latest
-    container_name: nastool
     volumes:
-      - "./nastool/config:/config"
-      - "/vol1/1000/download:/downloads"
-      - "/vol2/1000/media:/media"
+      - ./data/jellyfin/config:/config
+      - ./storage/media:/media
+      - ./storage/music:/music
     ports:
-      - "3000:3000"
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - UMASK=022
-      - TZ=Asia/Shanghai
-      - NASTOOL_AUTO_UPDATE=true
-    restart: always
+      - 8096:8096
+      - 8920:8920
+    restart: unless-stopped
     networks:
-      - nas_network
-    depends_on:
-      - jellyfin
+      - app-network
 
-  aria2:
-    image: p3terx/aria2-pro
-    container_name: aria2
+  # 5. Subtitle Edit（自动字幕）
+  subtitle-edit:
+    image: alexandernst/subtitle-edit:latest
+    container_name: subtitle-edit
     environment:
-      - PUID=1000
-      - PGID=1000
       - TZ=Asia/Shanghai
-      - RPC_SECRET=yukun # 请修改这个密钥
-      - RPC_PORT=6800
+      - SE_AUTO_DOWNLOAD=true
+      - SE_LANGUAGES=zh-CN,en
+      - SE_INTERVAL=300
     volumes:
-      - "./aria2/config:/config"
-      - "/vol1/1000/download:/downloads"
+      - ./storage/media:/media
+      - ./data/subtitle-edit/config:/config
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # 6. FileBot（文件整理）
+  filebot:
+    image: rednoah/filebot:latest
+    container_name: filebot
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./data/qbittorrent/downloads:/input
+      - ./storage/media:/output
+      - ./data/filebot/config:/config
+    command: -script fn:amc --output /output --action move --conflict auto /input
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  ################################### 二、音乐管理（Navidrome+Music-tag-Web）###################################
+  # 7. Navidrome（音乐服务器）
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    environment:
+      - TZ=Asia/Shanghai
+      - ND_SCANSCHEDULE=0 3 * * * # 每天凌晨3点扫描
+      - ND_MAXSCANSPEED=10mbps
+    volumes:
+      - ./storage/music:/music
+      - ./data/navidrome/data:/data
     ports:
-      - "6800:6800"
+      - 4533:4533
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # 8. Music-tag-Web（音乐标签编辑）
+  music-tag-web:
+    image: metowolf/music-tag-web:latest
+    container_name: music-tag-web
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./storage/music:/music
+      - ./data/music-tag-web/data:/app/data
+    ports:
+      - 3002:80
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  ################################### 三、实用工具（Alist+Quark-auto-save+Rustdesk）###################################
+  # 9. Alist（云盘挂载）
+  alist:
+    image: xhofe/alist:latest
+    container_name: alist
+    volumes:
+      - ./data/alist/data:/opt/alist/data
+    ports:
+      - 5244:5244
+    environment:
+      - TZ=Asia/Shanghai
     restart: always
     networks:
-      - nas_network
+      - app-network
 
-  ariang:
-    image: p3terx/ariang
-    container_name: ariang
-    ports:
-      - "6880:6880"
-    restart: always
+  # 10. Quark-auto-save（夸克自动转存）
+  quark-auto-save:
+    image: lss233/quark-auto-save:latest
+    container_name: quark-auto-save
+    environment:
+      - TZ=Asia/Shanghai
+      - QUARK_COOKIE=your_cookie  # 替换为你的夸克Cookie（浏览器F12获取）
+      - SAVE_PATH=/quark
+    volumes:
+      - ./storage/cloud/quark:/quark
+      - ./data/quark-auto-save/config:/config
+    restart: unless-stopped
     networks:
-      - nas_network
+      - app-network
 
+  # 11. Rustdesk（远程控制）
+  rustdesk:
+    image: rustdesk/rustdesk-server:latest
+    container_name: rustdesk
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./data/rustdesk/root:/root
+    ports:
+      - 21115:21115/tcp
+      - 21116:21116/tcp
+      - 21116:21116/udp
+      - 21117:21117/tcp
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  ################################### 四、管理面板（Lucky+Sun-Panel）###################################
+  # 12. Lucky（全能管理面板）
+  lucky:
+    image: luckyjs/lucky:latest
+    container_name: lucky
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./data/lucky/home:/root/.lucky
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 9001:9000
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # 13. Sun-Panel（导航面板）
+  sun-panel:
+    image: hwclt/sun-panel:latest
+    container_name: sun-panel
+    environment:
+      - TZ=Asia/Shanghai
+      - ADMIN_USER=admin
+      - ADMIN_PWD=admin123
+    volumes:
+      - ./data/sun-panel/data:/app/data
+    ports:
+      - 3003:3000
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # 14. Aipan（网盘搜索）
   aipan:
     image: unilei/aipan-netdisk-search:latest
     container_name: aipan
     ports:
-      - "8082:3000"
+      - 8082:3000
     environment:
       - TZ=Asia/Shanghai
     restart: always
     networks:
-      - nas_network
-
-  dpanel:
-    image: dpanel/dpanel:latest
-    container_name: dpanel
-    volumes:
-      - "./dpanel/config:/config"
-    ports:
-      - "8083:8080"
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Asia/Shanghai
-    restart: always
-    networks:
-      - nas_network
-
-  moviepilot:
-    image: jxxghp/moviepilot:latest
-    container_name: moviepilot
-    volumes:
-      - './moviepilot/config:/config'
-      - '/vol2/1000/media:/media'
-    ports:
-      - '9000:9000'
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Asia/Shanghai
-    restart: always
-    networks:
-      - nas_network
-
-  lucky:
-    image: gdy666/lucky:latest
-    container_name: lucky
-    volumes:
-      - './lucky/config:/root/.config/lucky'
-      - './lucky/cache:/root/.cache/lucky'
-    ports:
-      - '16601:16601'
-      - '16602:16602'
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Asia/Shanghai
-    restart: always
-    networks:
-      - nas_network
+      - app-network
 
 networks:
-  nas_network:
+  app-network:
     driver: bridge
