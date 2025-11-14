@@ -80,20 +80,20 @@ services:
       - app-network
 
   # 5. Subtitle Edit（自动字幕）
-  subtitle-edit:
-    image: alexandernst/subtitle-edit:latest
-    container_name: subtitle-edit
-    environment:
-      - TZ=Asia/Shanghai
-      - SE_AUTO_DOWNLOAD=true
-      - SE_LANGUAGES=zh-CN,en
-      - SE_INTERVAL=300
-    volumes:
-      - /vol2/1000/media:/media
-      - ./data/subtitle-edit/config:/config
-    restart: unless-stopped
-    networks:
-      - app-network
+  # subtitle-edit:
+  #   image: alexandernst/subtitle-edit:latest
+  #   container_name: subtitle-edit
+  #   environment:
+  #     - TZ=Asia/Shanghai
+  #     - SE_AUTO_DOWNLOAD=true
+  #     - SE_LANGUAGES=zh-CN,en
+  #     - SE_INTERVAL=300
+  #   volumes:
+  #     - /vol2/1000/media:/media
+  #     - ./data/subtitle-edit/config:/config
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
 
   # 6. FileBot（文件整理）
   filebot:
