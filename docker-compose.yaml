@@ -193,7 +193,7 @@ services:
   ################################### 四、管理面板（Lucky+Sun-Panel）###################################
   # 12. Lucky（全能管理面板）
   lucky:
-    image: luckyjs/lucky:latest
+    image: gdy666/lucky:latest
     container_name: lucky
     privileged: true
     environment:
@@ -209,7 +209,7 @@ services:
 
   # 13. Sun-Panel（导航面板）
   sun-panel:
-    image: hwclt/sun-panel:latest
+    image: hslr/sun-panel:latest
     container_name: sun-panel
     environment:
       - TZ=Asia/Shanghai
