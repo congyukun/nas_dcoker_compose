@@ -130,12 +130,12 @@ services:
 
   # 8. Music-tag-Web（音乐标签编辑）
   music-tag-web:
-    image: metowolf/music-tag-web:latest
+    image: panda62/music-tag-web:latest
     container_name: music-tag-web
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - ./storage/music:/music
+      - ./storage/music:/app/media:rw
       - ./data/music-tag-web/data:/app/data
     ports:
       - 3002:80
@@ -175,23 +175,42 @@ services:
       - app-network
 
   # 11. Rustdesk（远程控制）
-  rustdesk:
-    image: rustdesk/rustdesk-server:latest
-    container_name: rustdesk
-    environment:
-      - TZ=Asia/Shanghai
-    volumes:
-      - ./data/rustdesk/root:/root
-    ports:
-      - 21115:21115/tcp
-      - 21116:21116/tcp
-      - 21116:21116/udp
-      - 21117:21117/tcp
-    restart: unless-stopped
-    networks:
-      - app-network
+  # rustdesk:
+  #   image: rustdesk/rustdesk-server:latest
+  #   container_name: rustdesk
+  #   environment:
+  #     - TZ=Asia/Shanghai
+  #   volumes:
+  #     - ./data/rustdesk/root:/root
+  #   ports:
+  #     - 21115:21115/tcp
+  #     - 21116:21116/tcp
+  #     - 21116:21116/udp
+  #     - 21117:21117/tcp
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
 
-  ################################### 四、管理面板（Lucky+Sun-Panel）###################################
+  ################################### 四、管理面板（1Panel+Lucky+Sun-Panel）###################################
+  
+  onepanel:
+    image: "${REGISTRY_MIRROR:-}moelin/1panel:latest"
+    container_name: 1panel
+    restart: always
+    network_mode: host
+    environment:
+      TZ: ${TZ}
+    volumes:
+      - "${ONEPANEL_DOCKER_SOCK}:/var/run/docker.sock"
+      - "${ONEPANEL_DOCKER_VOLUMES}:/var/lib/docker/volumes"
+      - "${ONEPANEL_OPT_DIR}:/opt"
+      - "${ONEPANEL_ROOT_DIR}:/root"
+      - "${ONEPANEL_DOCKER_ETC_DIR}:/etc/docker"
+    labels:
+      createdBy: "Apps"
+    networks:
+      - app-network  
+
   # 12. Lucky（全能管理面板）
   lucky:
     image: gdy666/lucky:latest
@@ -209,20 +228,20 @@ services:
       - app-network
 
   # 13. Sun-Panel（导航面板）
-  sun-panel:
-    image: hslr/sun-panel:latest
-    container_name: sun-panel
-    environment:
-      - TZ=Asia/Shanghai
-      - ADMIN_USER=admin
-      - ADMIN_PWD=admin123
-    volumes:
-      - ./data/sun-panel/data:/app/data
-    ports:
-      - 3003:3000
-    restart: unless-stopped
-    networks:
-      - app-network
+  # sun-panel:
+  #   image: hslr/sun-panel:latest
+  #   container_name: sun-panel
+  #   environment:
+  #     - TZ=Asia/Shanghai
+  #     - ADMIN_USER=admin
+  #     - ADMIN_PWD=admin123
+  #   volumes:
+  #     - ./data/sun-panel/data:/app/data
+  #   ports:
+  #     - 3003:3000
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
 
   # 14. Aipan（网盘搜索）
   aipan:
@@ -235,6 +254,7 @@ services:
     restart: always
     networks:
       - app-network
+
   xiaomusic:
     image: docker.hanxi.cc/hanxi/xiaomusic
     container_name: xiaomusic
@@ -248,6 +268,7 @@ services:
       - /xiaomusic_conf:/app/conf
     networks:
       - app-network
+
 networks:
   app-network:
     driver: bridge
