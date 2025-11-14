@@ -250,6 +250,7 @@ services:
       - ADMIN_USER=yukun
       - ADMIN_PASSWORD=Cyk920211.
       - JWT_SECRET=XnKZDR7OmPce9SxBjbPOqyMnMKDMdLLWNJP9iqsrYNk=
+      - DATABASE_URL=postgresql://yukun:Cyk920211.@postgres:5432/aipan
     ports:
       - 8082:3000
     restart: unless-stopped
@@ -271,7 +272,7 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U yukun"]
+      test: ["CMD-SHELL", "pg_isready -U yukun -d aipan"]
       interval: 10s
       timeout: 5s
       retries: 10
