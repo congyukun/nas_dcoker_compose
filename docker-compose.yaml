@@ -234,7 +234,19 @@ services:
     restart: always
     networks:
       - app-network
-
+  xiaomusic:
+    image: docker.hanxi.cc/hanxi/xiaomusic
+    container_name: xiaomusic
+    restart: unless-stopped
+    ports:
+      - 58090:8090
+    environment:
+      XIAOMUSIC_PUBLIC_PORT: 58090
+    volumes:
+      - /xiaomusic_music:/app/music
+      - /xiaomusic_conf:/app/conf
+    networks:
+      - app-network
 networks:
   app-network:
     driver: bridge
