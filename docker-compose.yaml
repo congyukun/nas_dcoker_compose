@@ -11,8 +11,8 @@ services:
       - TZ=Asia/Shanghai
       - WEBUI_PORT=8080
     volumes:
-      - ./data/qbittorrent/downloads:/downloads
-      - ./data/qbittorrent/config:/config
+      - /vol2/1000/media:/downloads
+      - ./qbittorrent/config:/config
     ports:
       - 8080:8080
       - 6881:6881
@@ -22,18 +22,18 @@ services:
       - app-network
 
   # 2. MoviePilot-v2（影视自动化核心）
-  moviepilot:
-    image: johngong/moviepilot:latest
-    container_name: moviepilot
+  moviepilot-v2:
+    image: jxxghp/moviepilot-v2:latest
+    container_name: moviepilot-v2
     environment:
       - TZ=Asia/Shanghai
       - MP_PORT=3000
       - MP_DATA=/config
       - AUTO_DELETE_TORRENT=7 # 7天自动删种子
     volumes:
-      - ./storage/media:/media
-      - ./data/moviepilot/config:/config
-      - ./data/qbittorrent/downloads:/downloads
+      - ./moviepilot/config:/config
+      - /vol2/1000/media:/media
+      - /vol2/1000/media:/downloads
     ports:
       - 3000:3000
     depends_on:
@@ -44,21 +44,21 @@ services:
 
   # 3. Nastools（备选自动化工具）
   nastools:
-    image: jxxghp/nastools:latest
+    image: syly948/nastools:2.9.1
     container_name: nastools
-    environment:
-      - TZ=Asia/Shanghai
-      - NASTOOLS_CONFIG=/config/config.yaml
-      - AUTO_REMOVE_TORRENT=7
-    volumes:
-      - ./storage/media:/media
-      - ./data/nastools/config:/config
-      - ./data/qbittorrent/downloads:/downloads
+    hostname: nastools
     ports:
-      - 3001:3000
-    depends_on:
-      - qbittorrent
-    restart: unless-stopped
+      - 3000:3000
+    volumes:
+      - ./nastools/config:/config
+      - /vol2/1000/media:/downloads
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=022
+      - TZ=Asia/Shanghai
+      - AUTO_REMOVE_TORRENT=7
+    restart: always
     networks:
       - app-network
 
@@ -69,9 +69,9 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - ./data/jellyfin/config:/config
-      - ./storage/media:/media
-      - ./storage/music:/music
+      - ./jellyfin/config:/config
+      - /vol2/1000/media:/media
+      - /vol2/1000/music:/music
     ports:
       - 8096:8096
       - 8920:8920
@@ -89,7 +89,7 @@ services:
       - SE_LANGUAGES=zh-CN,en
       - SE_INTERVAL=300
     volumes:
-      - ./storage/media:/media
+      - /vol2/1000/media:/media
       - ./data/subtitle-edit/config:/config
     restart: unless-stopped
     networks:
@@ -102,9 +102,9 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - ./data/qbittorrent/downloads:/input
-      - ./storage/media:/output
-      - ./data/filebot/config:/config
+      - /vol2/1000/media:/input
+      - /vol2/1000/media:/output
+      - ./filebot/config:/config
     command: -script fn:amc --output /output --action move --conflict auto /input
     restart: unless-stopped
     networks:
@@ -120,8 +120,8 @@ services:
       - ND_SCANSCHEDULE=0 3 * * * # 每天凌晨3点扫描
       - ND_MAXSCANSPEED=10mbps
     volumes:
-      - ./storage/music:/music
-      - ./data/navidrome/data:/data
+      - /vol2/1000/music:/music
+      - ./navidrome/data:/data
     ports:
       - 4533:4533
     restart: unless-stopped
@@ -135,8 +135,8 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - ./storage/music:/app/media:rw
-      - ./data/music-tag-web/data:/app/data
+      - /vol2/1000/music:/app/media:rw
+      - ./music-tag-web/data:/app/data
     ports:
       - 3002:80
     restart: unless-stopped
@@ -169,7 +169,7 @@ services:
       WEBUI_PASSWORD: "admin123"
     volumes:
       - ./storage/cloud/quark:/quark
-      - ./data/quark-auto-save/config:/config
+      - ./quark-auto-save/config:/config
     restart: unless-stopped
     networks:
       - app-network
@@ -193,23 +193,20 @@ services:
 
   ################################### 四、管理面板（1Panel+Lucky+Sun-Panel）###################################
   
-  onepanel:
-    image: "${REGISTRY_MIRROR:-}moelin/1panel:latest"
-    container_name: 1panel
+  1panel:
+    container_name: 1panel # 容器名
     restart: always
-    network_mode: host
-    environment:
-      TZ: ${TZ}
     volumes:
-      - "${ONEPANEL_DOCKER_SOCK}:/var/run/docker.sock"
-      - "${ONEPANEL_DOCKER_VOLUMES}:/var/lib/docker/volumes"
-      - "${ONEPANEL_OPT_DIR}:/opt"
-      - "${ONEPANEL_ROOT_DIR}:/root"
-      - "${ONEPANEL_DOCKER_ETC_DIR}:/etc/docker"
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+      - /opt:/opt  # 文件存储映射
+      - /root:/root  # 可选的文件存储映射
+      - /etc/docker:/etc/docker  # docker 配置文件夹映射
+    environment:
+      - TZ=Asia/Shanghai  # 时区设置
+    image: moelin/1panel:latest
     labels:
       createdBy: "Apps"
-    networks:
-      - app-network  
 
   # 12. Lucky（全能管理面板）
   lucky:
@@ -244,16 +241,34 @@ services:
   #     - app-network
 
   # 14. Aipan（网盘搜索）
+
   aipan:
     image: unilei/aipan-netdisk-search:latest
     container_name: aipan
-    ports:
-      - 8082:3000
     environment:
       - TZ=Asia/Shanghai
-    restart: always
+    ports:
+      - 8082:3000
+    env_file:
+      - ADMIN_USER=yukun
+      - ADMIN_PASSWORD=Cyk920211.
+      - JWT_SECRET=XnKZDR7OmPce9SxBjbPOqyMnMKDMdLLWNJP9iqsrYNk=
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - app-network
+
+  postgres:
+    image: postgres:15
+    volumes:
+      - ./data/postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: yukun
+      POSTGRES_PASSWORD: Cyk920211.
+      POSTGRES_DB: aipan
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aipan"]
 
   xiaomusic:
     image: docker.hanxi.cc/hanxi/xiaomusic
@@ -264,10 +279,31 @@ services:
     environment:
       XIAOMUSIC_PUBLIC_PORT: 58090
     volumes:
-      - /xiaomusic_music:/app/music
-      - /xiaomusic_conf:/app/conf
+      - /vol2/1000/music:/app/music
+      - ./xiaomusic_conf:/app/conf
     networks:
       - app-network
+
+  jackett:
+    image: linuxserver/jackett
+    container_name: jackett
+    hostname: jackett
+    ports:
+      - 9117:9117
+    volumes:
+      - ./jackett/config:/config
+      - /vol2/1000/media:/downloads
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+      - AUTO_UPDATE=true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9117/UI/Login"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 networks:
   app-network:
