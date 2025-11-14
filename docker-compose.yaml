@@ -160,12 +160,13 @@ services:
 
   # 10. Quark-auto-save（夸克自动转存）
   quark-auto-save:
-    image: lss233/quark-auto-save:latest
+    image: cp0204/quark-auto-save
     container_name: quark-auto-save
+    ports:
+      - 5005:5005
     environment:
-      - TZ=Asia/Shanghai
-      - QUARK_COOKIE=b-user-id=e8fbab25-66c2-a6e8-6607-c8f5865e0c55; _UP_A4A_11_=wb9c91eb8f3f49a88c00e927612aa3b8; CwsSessionId=7e7eda27-3554-497b-900d-34156a457d66; __sdid=AAT4P7c0iDlDboacBaMZIwOFbAjPSVep0dYA456mNF8L93NSGvRjSD0AV2s1qh3nKWw=; isg=BM7On8j7Kz1WIZDRNmZ25QARH6KQT5JJne9TbPgWdlGMW2y1YturWGYYlo83p4ph; _UP_F7E_8D_=G%2BeTvZpAeW%2FBEBNfZLZA0Qo8NRFFf9oHqO3lAZLwNYcYA6kXAPeC%2BoZhdJTAzdXQUQVpsz7eHRdLHpvA%2Fhicy1HUTu2LBlCPaL512lScSgNa%2FGnzOch3JdUIQgHTVjPlc8YdM17b1ekdi5O7yDw0zPOOzc%2FA%2FcWKs%2FvtYvasJZ8V4m3qquQzbW1JFyFgAryjpyQRlEcipJypcUe9jZI%2Bxm7LdwWVC57iqJOMnzaZtYmwPMpd0%2B7BZarlx5I0Wl5nDsG05Cf8pRZwZDzB3oYCMp0dX0cGBGPb6RoHEkf8wVft05k05ngkGyHsIakZbjBMQlwW1OikDv5PYINDvHfr7TLpwUyYjFQefcP%2FjyKRAGfBCHmjptbGWV8IaiP9jBN5rPsU17bDenKj%2Bhm3mVYTBSQI4DlGUbtPZ%2FGA1kMkAh0jtD9ufGqk79Uxi0xHOqsZoAg3J36dS9adhc5VTnv%2BjWSpj%2B0v9aqQoAg3J36dS9ZU25CTU1P0WsIDEnp%2BzT9l6QFa%2Funqf%2BpNktF%2FskRKCJPGNxq9uNZW; _UP_D_=pc; __pus=4d6047b2b34f8242f91ae166e51acc67AASc8N5Z3PXrTkyhWl/UKAfpiiM+f2rKsgihO2btk9QYQXxk1QcyvRPdAwpz7pdfaOMkT7oSEcN1PX9VyOO5fEA6; __kp=e19dbd40-c124-11f0-a12b-d972e8af2fb6; __kps=AAQ02wlSHcvQMSAlo6ynBF5e; __ktd=KH8LxUss/GJcd87wcAGB5g==; __uid=AAQ02wlSHcvQMSAlo6ynBF5e; __puus=832cb06e7576e9ba4669b24effe49805AARUL8VFZaUxyq4Eg4rkccUCjzH6giTkV8P2NBmGkh6a12XnslzrrxZqEElNimWh2ekOXrvFkR7uT+Wl3bFRhGYtWHWUdJGk+RXItAR0AttFMns/RTC87UZAxM+ZeLy38Gl7puLv5S2TEspge35b5prHiUvKsVKz5yDqJZO0c0dE9anWiD1ql78KpwACdu60hYHYf7gXT6rcrxlZy4EKrpeb  # 替换为你的夸克Cookie（浏览器F12获取）
-      - SAVE_PATH=/quark
+      WEBUI_USERNAME: "admin"
+      WEBUI_PASSWORD: "admin123"
     volumes:
       - ./storage/cloud/quark:/quark
       - ./data/quark-auto-save/config:/config
