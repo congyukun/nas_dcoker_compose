@@ -48,7 +48,7 @@ services:
     container_name: nastools
     hostname: nastools
     ports:
-      - 3000:3000
+      - 3001:3000
     volumes:
       - ./nastools/config:/config
       - /vol2/1000/media:/downloads
@@ -247,12 +247,12 @@ services:
     container_name: aipan
     environment:
       - TZ=Asia/Shanghai
-    ports:
-      - 8082:3000
-    env_file:
       - ADMIN_USER=yukun
       - ADMIN_PASSWORD=Cyk920211.
       - JWT_SECRET=XnKZDR7OmPce9SxBjbPOqyMnMKDMdLLWNJP9iqsrYNk=
+    ports:
+      - 8082:3000
+    restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
@@ -267,8 +267,14 @@ services:
       POSTGRES_USER: yukun
       POSTGRES_PASSWORD: Cyk920211.
       POSTGRES_DB: aipan
+    restart: unless-stopped
+    networks:
+      - app-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U aipan"]
+      test: ["CMD-SHELL", "pg_isready -U yukun"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   xiaomusic:
     image: docker.hanxi.cc/hanxi/xiaomusic
