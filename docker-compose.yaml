@@ -101,39 +101,24 @@ services:
 
   # 6. FileBot（文件整理）
   # 6. FileBot（文件整理）
-  filebot:
-    image: rednoah/filebot:latest
-    container_name: filebot
-    environment:
-      - TZ=Asia/Shanghai
-      - LANG=C.UTF-8
-      - FILEBOT_OPTS=-Duser.language=zh -Duser.country=CN
-      - JAVA_OPTS=-Xmx1024m
-    volumes:
-      - ./media/raw:/input
-      - ./media/organized:/output
-      - ./filebot/config:/config
-      - ./filebot/logs:/var/log/filebot
-      - ./filebot/data:/data/filebot
-    command: >
-      -script fn:amc
-      --output /output
-      --action move
-      --conflict auto
-      --lang zh
-      --log-file /var/log/filebot/amc.log
-      --def music=y video=y subtitles=y clean=y minFileSize=100M movieFormat="{plex.name}" seriesFormat="{plex.name}" musicFormat="{plex.name}"
-      /input
-    restart: unless-stopped
-    networks:
-      - app-network
-    user: "1000:1000"
-    healthcheck:
-      test: ["CMD", "filebot", "-version"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+  # filebot:
+  #   image: rednoah/filebot:latest
+  #   container_name: filebot
+  #   environment:
+  #     - TZ=Asia/Shanghai
+  #     - LANG=C.UTF-8
+  #     - FILEBOT_OPTS=-Duser.language=zh -Duser.country=CN
+  #     - JAVA_OPTS=-Xmx1024m
+  #   volumes:
+  #     - ./media/raw:/input
+  #     - ./media/organized:/output
+  #     - ./filebot/config:/config
+  #     - ./filebot/logs:/var/log/filebot
+  #     - ./filebot/data:/data/filebot
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+  #   # FileBot 需要特殊配置，暂时禁用避免影响其他服务
   ################################### 二、音乐管理（Navidrome+Music-tag-Web）###################################
   # 7. Navidrome（音乐服务器）
   # 7. Navidrome（音乐服务器）
@@ -174,11 +159,11 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:80/ || exit 1"]
+      test: ["CMD-SHELL", "nc -z localhost 80 || exit 1"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 30s
+      retries: 5
+      start_period: 60s
 
   ################################### 三、实用工具（Alist+Quark-auto-save+Rustdesk）###################################
   # 9. Alist（云盘挂载）
@@ -212,11 +197,11 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:5005/ || exit 1"]
+      test: ["CMD-SHELL", "nc -z localhost 5005 || exit 1"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 30s
+      retries: 5
+      start_period: 60s
   # 11. Rustdesk（远程控制）
   # rustdesk:
   #   image: rustdesk/rustdesk-server:latest
@@ -254,11 +239,11 @@ services:
     labels:
       createdBy: "Apps"
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8888/ || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8888/api/v1/entrance/status || exit 1"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 60s
+      retries: 5
+      start_period: 90s
 
   # 12. Lucky（全能管理面板）
   # 12. Lucky（全能管理面板）
@@ -277,11 +262,11 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:9000/ || exit 1"]
+      test: ["CMD-SHELL", "nc -z localhost 9000 || exit 1"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 60s
+      retries: 5
+      start_period: 90s
   # 13. Sun-Panel（导航面板）
   # sun-panel:
   #   image: hslr/sun-panel:latest
@@ -308,7 +293,7 @@ services:
       - ADMIN_PASSWORD=Cyk920211.
       - JWT_SECRET=XnKZDR7OmPce9SxBjbPOqyMnMKDMdLLWNJP9iqsrYNk=
       - DATABASE_URL=postgresql://yukun:Cyk920211.@postgres:5432/aipan
-      - LOG_LEVEL=debug
+      - LOG_LEVEL=info
     ports:
       - "8082:3000"
     restart: unless-stopped
@@ -318,11 +303,11 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/health"]
-      interval: 15s
+      test: ["CMD-SHELL", "nc -z localhost 3000 || exit 1"]
+      interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 60s
+      start_period: 90s
     volumes:
       - ./data/aipan_logs:/app/logs
 
@@ -368,11 +353,11 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8090/ || exit 1"]
+      test: ["CMD-SHELL", "nc -z localhost 8090 || exit 1"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 30s
+      retries: 5
+      start_period: 60s
 
   jackett:
     image: linuxserver/jackett
