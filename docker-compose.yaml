@@ -235,11 +235,11 @@ services:
       - TZ=Asia/Shanghai
     image: moelin/1panel:latest
     ports:
-      - "8888:8888"  # 添加端口映射
+      - "8888:10086"
     labels:
       createdBy: "Apps"
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8888/api/v1/entrance/status || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:10086/api/v1/entrance/status || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
