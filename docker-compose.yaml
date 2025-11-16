@@ -120,7 +120,7 @@ services:
   #     - app-network
   #   # FileBot 需要特殊配置，暂时禁用避免影响其他服务
   ################################### 二、音乐管理（Navidrome+Music-tag-Web）###################################
-  # 7. Navidrome（音乐服务器）
+  
   # 7. Navidrome（音乐服务器）
   navidrome:
     image: deluan/navidrome:latest
@@ -180,7 +180,6 @@ services:
   #   networks:
   #     - app-network
 
-  # 10. Quark-auto-save（夸克自动转存）
   # 10. Quark-auto-save（夸克自动转存）
   quark-auto-save:
     image: cp0204/quark-auto-save
@@ -245,7 +244,6 @@ services:
       retries: 5
       start_period: 90s
 
-  # 12. Lucky（全能管理面板）
   # 12. Lucky（全能管理面板）
   lucky:
     image: gdy666/lucky:latest
