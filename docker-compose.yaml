@@ -100,6 +100,7 @@ services:
   #     - app-network
 
   # 6. FileBot（文件整理）
+  # 6. FileBot（文件整理）
   filebot:
     image: rednoah/filebot:latest
     container_name: filebot
@@ -107,10 +108,10 @@ services:
       - TZ=Asia/Shanghai
       - LANG=C.UTF-8
       - FILEBOT_OPTS=-Duser.language=zh -Duser.country=CN
-      - JAVA_OPTS=-Xmx512m  # 增加内存限制
+      - JAVA_OPTS=-Xmx1024m
     volumes:
-      - ./media/raw:/input  # 修改为相对路径
-      - ./media/organized:/output  # 修改为相对路径
+      - ./media/raw:/input
+      - ./media/organized:/output
       - ./filebot/config:/config
       - ./filebot/logs:/var/log/filebot
       - ./filebot/data:/data/filebot
@@ -126,19 +127,15 @@ services:
     restart: unless-stopped
     networks:
       - app-network
-    user: "0:0"
+    user: "1000:1000"
     healthcheck:
       test: ["CMD", "filebot", "-version"]
       interval: 30s
       timeout: 10s
       retries: 3
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: "2G"  # 增加内存限制
-
+      start_period: 30s
   ################################### 二、音乐管理（Navidrome+Music-tag-Web）###################################
+  # 7. Navidrome（音乐服务器）
   # 7. Navidrome（音乐服务器）
   navidrome:
     image: deluan/navidrome:latest
@@ -147,15 +144,21 @@ services:
       - TZ=Asia/Shanghai
       - ND_SCANSCHEDULE=0 3 * * * # 每天凌晨3点扫描
       - ND_MAXSCANSPEED=10mbps
+      - ND_LOGLEVEL=info
     volumes:
       - /vol2/1000/music:/music
       - ./navidrome/data:/data
     ports:
-      - 4533:4533
+      - "4533:4533"
     restart: unless-stopped
     networks:
       - app-network
-
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:4533/ping || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
   # 8. Music-tag-Web（音乐标签编辑）
   music-tag-web:
     image: panda62/music-tag-web:latest
@@ -166,10 +169,16 @@ services:
       - /vol2/1000/music:/app/media:rw
       - ./music-tag-web/data:/app/data
     ports:
-      - 3002:80
+      - "3002:80"
     restart: unless-stopped
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:80/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   ################################### 三、实用工具（Alist+Quark-auto-save+Rustdesk）###################################
   # 9. Alist（云盘挂载）
@@ -187,11 +196,12 @@ services:
   #     - app-network
 
   # 10. Quark-auto-save（夸克自动转存）
+  # 10. Quark-auto-save（夸克自动转存）
   quark-auto-save:
     image: cp0204/quark-auto-save
     container_name: quark-auto-save
     ports:
-      - 5005:5005
+      - "5005:5005"
     environment:
       WEBUI_USERNAME: "admin"
       WEBUI_PASSWORD: "admin123"
@@ -201,7 +211,12 @@ services:
     restart: unless-stopped
     networks:
       - app-network
-
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:5005/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
   # 11. Rustdesk（远程控制）
   # rustdesk:
   #   image: rustdesk/rustdesk-server:latest
@@ -223,7 +238,7 @@ services:
   
   1panel:
     container_name: 1panel # 容器名
-    restart: always
+    restart: unless-stopped
     networks:
       - app-network
     volumes:
@@ -234,9 +249,18 @@ services:
     environment:
       - TZ=Asia/Shanghai
     image: moelin/1panel:latest
+    ports:
+      - "8888:8888"  # 添加端口映射
     labels:
       createdBy: "Apps"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8888/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
+  # 12. Lucky（全能管理面板）
   # 12. Lucky（全能管理面板）
   lucky:
     image: gdy666/lucky:latest
@@ -248,11 +272,16 @@ services:
       - ./data/lucky/home:/root/.lucky
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - 9001:9000
+      - "9001:9000"
     restart: unless-stopped
     networks:
       - app-network
-
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:9000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
   # 13. Sun-Panel（导航面板）
   # sun-panel:
   #   image: hslr/sun-panel:latest
@@ -329,21 +358,28 @@ services:
     container_name: xiaomusic
     restart: unless-stopped
     ports:
-      - 58090:8090
+      - "58090:8090"
     environment:
       XIAOMUSIC_PUBLIC_PORT: 58090
+      TZ: Asia/Shanghai
     volumes:
       - /vol2/1000/music:/app/music
       - ./xiaomusic_conf:/app/conf
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8090/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   jackett:
     image: linuxserver/jackett
     container_name: jackett
     hostname: jackett
     ports:
-      - 9117:9117
+      - "9117:9117"
     volumes:
       - ./jackett/config:/config
       - /vol2/1000/media:/downloads
@@ -354,13 +390,17 @@ services:
       - AUTO_UPDATE=true
     restart: unless-stopped
     networks:
-      - app-network  # 添加网络配置
+      - app-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9117/UI/Login"]
+      test: ["CMD-SHELL", "curl -f http://localhost:9117/UI/Login || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 60s
 
 networks:
   app-network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
