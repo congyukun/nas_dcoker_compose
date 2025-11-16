@@ -159,7 +159,7 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 80 || exit 1"]
+      test: ["CMD-SHELL", "nc -z localhost 8001 || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
