@@ -154,7 +154,7 @@ services:
       - /vol2/1000/music:/app/media:rw
       - ./music-tag-web/data:/app/data
     ports:
-      - "3002:80"
+      - "3002:8001"
     restart: unless-stopped
     networks:
       - app-network
