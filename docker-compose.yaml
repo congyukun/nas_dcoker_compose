@@ -255,12 +255,12 @@ services:
       - ./data/lucky/home:/root/.lucky
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - "9001:9000"
+      - "9001:16601"
     restart: unless-stopped
     networks:
       - app-network
     healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 9000 || exit 1"]
+      test: ["CMD-SHELL", "nc -z localhost 16601 || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
