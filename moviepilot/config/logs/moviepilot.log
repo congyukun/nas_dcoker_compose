@@ -1,0 +1,751 @@
+【INFO】2025-11-15 11:23:13,011 - config.py - 'API_TOKEN' 未设置，已随机生成新的【API_TOKEN】nCgsRdpxD0iLzrn_VJ9N2A
+【INFO】2025-11-15 11:23:15,544 - 294b007932ef_2_0_0.py - 【超级管理员初始密码】FGGBM0BgY-i9aNF_GrzTTw 请登录系统后在设定中修改。 注：该密码只会显示一次，请注意保存。
+【INFO】2025-11-15 11:23:16,322 - category.py - 已加载二级分类策略 category.yaml
+【INFO】2025-11-15 11:23:16,323 - torrents.py - 开始清理种子缓存数据 ...
+【INFO】2025-11-15 11:23:16,323 - torrents.py - 种子缓存数据清理完成
+【INFO】2025-11-15 11:23:19,001 - modules_initializer.py - 认证资源版本：2.4.2
+【INFO】2025-11-15 11:23:19,001 - modules_initializer.py - 站点资源版本：2.1.2
+【INFO】2025-11-15 11:23:19,001 - resource.py - 开始检测资源包版本...
+【INFO】2025-11-15 11:23:19,001 - resource.py - 最新资源包版本：v123
+【INFO】2025-11-15 11:23:19,001 - resource.py - user.sites.v2.bin 资源包有更新，最新版本：v2.1.6
+【INFO】2025-11-15 11:23:19,001 - resource.py - 开始更新资源文件：user.sites.v2.bin ...
+【INFO】2025-11-15 11:23:19,001 - resource.py - 资源包更新完成，开始重启服务...
+【WARNING】2025-11-15 11:23:19,001 - system.py - 检查重启策略失败: Error while fetching server API version: HTTPConnectionPool(host='127.0.0.1', port=38379): Max retries exceeded with url: /version (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xffff82789310>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【INFO】2025-11-15 11:23:19,001 - system.py - 容器未配置自动重启策略，使用Docker API重启...
+【INFO】2025-11-15 11:23:19,001 - modules_initializer.py - 用户认证失败，站点认证参数未设置，无法自动进行用户认证！
+【INFO】2025-11-15 11:23:19,001 - subscribe.py - 当前用户UUID: 8b1835a36566459d1347fb20c3e538093ed72c5d78eb7056e05ca4e4bf905e04
+【INFO】2025-11-15 11:23:19,001 - chain - NotificationType.Manual 的消息已设置发送给管理员
+【INFO】2025-11-15 11:23:19,001 - message.py - 发送消息：{'message': Notification(channel=None, source=None, mtype=<NotificationType.Manual: '手动处理'>, ctype=None, title='MoviePilot用户认证', text='用户认证失败，站点相关功能将无法使用！', image=None, link=None, userid=None, username=None, date=None, action=1, targets={}, buttons=None, original_message_id=None, original_chat_id=None)}
+【INFO】2025-11-15 11:23:19,001 - system.py - 插件备份目录不存在，跳过恢复
+【INFO】2025-11-15 11:23:19,001 - monitor.py - 未找到任何目录监控配置
+【INFO】2025-11-15 11:23:21,243 - plugin.py - 共获取到 183 个线上插件
+【INFO】2025-11-15 11:23:26,604 - douban - 开始发现豆瓣 电影 ...
+【INFO】2025-11-15 11:23:27,733 - douban - 开始发现豆瓣 电视剧 ...
+【INFO】2025-11-15 11:23:35,005 - douban - 开始发现豆瓣 电影 ...
+【INFO】2025-11-15 11:23:36,411 - douban - 开始发现豆瓣 电视剧 ...
+【INFO】2025-11-15 11:23:43,384 - douban - 开始发现豆瓣 电影 ...
+【INFO】2025-11-15 11:23:44,940 - douban - 开始发现豆瓣 电视剧 ...
+【INFO】2025-11-15 11:23:50,146 - douban - 开始发现豆瓣 电影 ...
+【INFO】2025-11-15 11:23:51,920 - douban - 开始发现豆瓣 电视剧 ...
+【INFO】2025-11-15 11:23:56,941 - douban - 开始发现豆瓣 电影 ...
+【INFO】2025-11-15 11:23:58,219 - douban - 开始发现豆瓣 电视剧 ...
+【INFO】2025-11-15 11:25:19,145 - subscribe.py - 开始预缓存订阅日历 ...
+【INFO】2025-11-15 11:25:19,146 - subscribe.py - 订阅日历预缓存完成
+【INFO】2025-11-15 11:28:18,797 - site.py - 开始同步CookieCloud站点 ...
+【ERROR】2025-11-15 11:28:18,809 - site.py - CookieCloud同步失败：CookieCloud参数不正确
+【INFO】2025-11-15 11:33:18,791 - scheduler.py - 用户未认证，正在尝试认证...
+【ERROR】2025-11-15 11:33:18,794 - scheduler.py - 用户认证失败，站点认证参数未设置，无法自动进行用户认证！，共失败 1 次
+【INFO】2025-11-15 11:43:18,793 - scheduler.py - 用户未认证，正在尝试认证...
+【ERROR】2025-11-15 11:43:18,795 - scheduler.py - 用户认证失败，站点认证参数未设置，无法自动进行用户认证！，共失败 2 次
+【INFO】2025-11-15 11:47:31,324 - system.py - 已备份插件目录: apprisemsg
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: autoclean
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: autosignin
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: autosubv2
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: bangumicoll
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: barkmsg
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: brushflow
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: bugreporter
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: categoryeditor
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: chatgpt
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: chinesesubfinder
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: clashruleprovider
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: cleaninvalidplugin
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: cleaninvalidseed
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: cloudflarespeedtest
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: contractcheck
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: crossseed
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: customhosts
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: customindexer
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: customsites
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: dailyword
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: dingdingmsg
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: doubanrank
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: doubansync
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: downloadingmsg
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: downloadsitetag
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: dynamicwechat
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: episodegroupmeta
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: feishumsg
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: ffmpegthumb
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: gotifymsg
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: historytov2
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: imdbsource
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: invitessignin
+【INFO】2025-11-15 11:47:31,325 - system.py - 已备份插件目录: ipdetect
+【INFO】2025-11-15 11:47:31,326 - system.py - 已备份插件目录: iyuuauth
+【INFO】2025-11-15 11:47:31,326 - system.py - 已备份插件目录: iyuuautoseed
+【INFO】2025-11-15 11:47:31,326 - system.py - 已备份插件目录: iyuumsg
+【INFO】2025-11-15 11:47:31,326 - system.py - 已备份插件目录: lexiannot
+【INFO】2025-11-15 11:47:31,326 - system.py - 已备份插件目录: libraryscraper
+【INFO】2025-11-15 11:47:31,326 - system.py - 已备份插件目录: linkmonitor
+【INFO】2025-11-15 11:47:31,326 - system.py - 已备份插件目录: mediaservermsg
+【INFO】2025-11-15 11:47:31,326 - system.py - 已备份插件目录: mediaserverrefresh
+【INFO】2025-11-15 11:47:31,326 - system.py - 已备份插件目录: meowmsg
+【INFO】2025-11-15 11:47:31,326 - system.py - 已备份插件目录: moviepilotupdatenotify
+【INFO】2025-11-15 11:47:31,326 - system.py - 已备份插件目录: mpserverstatus
+【INFO】2025-11-15 11:47:31,326 - system.py - 已备份插件目录: multiclass
+【INFO】2025-11-15 11:47:31,326 - system.py - 已备份插件目录: neodbsync
+【INFO】2025-11-15 11:47:31,326 - system.py - 已备份插件目录: ntfymsg
+【INFO】2025-11-15 11:47:31,326 - system.py - 已备份插件目录: personmeta
+【INFO】2025-11-15 11:47:34,326 - system.py - 已备份插件目录: playletcategory
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: pushdeermsg
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: pushplusmsg
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: qbcommand
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: remoteidentifiers
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: removelink
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: rsssubscribe
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: siterefresh
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: sitestatistic
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: speedlimiter
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: subscribeclear
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: synccookiecloud
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: tmdbwallpaper
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: tobypasstrackers
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: torrentremover
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: torrenttransfer
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: trackereditor
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: trendingshow
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: tvdbdiscover
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: webhook
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: workwechatmsg
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: wxpushermsg
+【INFO】2025-11-15 11:47:34,327 - system.py - 已备份插件目录: zvideohelper
+【INFO】2025-11-15 11:47:34,327 - system.py - 插件备份完成，备份位置: /config/plugins_backup
+【INFO】2025-11-15 11:47:34,327 - scheduler.py - 正在停止定时任务...
+【INFO】2025-11-15 11:47:34,328 - scheduler.py - 定时任务停止完成
+【INFO】2025-11-15 11:47:34,328 - plugin.py - 正在停止所有插件...
+【INFO】2025-11-15 11:47:34,328 - plugin.py - 插件停止完成
+【INFO】2025-11-15 11:47:34,328 - plugin.py - 未启用插件文件修改监测，无需停止
+【INFO】2025-11-15 11:47:34,328 - module.py - 正在停止所有模块...
+【INFO】2025-11-15 11:47:34,328 - thetvdb - TheTvDbModule 停止。正在清除 TVDB 会话。
+【INFO】2025-11-15 11:47:34,328 - module.py - 所有模块停止完成
+【INFO】2025-11-15 11:47:34,328 - event.py - 正在停止事件处理...
+【INFO】2025-11-15 11:47:34,328 - event.py - 事件处理停止完成
+【INFO】2025-11-15 11:47:34,328 - display.py - 正在停止虚拟显示...
+【INFO】2025-11-15 11:47:34,328 - display.py - 虚拟显示已停止
+【INFO】2025-11-15 11:47:34,328 - message.py - 正在停止消息队列...
+【INFO】2025-11-15 11:48:43,545 - modules_initializer.py - 认证资源版本：2.4.2
+【INFO】2025-11-15 11:48:43,546 - modules_initializer.py - 站点资源版本：2.1.2
+【INFO】2025-11-15 11:48:43,546 - resource.py - 开始检测资源包版本...
+【WARNING】2025-11-15 11:48:43,546 - log.py - 无法连接资源包仓库！
+【INFO】2025-11-15 11:48:43,546 - modules_initializer.py - 用户认证失败，站点认证参数未设置，无法自动进行用户认证！
+【INFO】2025-11-15 11:48:43,546 - category.py - 已加载二级分类策略 category.yaml
+【INFO】2025-11-15 11:48:43,546 - subscribe.py - 当前用户UUID: 8911abf35f30353426c195840328e874291a97343ea9990a659fc10f6ed6063b
+【INFO】2025-11-15 11:48:43,546 - chain - NotificationType.Manual 的消息已设置发送给管理员
+【INFO】2025-11-15 11:48:43,546 - message.py - 发送消息：{'message': Notification(channel=None, source=None, mtype=<NotificationType.Manual: '手动处理'>, ctype=None, title='MoviePilot用户认证', text='用户认证失败，站点相关功能将无法使用！', image=None, link=None, userid=None, username=None, date=None, action=1, targets={}, buttons=None, original_message_id=None, original_chat_id=None)}
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: moviepilotupdatenotify
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: zvideohelper
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: webhook
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: meowmsg
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: clashruleprovider
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: trackereditor
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: tvdbdiscover
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: categoryeditor
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: apprisemsg
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: gotifymsg
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: linkmonitor
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: libraryscraper
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: tobypasstrackers
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: episodegroupmeta
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: cloudflarespeedtest
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: doubansync
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: iyuuauth
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: remoteidentifiers
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: ntfymsg
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: doubanrank
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: ffmpegthumb
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: workwechatmsg
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: bangumicoll
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: personmeta
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: mpserverstatus
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: tmdbwallpaper
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: playletcategory
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: removelink
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: mediaserverrefresh
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: invitessignin
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: customhosts
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: chinesesubfinder
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: iyuuautoseed
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: brushflow
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: bugreporter
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: rsssubscribe
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: dailyword
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: iyuumsg
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: lexiannot
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: dynamicwechat
+【INFO】2025-11-15 11:48:43,546 - system.py - 已恢复插件目录: qbcommand
+【ERROR】2025-11-15 11:48:43,701 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /thsrite/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff8317aa50>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,701 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,702 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/jxxghp/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /jxxghp/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff8315aa50>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,702 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/DDS-Derek/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /DDS-Derek/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff831a8290>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【WARNING】2025-11-15 11:48:43,702 - plugin.py - 获取插件库失败：https://github.com/thsrite/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,702 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/honue/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /honue/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff831797c0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,703 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/honue/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /honue/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff83179e50>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,703 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/madrays/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /madrays/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff831a98e0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,703 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/justzerock/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /justzerock/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff83122fc0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,702 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/InfinityPacer/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /InfinityPacer/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff8317b770>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,703 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/justzerock/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /justzerock/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff831aab40>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,702 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /thsrite/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff83178dd0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,703 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/jxxghp/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /jxxghp/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff839f3080>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,704 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/jxxghp/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,703 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/DDS-Derek/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /DDS-Derek/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff831a8da0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,703 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/KoWming/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /KoWming/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff831ab9b0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,702 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/InfinityPacer/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /InfinityPacer/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff8317a8a0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,704 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/madrays/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /madrays/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff83a88b30>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,704 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/DDS-Derek/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,704 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/InfinityPacer/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:48:43,705 - plugin.py - 获取v2插件库失败：https://github.com/InfinityPacer/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,705 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,705 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/honue/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,706 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/madrays/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,706 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/justzerock/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,706 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/justzerock/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,706 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/jxxghp/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,706 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/DDS-Derek/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,706 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/KoWming/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:48:43,706 - plugin.py - 获取v2插件库失败：https://github.com/jxxghp/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:48:43,706 - plugin.py - 获取v2插件库失败：https://github.com/justzerock/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,707 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/KoWming/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /KoWming/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff831784a0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,707 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/madrays/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:48:43,707 - plugin.py - 获取插件库失败：https://github.com/jxxghp/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:48:43,707 - plugin.py - 获取插件库失败：https://github.com/DDS-Derek/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,707 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/honue/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:48:43,707 - plugin.py - 获取插件库失败：https://github.com/honue/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:48:43,708 - plugin.py - 获取插件库失败：https://github.com/justzerock/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:48:43,707 - plugin.py - 获取v2插件库失败：https://github.com/DDS-Derek/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,708 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/InfinityPacer/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:48:43,708 - plugin.py - 获取插件库失败：https://github.com/madrays/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,710 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/KoWming/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:48:43,709 - plugin.py - 获取v2插件库失败：https://github.com/thsrite/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,710 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/wikrin/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /wikrin/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff831ab0b0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【WARNING】2025-11-15 11:48:43,710 - plugin.py - 获取v2插件库失败：https://github.com/honue/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,710 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/wikrin/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /wikrin/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff83159b80>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,711 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/HankunYu/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /HankunYu/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff606919a0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,713 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/Aqr-K/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /Aqr-K/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff60693c20>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,713 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/baozaodetudou/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /baozaodetudou/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff60692450>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,712 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/HankunYu/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /HankunYu/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff60691d00>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【WARNING】2025-11-15 11:48:43,713 - plugin.py - 获取插件库失败：https://github.com/KoWming/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:48:43,713 - plugin.py - 获取插件库失败：https://github.com/InfinityPacer/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,714 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/Aqr-K/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /Aqr-K/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff60690950>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,715 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/hotlcc/MoviePilot-Plugins-Third/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /hotlcc/MoviePilot-Plugins-Third/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff606b8bf0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【WARNING】2025-11-15 11:48:43,714 - plugin.py - 获取v2插件库失败：https://github.com/KoWming/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,714 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/wikrin/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,715 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/wikrin/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:48:43,714 - plugin.py - 获取v2插件库失败：https://github.com/madrays/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,714 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/baozaodetudou/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /baozaodetudou/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff60692ab0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,715 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/HankunYu/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,715 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/hotlcc/MoviePilot-Plugins-Third/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /hotlcc/MoviePilot-Plugins-Third/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff606b83b0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,715 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/Aqr-K/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,716 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/HankunYu/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:48:43,716 - plugin.py - 获取v2插件库失败：https://github.com/wikrin/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,716 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/gxterry/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /gxterry/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff606b98e0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,717 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/Aqr-K/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,717 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/baozaodetudou/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,717 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/baozaodetudou/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:48:43,717 - plugin.py - 获取v2插件库失败：https://github.com/HankunYu/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:48:43,717 - plugin.py - 获取插件库失败：https://github.com/wikrin/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,717 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/hotlcc/MoviePilot-Plugins-Third/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,718 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/gxterry/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /gxterry/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff606ba120>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:48:43,724 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/gxterry/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,724 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/DzAvril/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /DzAvril/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff606ba990>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【WARNING】2025-11-15 11:48:43,717 - plugin.py - 获取插件库失败：https://github.com/Aqr-K/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,717 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/hotlcc/MoviePilot-Plugins-Third/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:48:43,717 - plugin.py - 获取插件库失败：https://github.com/HankunYu/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:48:43,724 - plugin.py - 获取v2插件库失败：https://github.com/Aqr-K/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:48:43,724 - plugin.py - 获取插件库失败：https://github.com/baozaodetudou/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:48:43,724 - plugin.py - 获取v2插件库失败：https://github.com/baozaodetudou/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:48:43,725 - plugin.py - 获取插件库失败：https://github.com/hotlcc/MoviePilot-Plugins-Third，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:48:43,725 - plugin.py - 获取v2插件库失败：https://github.com/hotlcc/MoviePilot-Plugins-Third，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,725 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/gxterry/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,725 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/DzAvril/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:48:43,725 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/DzAvril/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /DzAvril/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff606b9e20>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【WARNING】2025-11-15 11:48:43,725 - plugin.py - 获取插件库失败：https://github.com/gxterry/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:48:43,725 - plugin.py - 获取v2插件库失败：https://github.com/gxterry/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:48:43,725 - plugin.py - 获取插件库失败：https://github.com/DzAvril/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:48:43,726 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/DzAvril/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:48:43,726 - plugin.py - 获取v2插件库失败：https://github.com/DzAvril/MoviePilot-Plugins，请检查 GitHub 网络连接
+【INFO】2025-11-15 11:48:43,726 - plugin.py - 共获取到 0 个线上插件
+【INFO】2025-11-15 11:48:46,548 - system.py - 已恢复插件目录: wxpushermsg
+【INFO】2025-11-15 11:48:46,549 - system.py - 已恢复插件目录: siterefresh
+【INFO】2025-11-15 11:48:46,549 - system.py - 已恢复插件目录: neodbsync
+【INFO】2025-11-15 11:48:46,549 - system.py - 已恢复插件目录: cleaninvalidseed
+【INFO】2025-11-15 11:48:46,549 - system.py - 已恢复插件目录: autosubv2
+【INFO】2025-11-15 11:48:46,549 - system.py - 已恢复插件目录: torrenttransfer
+【INFO】2025-11-15 11:48:46,550 - system.py - 已恢复插件目录: imdbsource
+【INFO】2025-11-15 11:48:46,550 - system.py - 已恢复插件目录: ipdetect
+【INFO】2025-11-15 11:48:46,550 - system.py - 已恢复插件目录: autosignin
+【INFO】2025-11-15 11:48:46,550 - system.py - 已恢复插件目录: pushplusmsg
+【INFO】2025-11-15 11:48:46,550 - system.py - 已恢复插件目录: downloadsitetag
+【INFO】2025-11-15 11:48:46,550 - system.py - 已恢复插件目录: chatgpt
+【INFO】2025-11-15 11:48:46,550 - system.py - 已恢复插件目录: torrentremover
+【INFO】2025-11-15 11:48:46,550 - system.py - 已恢复插件目录: customsites
+【INFO】2025-11-15 11:48:46,550 - system.py - 已恢复插件目录: autoclean
+【INFO】2025-11-15 11:48:46,550 - system.py - 已恢复插件目录: pushdeermsg
+【INFO】2025-11-15 11:48:46,550 - system.py - 已恢复插件目录: subscribeclear
+【INFO】2025-11-15 11:48:46,550 - system.py - 已恢复插件目录: downloadingmsg
+【INFO】2025-11-15 11:48:46,550 - system.py - 已恢复插件目录: trendingshow
+【INFO】2025-11-15 11:48:46,551 - system.py - 已恢复插件目录: synccookiecloud
+【INFO】2025-11-15 11:48:46,551 - system.py - 已恢复插件目录: crossseed
+【INFO】2025-11-15 11:48:46,551 - system.py - 已恢复插件目录: barkmsg
+【INFO】2025-11-15 11:48:46,551 - system.py - 已恢复插件目录: multiclass
+【INFO】2025-11-15 11:48:46,551 - system.py - 已恢复插件目录: contractcheck
+【INFO】2025-11-15 11:48:46,551 - system.py - 已恢复插件目录: feishumsg
+【INFO】2025-11-15 11:48:46,551 - system.py - 已恢复插件目录: dingdingmsg
+【INFO】2025-11-15 11:48:46,551 - system.py - 已恢复插件目录: cleaninvalidplugin
+【INFO】2025-11-15 11:48:46,551 - system.py - 已恢复插件目录: historytov2
+【INFO】2025-11-15 11:48:46,551 - system.py - 已恢复插件目录: mediaservermsg
+【INFO】2025-11-15 11:48:46,551 - system.py - 已恢复插件目录: speedlimiter
+【INFO】2025-11-15 11:48:46,551 - system.py - 已恢复插件目录: customindexer
+【INFO】2025-11-15 11:48:46,552 - system.py - 已恢复插件目录: sitestatistic
+【INFO】2025-11-15 11:48:46,552 - system.py - 插件恢复完成，共恢复 73 个项目
+【INFO】2025-11-15 11:48:46,552 - system.py - 已删除插件备份目录: /config/plugins_backup
+【INFO】2025-11-15 11:48:46,552 - monitor.py - 未找到任何目录监控配置
+【ERROR】2025-11-15 11:49:04,644 - tmdbapi.py - 无法连接TheMovieDb，请检查网络连接！
+【ERROR】2025-11-15 11:49:08,640 - tmdbapi.py - 无法连接TheMovieDb，请检查网络连接！
+【ERROR】2025-11-15 11:49:28,701 - tmdbapi.py - 无法连接TheMovieDb，请检查网络连接！
+【ERROR】2025-11-15 11:49:48,739 - tmdbapi.py - 无法连接TheMovieDb，请检查网络连接！
+【INFO】2025-11-15 11:49:52,022 - douban - 开始发现豆瓣 电影 ...
+【INFO】2025-11-15 11:49:53,161 - douban - 开始发现豆瓣 电视剧 ...
+【INFO】2025-11-15 11:49:59,963 - douban - 开始发现豆瓣 电影 ...
+【INFO】2025-11-15 11:50:01,392 - douban - 开始发现豆瓣 电视剧 ...
+【INFO】2025-11-15 11:50:07,275 - douban - 开始发现豆瓣 电影 ...
+【INFO】2025-11-15 11:50:08,695 - douban - 开始发现豆瓣 电视剧 ...
+【INFO】2025-11-15 11:50:13,302 - douban - 开始发现豆瓣 电影 ...
+【INFO】2025-11-15 11:50:14,660 - douban - 开始发现豆瓣 电视剧 ...
+【INFO】2025-11-15 11:50:18,183 - douban - 开始发现豆瓣 电影 ...
+【INFO】2025-11-15 11:50:19,272 - douban - 开始发现豆瓣 电视剧 ...
+【INFO】2025-11-15 11:50:43,675 - subscribe.py - 开始预缓存订阅日历 ...
+【INFO】2025-11-15 11:50:43,676 - subscribe.py - 订阅日历预缓存完成
+【INFO】2025-11-15 11:50:49,366 - system.py - 已备份插件目录: apprisemsg
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: autoclean
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: autosignin
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: autosubv2
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: bangumicoll
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: barkmsg
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: brushflow
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: bugreporter
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: categoryeditor
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: chatgpt
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: chinesesubfinder
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: clashruleprovider
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: cleaninvalidplugin
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: cleaninvalidseed
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: cloudflarespeedtest
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: contractcheck
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: crossseed
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: customhosts
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: customindexer
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: customsites
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: dailyword
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: dingdingmsg
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: doubanrank
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: doubansync
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: downloadingmsg
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: downloadsitetag
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: dynamicwechat
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: episodegroupmeta
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: feishumsg
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: ffmpegthumb
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: gotifymsg
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: historytov2
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: imdbsource
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: invitessignin
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: ipdetect
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: iyuuauth
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: iyuuautoseed
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: iyuumsg
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: lexiannot
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: libraryscraper
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: linkmonitor
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: mediaservermsg
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: mediaserverrefresh
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: meowmsg
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: moviepilotupdatenotify
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: mpserverstatus
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: multiclass
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: neodbsync
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: ntfymsg
+【INFO】2025-11-15 11:50:49,367 - system.py - 已备份插件目录: personmeta
+【INFO】2025-11-15 11:50:52,369 - system.py - 已备份插件目录: playletcategory
+【INFO】2025-11-15 11:50:52,369 - system.py - 已备份插件目录: pushdeermsg
+【INFO】2025-11-15 11:50:52,369 - system.py - 已备份插件目录: pushplusmsg
+【INFO】2025-11-15 11:50:52,369 - system.py - 已备份插件目录: qbcommand
+【INFO】2025-11-15 11:50:52,370 - system.py - 已备份插件目录: remoteidentifiers
+【INFO】2025-11-15 11:50:52,370 - system.py - 已备份插件目录: removelink
+【INFO】2025-11-15 11:50:52,370 - system.py - 已备份插件目录: rsssubscribe
+【INFO】2025-11-15 11:50:52,370 - system.py - 已备份插件目录: siterefresh
+【INFO】2025-11-15 11:50:52,370 - system.py - 已备份插件目录: sitestatistic
+【INFO】2025-11-15 11:50:52,370 - system.py - 已备份插件目录: speedlimiter
+【INFO】2025-11-15 11:50:52,371 - system.py - 已备份插件目录: subscribeclear
+【INFO】2025-11-15 11:50:52,371 - system.py - 已备份插件目录: synccookiecloud
+【INFO】2025-11-15 11:50:52,371 - system.py - 已备份插件目录: tmdbwallpaper
+【INFO】2025-11-15 11:50:52,371 - system.py - 已备份插件目录: tobypasstrackers
+【INFO】2025-11-15 11:50:52,371 - system.py - 已备份插件目录: torrentremover
+【INFO】2025-11-15 11:50:52,371 - system.py - 已备份插件目录: torrenttransfer
+【INFO】2025-11-15 11:50:52,371 - system.py - 已备份插件目录: trackereditor
+【INFO】2025-11-15 11:50:52,371 - system.py - 已备份插件目录: trendingshow
+【INFO】2025-11-15 11:50:52,371 - system.py - 已备份插件目录: tvdbdiscover
+【INFO】2025-11-15 11:50:52,371 - system.py - 已备份插件目录: webhook
+【INFO】2025-11-15 11:50:52,371 - system.py - 已备份插件目录: workwechatmsg
+【INFO】2025-11-15 11:50:52,371 - system.py - 已备份插件目录: wxpushermsg
+【INFO】2025-11-15 11:50:52,371 - system.py - 已备份插件目录: zvideohelper
+【INFO】2025-11-15 11:50:52,371 - system.py - 插件备份完成，备份位置: /config/plugins_backup
+【INFO】2025-11-15 11:50:52,371 - scheduler.py - 正在停止定时任务...
+【INFO】2025-11-15 11:50:52,371 - scheduler.py - 定时任务停止完成
+【INFO】2025-11-15 11:50:52,372 - plugin.py - 正在停止所有插件...
+【INFO】2025-11-15 11:50:52,372 - plugin.py - 插件停止完成
+【INFO】2025-11-15 11:50:52,372 - plugin.py - 未启用插件文件修改监测，无需停止
+【INFO】2025-11-15 11:50:52,372 - module.py - 正在停止所有模块...
+【INFO】2025-11-15 11:50:52,372 - thetvdb - TheTvDbModule 停止。正在清除 TVDB 会话。
+【INFO】2025-11-15 11:50:52,372 - module.py - 所有模块停止完成
+【INFO】2025-11-15 11:50:52,372 - event.py - 正在停止事件处理...
+【INFO】2025-11-15 11:50:52,372 - event.py - 事件处理停止完成
+【INFO】2025-11-15 11:50:52,372 - display.py - 正在停止虚拟显示...
+【INFO】2025-11-15 11:50:52,372 - display.py - 虚拟显示已停止
+【INFO】2025-11-15 11:50:52,373 - message.py - 正在停止消息队列...
+【INFO】2025-11-15 11:51:23,827 - modules_initializer.py - 认证资源版本：2.4.2
+【INFO】2025-11-15 11:51:23,827 - modules_initializer.py - 站点资源版本：2.1.2
+【INFO】2025-11-15 11:51:23,827 - resource.py - 开始检测资源包版本...
+【WARNING】2025-11-15 11:51:23,827 - log.py - 无法连接资源包仓库！
+【INFO】2025-11-15 11:51:23,827 - modules_initializer.py - 用户认证失败，站点认证参数未设置，无法自动进行用户认证！
+【INFO】2025-11-15 11:51:23,827 - category.py - 已加载二级分类策略 category.yaml
+【INFO】2025-11-15 11:51:23,827 - subscribe.py - 当前用户UUID: 2bc736d722e2b4148dcf7acd5fcc7be08e9fe149e5fccf3c2fea63ef9ab12a7b
+【INFO】2025-11-15 11:51:23,827 - chain - NotificationType.Manual 的消息已设置发送给管理员
+【INFO】2025-11-15 11:51:23,827 - message.py - 发送消息：{'message': Notification(channel=None, source=None, mtype=<NotificationType.Manual: '手动处理'>, ctype=None, title='MoviePilot用户认证', text='用户认证失败，站点相关功能将无法使用！', image=None, link=None, userid=None, username=None, date=None, action=1, targets={}, buttons=None, original_message_id=None, original_chat_id=None)}
+【INFO】2025-11-15 11:51:23,827 - system.py - 已恢复插件目录: moviepilotupdatenotify
+【INFO】2025-11-15 11:51:23,827 - system.py - 已恢复插件目录: zvideohelper
+【INFO】2025-11-15 11:51:23,827 - system.py - 已恢复插件目录: webhook
+【INFO】2025-11-15 11:51:23,827 - system.py - 已恢复插件目录: meowmsg
+【INFO】2025-11-15 11:51:23,827 - system.py - 已恢复插件目录: clashruleprovider
+【INFO】2025-11-15 11:51:23,827 - system.py - 已恢复插件目录: trackereditor
+【INFO】2025-11-15 11:51:23,827 - system.py - 已恢复插件目录: tvdbdiscover
+【INFO】2025-11-15 11:51:23,827 - system.py - 已恢复插件目录: categoryeditor
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: apprisemsg
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: gotifymsg
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: linkmonitor
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: libraryscraper
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: tobypasstrackers
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: episodegroupmeta
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: cloudflarespeedtest
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: doubansync
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: iyuuauth
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: remoteidentifiers
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: ntfymsg
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: doubanrank
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: ffmpegthumb
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: workwechatmsg
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: bangumicoll
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: personmeta
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: mpserverstatus
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: tmdbwallpaper
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: playletcategory
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: removelink
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: mediaserverrefresh
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: invitessignin
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: customhosts
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: chinesesubfinder
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: iyuuautoseed
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: brushflow
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: bugreporter
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: rsssubscribe
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: dailyword
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: iyuumsg
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: lexiannot
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: dynamicwechat
+【INFO】2025-11-15 11:51:23,828 - system.py - 已恢复插件目录: qbcommand
+【ERROR】2025-11-15 11:51:23,918 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/madrays/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /madrays/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff85823c80>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,919 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/justzerock/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /justzerock/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff858451f0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,919 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/madrays/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /madrays/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff85844770>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,919 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/InfinityPacer/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /InfinityPacer/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff857ecc20>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,920 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /thsrite/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff85821e20>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,920 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/DDS-Derek/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /DDS-Derek/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff85823050>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,919 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/honue/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /honue/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff858211f0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,919 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /thsrite/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff857c17c0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,919 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/DDS-Derek/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /DDS-Derek/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff858228a0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,920 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/KoWming/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /KoWming/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff858467e0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,920 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/madrays/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,920 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/jxxghp/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /jxxghp/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff857ee9f0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,919 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/honue/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /honue/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff85820950>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,920 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/honue/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,920 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/InfinityPacer/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /InfinityPacer/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff85821cd0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,920 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/justzerock/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /justzerock/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff85845cd0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,920 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/jxxghp/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /jxxghp/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff86ac25d0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,921 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,921 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/madrays/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,921 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/DDS-Derek/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,921 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/honue/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,921 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/justzerock/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,921 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/InfinityPacer/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,921 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/justzerock/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,921 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,922 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/KoWming/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:51:23,922 - plugin.py - 获取插件库失败：https://github.com/honue/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:51:23,922 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/jxxghp/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:51:23,922 - plugin.py - 获取插件库失败：https://github.com/madrays/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:51:23,922 - plugin.py - 获取v2插件库失败：https://github.com/honue/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:51:23,923 - plugin.py - 获取插件库失败：https://github.com/DDS-Derek/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:51:23,923 - plugin.py - 获取插件库失败：https://github.com/thsrite/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:51:23,924 - plugin.py - 获取v2插件库失败：https://github.com/thsrite/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:51:23,923 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/InfinityPacer/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,924 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/KoWming/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /KoWming/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff85868080>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【WARNING】2025-11-15 11:51:23,924 - plugin.py - 获取插件库失败：https://github.com/justzerock/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:51:23,924 - plugin.py - 获取v2插件库失败：https://github.com/InfinityPacer/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:51:23,925 - plugin.py - 获取v2插件库失败：https://github.com/justzerock/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:51:23,925 - plugin.py - 获取v2插件库失败：https://github.com/jxxghp/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:51:23,925 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/DDS-Derek/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:51:23,925 - plugin.py - 获取v2插件库失败：https://github.com/DDS-Derek/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:51:23,926 - plugin.py - 获取插件库失败：https://github.com/KoWming/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:51:23,927 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/KoWming/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,927 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/HankunYu/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /HankunYu/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff858459d0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,927 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/HankunYu/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /HankunYu/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff85846720>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,927 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/jxxghp/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,928 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/Aqr-K/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /Aqr-K/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff85823f20>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,927 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/wikrin/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /wikrin/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff857ee210>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,928 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/baozaodetudou/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /baozaodetudou/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff85844980>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【WARNING】2025-11-15 11:51:23,929 - plugin.py - 获取v2插件库失败：https://github.com/KoWming/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:51:23,928 - plugin.py - 获取插件库失败：https://github.com/InfinityPacer/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:51:23,929 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/baozaodetudou/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /baozaodetudou/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff85845400>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,929 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/Aqr-K/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /Aqr-K/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff87b067e0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,929 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/HankunYu/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,927 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/wikrin/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /wikrin/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff857ee6c0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,930 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/HankunYu/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:51:23,928 - plugin.py - 获取v2插件库失败：https://github.com/madrays/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:51:23,930 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/wikrin/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:51:23,930 - plugin.py - 获取插件库失败：https://github.com/jxxghp/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:51:23,930 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/hotlcc/MoviePilot-Plugins-Third/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /hotlcc/MoviePilot-Plugins-Third/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff858687d0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,930 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/wikrin/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:51:23,930 - plugin.py - 获取v2插件库失败：https://github.com/wikrin/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:51:23,930 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/Aqr-K/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,931 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/baozaodetudou/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,931 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/Aqr-K/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,931 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/hotlcc/MoviePilot-Plugins-Third/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /hotlcc/MoviePilot-Plugins-Third/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff8586a270>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,932 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/gxterry/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /gxterry/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff85869f70>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【WARNING】2025-11-15 11:51:23,932 - plugin.py - 获取插件库失败：https://github.com/HankunYu/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:51:23,932 - plugin.py - 获取插件库失败：https://github.com/wikrin/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:51:23,933 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/baozaodetudou/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,932 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/DzAvril/MoviePilot-Plugins/main/package.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /DzAvril/MoviePilot-Plugins/main/package.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff8586b050>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【WARNING】2025-11-15 11:51:23,932 - plugin.py - 获取v2插件库失败：https://github.com/HankunYu/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:51:23,933 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/DzAvril/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /DzAvril/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff858446b0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【WARNING】2025-11-15 11:51:23,933 - plugin.py - 获取插件库失败：https://github.com/baozaodetudou/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:51:23,933 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/hotlcc/MoviePilot-Plugins-Third/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:51:23,933 - plugin.py - 获取插件库失败：https://github.com/Aqr-K/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:51:23,933 - plugin.py - 获取v2插件库失败：https://github.com/baozaodetudou/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:51:23,933 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/gxterry/MoviePilot-Plugins/main/package.v2.json，错误：HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /gxterry/MoviePilot-Plugins/main/package.v2.json (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0xffff8586ab40>: Failed to establish a new connection: [Errno 111] Connection refused'))
+【ERROR】2025-11-15 11:51:23,933 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/hotlcc/MoviePilot-Plugins-Third/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,934 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/gxterry/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:51:23,934 - plugin.py - 获取v2插件库失败：https://github.com/Aqr-K/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:51:23,934 - plugin.py - 获取插件库失败：https://github.com/hotlcc/MoviePilot-Plugins-Third，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:51:23,934 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/DzAvril/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【ERROR】2025-11-15 11:51:23,934 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/gxterry/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:51:23,934 - plugin.py - 获取v2插件库失败：https://github.com/DzAvril/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:51:23,934 - plugin.py - 获取插件库失败：https://github.com/gxterry/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 11:51:23,934 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/DzAvril/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 11:51:23,934 - plugin.py - 获取v2插件库失败：https://github.com/gxterry/MoviePilot-Plugins，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:51:23,934 - plugin.py - 获取v2插件库失败：https://github.com/hotlcc/MoviePilot-Plugins-Third，请检查 GitHub 网络连接
+【WARNING】2025-11-15 11:51:23,935 - plugin.py - 获取插件库失败：https://github.com/DzAvril/MoviePilot-Plugins，请检查 GitHub 网络连接
+【INFO】2025-11-15 11:51:23,935 - plugin.py - 共获取到 0 个线上插件
+【INFO】2025-11-15 11:51:26,835 - system.py - 已恢复插件目录: wxpushermsg
+【INFO】2025-11-15 11:51:26,835 - system.py - 已恢复插件目录: siterefresh
+【INFO】2025-11-15 11:51:26,836 - system.py - 已恢复插件目录: neodbsync
+【INFO】2025-11-15 11:51:26,836 - system.py - 已恢复插件目录: cleaninvalidseed
+【INFO】2025-11-15 11:51:26,836 - system.py - 已恢复插件目录: autosubv2
+【INFO】2025-11-15 11:51:26,836 - system.py - 已恢复插件目录: torrenttransfer
+【INFO】2025-11-15 11:51:26,836 - system.py - 已恢复插件目录: imdbsource
+【INFO】2025-11-15 11:51:26,836 - system.py - 已恢复插件目录: ipdetect
+【INFO】2025-11-15 11:51:26,837 - system.py - 已恢复插件目录: autosignin
+【INFO】2025-11-15 11:51:26,837 - system.py - 已恢复插件目录: pushplusmsg
+【INFO】2025-11-15 11:51:26,837 - system.py - 已恢复插件目录: downloadsitetag
+【INFO】2025-11-15 11:51:26,837 - system.py - 已恢复插件目录: chatgpt
+【INFO】2025-11-15 11:51:26,837 - system.py - 已恢复插件目录: torrentremover
+【INFO】2025-11-15 11:51:26,837 - system.py - 已恢复插件目录: customsites
+【INFO】2025-11-15 11:51:26,838 - system.py - 已恢复插件目录: autoclean
+【INFO】2025-11-15 11:51:26,838 - system.py - 已恢复插件目录: pushdeermsg
+【INFO】2025-11-15 11:51:26,838 - system.py - 已恢复插件目录: subscribeclear
+【INFO】2025-11-15 11:51:26,838 - system.py - 已恢复插件目录: downloadingmsg
+【INFO】2025-11-15 11:51:26,838 - system.py - 已恢复插件目录: trendingshow
+【INFO】2025-11-15 11:51:26,839 - system.py - 已恢复插件目录: synccookiecloud
+【INFO】2025-11-15 11:51:26,839 - system.py - 已恢复插件目录: crossseed
+【INFO】2025-11-15 11:51:26,839 - system.py - 已恢复插件目录: barkmsg
+【INFO】2025-11-15 11:51:26,839 - system.py - 已恢复插件目录: multiclass
+【INFO】2025-11-15 11:51:26,839 - system.py - 已恢复插件目录: contractcheck
+【INFO】2025-11-15 11:51:26,839 - system.py - 已恢复插件目录: feishumsg
+【INFO】2025-11-15 11:51:26,839 - system.py - 已恢复插件目录: dingdingmsg
+【INFO】2025-11-15 11:51:26,840 - system.py - 已恢复插件目录: cleaninvalidplugin
+【INFO】2025-11-15 11:51:26,840 - system.py - 已恢复插件目录: historytov2
+【INFO】2025-11-15 11:51:26,840 - system.py - 已恢复插件目录: mediaservermsg
+【INFO】2025-11-15 11:51:26,840 - system.py - 已恢复插件目录: speedlimiter
+【INFO】2025-11-15 11:51:26,840 - system.py - 已恢复插件目录: customindexer
+【INFO】2025-11-15 11:51:26,840 - system.py - 已恢复插件目录: sitestatistic
+【INFO】2025-11-15 11:51:26,840 - system.py - 插件恢复完成，共恢复 73 个项目
+【INFO】2025-11-15 11:51:26,840 - system.py - 已删除插件备份目录: /config/plugins_backup
+【INFO】2025-11-15 11:51:26,841 - monitor.py - 未找到任何目录监控配置
+【ERROR】2025-11-15 11:51:44,939 - tmdbapi.py - 无法连接TheMovieDb，请检查网络连接！
+【ERROR】2025-11-15 11:51:48,916 - tmdbapi.py - 无法连接TheMovieDb，请检查网络连接！
+【ERROR】2025-11-15 11:52:08,949 - tmdbapi.py - 无法连接TheMovieDb，请检查网络连接！
+【ERROR】2025-11-15 11:52:29,012 - tmdbapi.py - 无法连接TheMovieDb，请检查网络连接！
+【INFO】2025-11-15 11:52:30,860 - douban - 开始发现豆瓣 电影 ...
+【INFO】2025-11-15 11:52:31,926 - douban - 开始发现豆瓣 电视剧 ...
+【INFO】2025-11-15 11:52:38,647 - douban - 开始发现豆瓣 电影 ...
+【INFO】2025-11-15 11:52:40,198 - douban - 开始发现豆瓣 电视剧 ...
+【INFO】2025-11-15 11:52:46,252 - douban - 开始发现豆瓣 电影 ...
+【INFO】2025-11-15 11:52:47,595 - douban - 开始发现豆瓣 电视剧 ...
+【INFO】2025-11-15 11:52:51,424 - douban - 开始发现豆瓣 电影 ...
+【INFO】2025-11-15 11:52:52,717 - douban - 开始发现豆瓣 电视剧 ...
+【INFO】2025-11-15 11:52:56,117 - douban - 开始发现豆瓣 电影 ...
+【INFO】2025-11-15 11:52:57,114 - douban - 开始发现豆瓣 电视剧 ...
+【INFO】2025-11-15 11:53:23,973 - subscribe.py - 开始预缓存订阅日历 ...
+【INFO】2025-11-15 11:53:23,975 - subscribe.py - 订阅日历预缓存完成
+【INFO】2025-11-15 11:56:23,904 - site.py - 开始同步CookieCloud站点 ...
+【ERROR】2025-11-15 11:56:23,913 - site.py - CookieCloud同步失败：CookieCloud参数不正确
+【INFO】2025-11-15 12:01:23,918 - scheduler.py - 用户未认证，正在尝试认证...
+【ERROR】2025-11-15 12:01:23,920 - scheduler.py - 用户认证失败，站点认证参数未设置，无法自动进行用户认证！，共失败 1 次
+【INFO】2025-11-15 12:11:23,905 - scheduler.py - 用户未认证，正在尝试认证...
+【ERROR】2025-11-15 12:11:23,912 - scheduler.py - 用户认证失败，站点认证参数未设置，无法自动进行用户认证！，共失败 2 次
+【INFO】2025-11-15 12:21:23,902 - scheduler.py - 用户未认证，正在尝试认证...
+【ERROR】2025-11-15 12:21:23,915 - scheduler.py - 用户认证失败，站点认证参数未设置，无法自动进行用户认证！，共失败 3 次
+【INFO】2025-11-15 12:21:24,024 - scheduler.py - 主动内存回收完成，回收对象数: 159，释放内存: -1.91 MB
+【ERROR】2025-11-15 12:21:24,162 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/justzerock/MoviePilot-Plugins/main/package.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/justzerock/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取插件库失败：https://github.com/justzerock/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/KoWming/MoviePilot-Plugins/main/package.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/KoWming/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取插件库失败：https://github.com/KoWming/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/package.v2.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取v2插件库失败：https://github.com/thsrite/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/InfinityPacer/MoviePilot-Plugins/main/package.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/InfinityPacer/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取插件库失败：https://github.com/InfinityPacer/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/honue/MoviePilot-Plugins/main/package.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/honue/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取插件库失败：https://github.com/honue/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/DDS-Derek/MoviePilot-Plugins/main/package.v2.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/DDS-Derek/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取v2插件库失败：https://github.com/DDS-Derek/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/honue/MoviePilot-Plugins/main/package.v2.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/honue/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取v2插件库失败：https://github.com/honue/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/package.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/thsrite/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取插件库失败：https://github.com/thsrite/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/justzerock/MoviePilot-Plugins/main/package.v2.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/justzerock/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取v2插件库失败：https://github.com/justzerock/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/DDS-Derek/MoviePilot-Plugins/main/package.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/DDS-Derek/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取插件库失败：https://github.com/DDS-Derek/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/jxxghp/MoviePilot-Plugins/main/package.v2.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/jxxghp/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取v2插件库失败：https://github.com/jxxghp/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/madrays/MoviePilot-Plugins/main/package.v2.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/madrays/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取v2插件库失败：https://github.com/madrays/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/jxxghp/MoviePilot-Plugins/main/package.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/jxxghp/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取插件库失败：https://github.com/jxxghp/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/madrays/MoviePilot-Plugins/main/package.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/madrays/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取插件库失败：https://github.com/madrays/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/InfinityPacer/MoviePilot-Plugins/main/package.v2.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/InfinityPacer/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取v2插件库失败：https://github.com/InfinityPacer/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/Aqr-K/MoviePilot-Plugins/main/package.v2.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/Aqr-K/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:24,163 - plugin.py - 获取v2插件库失败：https://github.com/Aqr-K/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/HankunYu/MoviePilot-Plugins/main/package.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:24,163 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/HankunYu/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:27,166 - plugin.py - 获取插件库失败：https://github.com/HankunYu/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:27,167 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/gxterry/MoviePilot-Plugins/main/package.v2.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:27,167 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/gxterry/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:27,167 - plugin.py - 获取v2插件库失败：https://github.com/gxterry/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:27,167 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/DzAvril/MoviePilot-Plugins/main/package.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:27,167 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/DzAvril/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:27,168 - plugin.py - 获取插件库失败：https://github.com/DzAvril/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:27,168 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/gxterry/MoviePilot-Plugins/main/package.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:27,168 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/gxterry/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:27,168 - plugin.py - 获取插件库失败：https://github.com/gxterry/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:27,168 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/hotlcc/MoviePilot-Plugins-Third/main/package.v2.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:27,168 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/hotlcc/MoviePilot-Plugins-Third/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:27,169 - plugin.py - 获取v2插件库失败：https://github.com/hotlcc/MoviePilot-Plugins-Third，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:27,169 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/baozaodetudou/MoviePilot-Plugins/main/package.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:27,169 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/baozaodetudou/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:27,169 - plugin.py - 获取插件库失败：https://github.com/baozaodetudou/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:27,169 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/wikrin/MoviePilot-Plugins/main/package.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:27,169 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/wikrin/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:27,170 - plugin.py - 获取插件库失败：https://github.com/wikrin/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:27,170 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/HankunYu/MoviePilot-Plugins/main/package.v2.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:27,170 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/HankunYu/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:27,170 - plugin.py - 获取v2插件库失败：https://github.com/HankunYu/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:27,170 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/KoWming/MoviePilot-Plugins/main/package.v2.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:27,170 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/KoWming/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:27,170 - plugin.py - 获取v2插件库失败：https://github.com/KoWming/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:27,170 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/hotlcc/MoviePilot-Plugins-Third/main/package.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:27,171 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/hotlcc/MoviePilot-Plugins-Third/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:27,171 - plugin.py - 获取插件库失败：https://github.com/hotlcc/MoviePilot-Plugins-Third，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:27,171 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/Aqr-K/MoviePilot-Plugins/main/package.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:27,171 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/Aqr-K/MoviePilot-Plugins/main/package.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:27,171 - plugin.py - 获取插件库失败：https://github.com/Aqr-K/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:27,171 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/DzAvril/MoviePilot-Plugins/main/package.v2.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:27,171 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/DzAvril/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:27,171 - plugin.py - 获取v2插件库失败：https://github.com/DzAvril/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:27,171 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/wikrin/MoviePilot-Plugins/main/package.v2.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:27,171 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/wikrin/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:27,171 - plugin.py - 获取v2插件库失败：https://github.com/wikrin/MoviePilot-Plugins，请检查 GitHub 网络连接
+【ERROR】2025-11-15 12:21:27,172 - plugin.py - [GitHub] 请求失败，策略：直连, URL: https://raw.githubusercontent.com/baozaodetudou/MoviePilot-Plugins/main/package.v2.json，错误：All connection attempts failed
+【ERROR】2025-11-15 12:21:27,172 - plugin.py - [GitHub] 所有策略均请求失败，URL: https://raw.githubusercontent.com/baozaodetudou/MoviePilot-Plugins/main/package.v2.json，请检查网络连接或 GitHub 配置
+【WARNING】2025-11-15 12:21:27,172 - plugin.py - 获取v2插件库失败：https://github.com/baozaodetudou/MoviePilot-Plugins，请检查 GitHub 网络连接
+【INFO】2025-11-15 12:21:27,172 - plugin.py - 共获取到 0 个线上插件
+【ERROR】2025-11-15 12:21:45,002 - tmdbapi.py - 无法连接TheMovieDb，请检查网络连接！
+【INFO】2025-11-15 12:31:23,901 - scheduler.py - 用户未认证，正在尝试认证...
+【ERROR】2025-11-15 12:31:23,905 - scheduler.py - 用户认证失败，站点认证参数未设置，无法自动进行用户认证！，共失败 4 次
+【ERROR】2025-11-15 12:33:49,655 - tmdbapi.py - 无法连接TheMovieDb，请检查网络连接！
+【INFO】2025-11-15 12:37:02,578 - system.py - 已备份插件目录: apprisemsg
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: autoclean
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: autosignin
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: autosubv2
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: bangumicoll
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: barkmsg
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: brushflow
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: bugreporter
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: categoryeditor
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: chatgpt
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: chinesesubfinder
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: clashruleprovider
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: cleaninvalidplugin
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: cleaninvalidseed
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: cloudflarespeedtest
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: contractcheck
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: crossseed
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: customhosts
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: customindexer
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: customsites
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: dailyword
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: dingdingmsg
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: doubanrank
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: doubansync
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: downloadingmsg
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: downloadsitetag
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: dynamicwechat
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: episodegroupmeta
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: feishumsg
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: ffmpegthumb
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: gotifymsg
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: historytov2
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: imdbsource
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: invitessignin
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: ipdetect
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: iyuuauth
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: iyuuautoseed
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: iyuumsg
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: lexiannot
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: libraryscraper
+【INFO】2025-11-15 12:37:02,580 - system.py - 已备份插件目录: linkmonitor
+【INFO】2025-11-15 12:37:02,581 - system.py - 已备份插件目录: mediaservermsg
+【INFO】2025-11-15 12:37:02,581 - system.py - 已备份插件目录: mediaserverrefresh
+【INFO】2025-11-15 12:37:02,581 - system.py - 已备份插件目录: meowmsg
+【INFO】2025-11-15 12:37:02,581 - system.py - 已备份插件目录: moviepilotupdatenotify
+【INFO】2025-11-15 12:37:02,581 - system.py - 已备份插件目录: mpserverstatus
+【INFO】2025-11-15 12:37:02,581 - system.py - 已备份插件目录: multiclass
+【INFO】2025-11-15 12:37:02,581 - system.py - 已备份插件目录: neodbsync
+【INFO】2025-11-15 12:37:02,581 - system.py - 已备份插件目录: ntfymsg
+【INFO】2025-11-15 12:37:02,581 - system.py - 已备份插件目录: personmeta

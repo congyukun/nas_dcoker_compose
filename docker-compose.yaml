@@ -101,17 +101,57 @@ services:
     container_name: filebot
     environment:
       - TZ=Asia/Shanghai
+      - LANG=C.UTF-8  # 新增：解决中文文件名乱码问题
+      - FILEBOT_OPTS=-Duser.language=zh -Duser.country=CN  # 中文界面+地域适配
     volumes:
-      - /vol2/1000/media:/input
-      - /vol2/1000/media:/output
+      # 1. 输入目录：待整理的原始文件（必须与输出目录分离，避免循环处理）
+      - /vol2/1000/media/raw:/input
+      # 2. 输出目录：整理后的文件（分类存放）
+      - /vol2/1000/media/organized:/output
+      # 3. 配置目录：持久化FileBot设置、缓存、日志
       - ./filebot/config:/config
-    command: -script fn:amc --output /output --action move --conflict auto /input
+      # 4. 日志目录：单独存储整理日志，便于排查
+      - ./filebot/logs:/var/log/filebot
+      - ./filebot/data:/data/filebot
+    # 核心命令优化：修复参数顺序+添加关键选项
+    command: >
+      -script fn:amc
+      --output /output
+      --action move  # 移动文件（如需复制改为 copy）
+      --conflict auto  # 冲突时自动处理（覆盖/跳过/重命名）
+      --lang zh  # 中文识别
+      --log-file /var/log/filebot/amc.log  # 日志输出到文件
+      --def
+        music=y  # 启用音乐文件整理（按需关闭为 n）
+        video=y  # 启用视频文件整理
+        subtitles=y  # 自动下载字幕（按需关闭为 n）
+        clean=y  # 整理后清理空文件夹
+        minFileSize=100M  # 忽略小于100M的文件（避免零碎文件干扰）
+        movieFormat="{plex.name}"  # 电影命名格式（Plex兼容）
+        seriesFormat="{plex.name}"  # 剧集命名格式（Plex兼容）
+        musicFormat="{plex.name}"  # 音乐命名格式（Plex兼容）
+      /input
     restart: unless-stopped
     networks:
       - app-network
+    # 新增：权限调整（解决目录读写问题）
+    user: "0:0"  # 临时用root权限（避免权限不足，后续可按需调整）
+    # 新增：健康检查（确认容器正常运行）
+    healthcheck:
+      test: ["CMD", "filebot", "-version" ,"||", "exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    # 新增：资源限制（避免占用过多CPU/内存）
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1G"
 
   ################################### 二、音乐管理（Navidrome+Music-tag-Web）###################################
   # 7. Navidrome（音乐服务器）
+  
   navidrome:
     image: deluan/navidrome:latest
     container_name: navidrome
@@ -196,16 +236,17 @@ services:
   1panel:
     container_name: 1panel # 容器名
     restart: always
+    networks:
+      - app-network
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
       - /opt:/opt  # 文件存储映射
       - /root:/root  # 可选的文件存储映射
-      - /etc/docker:/etc/docker  # docker 配置文件夹映射
     environment:
       - TZ=Asia/Shanghai  # 时区设置
     image: moelin/1panel:latest
-    labels:
+    labels:  
       createdBy: "Apps"
 
   # 12. Lucky（全能管理面板）
@@ -241,7 +282,6 @@ services:
   #     - app-network
 
   # 14. Aipan（网盘搜索）
-
   aipan:
     image: unilei/aipan-netdisk-search:latest
     container_name: aipan
@@ -251,45 +291,67 @@ services:
       - ADMIN_PASSWORD=Cyk920211.
       - JWT_SECRET=XnKZDR7OmPce9SxBjbPOqyMnMKDMdLLWNJP9iqsrYNk=
       - DATABASE_URL=postgresql://yukun:Cyk920211.@postgres:5432/aipan
+      - LOG_LEVEL=debug  # 新增：开启调试日志，便于排查问题
     ports:
-      - 8082:3000
+      - "8082:3000"  # 宿主机8082端口映射容器3000（确保宿主机8082未被占用）
     restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
     networks:
       - app-network
+    # 新增：健康检查，确认 aipan 服务启动成功
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health" ,"||", "wget", "--spider", "http://localhost:3000/health", "||", "exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 60s  # 给足启动时间（数据库连接+服务初始化）
+    # 新增：权限调整（避免容器内权限不足导致启动失败）
+    user: "root"  # 临时用root排查，后续可按需调整为普通用户
+    volumes:
+      - ./data/aipan_logs:/app/logs  # 持久化日志，便于查看报错
 
   postgres:
     image: postgres:15
+    container_name: postgres-aipan  # 容器名加前缀，避免冲突
     volumes:
       - ./data/postgres_data:/var/lib/postgresql/data
+      - ./data/postgres_init:/docker-entrypoint-initdb.d  # 新增：初始化脚本目录（可选）
     environment:
-      POSTGRES_USER: yukun
-      POSTGRES_PASSWORD: Cyk920211.
-      POSTGRES_DB: aipan
+      - TZ=Asia/Shanghai  # 新增：数据库时区与应用一致
+      - POSTGRES_USER=yukun
+      - POSTGRES_PASSWORD=Cyk920211.
+      - POSTGRES_DB=aipan
+      - POSTGRES_INITDB_ARGS="--encoding=UTF8 --lc-collate=C --lc-ctype=C"  # 确保编码正常
     restart: unless-stopped
     networks:
       - app-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U yukun -d aipan"]
+      test: ["CMD-SHELL", "pg_isready -U yukun -d aipan -h localhost -p 5432"]  # 明确主机和端口
       interval: 10s
       timeout: 5s
       retries: 10
+    # 新增：资源限制（避免数据库占用过多资源）
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1G"
 
-  xiaomusic:
-    image: docker.hanxi.cc/hanxi/xiaomusic
-    container_name: xiaomusic
-    restart: unless-stopped
-    ports:
-      - 58090:8090
-    environment:
-      XIAOMUSIC_PUBLIC_PORT: 58090
-    volumes:
-      - /vol2/1000/music:/app/music
-      - ./xiaomusic_conf:/app/conf
-    networks:
-      - app-network
+  # xiaomusic:
+  #   image: docker.hanxi.cc/hanxi/xiaomusic
+  #   container_name: xiaomusic
+  #   restart: unless-stopped
+  #   ports:
+  #     - 58090:8090
+  #   environment:
+  #     XIAOMUSIC_PUBLIC_PORT: 58090
+  #   volumes:
+  #     - /vol2/1000/music:/app/music
+  #     - ./xiaomusic_conf:/app/conf
+  #   networks:
+  #     - app-network
 
   jackett:
     image: linuxserver/jackett
