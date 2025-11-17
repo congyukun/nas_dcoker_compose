@@ -259,7 +259,7 @@ services:
       - ADMIN_USER=yukun
       - ADMIN_*=Cyk920211.
       - JWT_*=XnKZDR7OmPce9SxBjbPOqyMnMKDMdLLWNJP9iqsrYNk=
-      - DATABASE_URL=postgresql://yukun:Cyk920211.@127.0.0.1:5432/aipan
+      - DATABASE_URL=postgresql://yukun:Cyk920211.@127.0.0.1:35432/aipan
       - LOG_LEVEL=info
     restart: unless-stopped
     depends_on:
@@ -287,10 +287,11 @@ services:
       - POSTGRES_PASSWORD=Cyk920211.
       - POSTGRES_DB=aipan
       - POSTGRES_INITDB_ARGS=--encoding=UTF8 --lc-collate=C --lc-ctype=C
+    command: ["postgres", "-c", "port=35432"]
     restart: unless-stopped
     network_mode: host
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U yukun -d aipan"]
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -p 35432 -U yukun -d aipan"]
       interval: 10s
       timeout: 5s
       retries: 10
