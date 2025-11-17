@@ -322,6 +322,28 @@ services:
       retries: 5
       start_period: 60s
 
+  ################################### 五、桌面浏览器 ###################################
+  kasm-chrome:
+    image: kasmweb/chrome:1.15.0
+    container_name: kasm-chrome
+    restart: unless-stopped
+    shm_size: "1g"
+    environment:
+      - TZ=Asia/Shanghai
+      - VNC_USER=browser
+      - VNC_PW=browser123
+      - DISPLAY_WIDTH=1920
+      - DISPLAY_HEIGHT=1080
+    volumes:
+      - ./browser/profile:/home/kasm-user/.config
+    network_mode: host
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 6901 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+
   jackett:
     image: linuxserver/jackett
     container_name: jackett
