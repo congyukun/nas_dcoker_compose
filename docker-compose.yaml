@@ -131,13 +131,15 @@ services:
     container_name: music-tag-web
     environment:
       - TZ=Asia/Shanghai
+      - PORT=38001
+      - GUNICORN_CMD_ARGS=--bind=0.0.0.0:38001
     volumes:
       - /vol2/1000/music:/app/media:rw
       - ./music-tag-web/data:/app/data
     restart: unless-stopped
     network_mode: host
     healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 8001 || exit 1"]
+      test: ["CMD-SHELL", "nc -z localhost 38001 || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
