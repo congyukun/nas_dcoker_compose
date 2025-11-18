@@ -122,28 +122,28 @@ services:
   ################################### 二、音乐管理（Navidrome+Music-tag-Web）###################################
   
   # 7. Navidrome（音乐服务器）
-  navidrome:
-    image: deluan/navidrome:latest
-    container_name: navidrome
-    environment:
-      - TZ=Asia/Shanghai
-      - ND_SCANSCHEDULE=0 3 * * * # 每天凌晨3点扫描
-      - ND_MAXSCANSPEED=10mbps
-      - ND_LOGLEVEL=info
-    volumes:
-      - /vol2/1000/music:/music
-      - ./navidrome/data:/data
-    ports:
-      - "4533:4533"
-    restart: unless-stopped
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:4533/ping || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+  # navidrome:
+  #   image: deluan/navidrome:latest
+  #   container_name: navidrome
+  #   environment:
+  #     - TZ=Asia/Shanghai
+  #     - ND_SCANSCHEDULE=0 3 * * * # 每天凌晨3点扫描
+  #     - ND_MAXSCANSPEED=10mbps
+  #     - ND_LOGLEVEL=info
+  #   volumes:
+  #     - /vol2/1000/music:/music
+  #     - ./navidrome/data:/data
+  #   ports:
+  #     - "4533:4533"
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:4533/ping || exit 1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 30s
   # 8. Music-tag-Web（音乐标签编辑）
   music-tag-web:
     image: panda62/music-tag-web:latest
