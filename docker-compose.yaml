@@ -37,7 +37,7 @@ services:
       - /vol2/1000/media:/media
       - /vol2/1000/media:/downloads
     ports:
-      - 3000:3000
+      - 30000:3000
     depends_on:
       - qbittorrent
     restart: unless-stopped
