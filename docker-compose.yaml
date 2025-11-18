@@ -2,19 +2,24 @@ services:
 
   ################################### 一、影视核心（自动化+播放+整理）###################################
   # 1. Qbittorrent 下载器
-  qbittorrent:
-    image: linuxserver/qbittorrent:latest
-    container_name: qbittorrent
-    environment:
-      - PUID=1000  # 调整为常见值
-      - PGID=1000  # 调整为常见值
-      - TZ=Asia/Shanghai
-      - WEBUI_PORT=8080
-    volumes:
-      - /vol2/1000/media:/downloads
-      - ./qbittorrent/config:/config
-    restart: unless-stopped
-    network_mode: host
+  # qbittorrent:
+  #   image: linuxserver/qbittorrent:latest
+  #   container_name: qbittorrent
+  #   environment:
+  #     - PUID=1000  # 调整为常见值
+  #     - PGID=1000  # 调整为常见值
+  #     - TZ=Asia/Shanghai
+  #     - WEBUI_PORT=8080
+  #   volumes:
+  #     - /vol2/1000/media:/downloads
+  #     - ./qbittorrent/config:/config
+  #   ports:
+  #     - 8080:8080
+  #     - 6881:6881
+  #     - 6881:6881/udp
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
 
   # 2. MoviePilot-v2（影视自动化核心）
   moviepilot-v2:
@@ -31,16 +36,21 @@ services:
       - ./moviepilot/config:/config
       - /vol2/1000/media:/media
       - /vol2/1000/media:/downloads
+    ports:
+      - 3000:3000
     depends_on:
       - qbittorrent
     restart: unless-stopped
-    network_mode: host
+    networks:
+      - app-network
 
   # 3. Nastools（备选自动化工具）
   nastools:
     image: syly948/nastools:2.9.1
     container_name: nastools
     hostname: nastools
+    ports:
+      - 3001:3000
     volumes:
       - ./nastools/config:/config
       - /vol2/1000/media:/downloads
@@ -51,7 +61,8 @@ services:
       - TZ=Asia/Shanghai
       - AUTO_REMOVE_TORRENT=7
     restart: always
-    network_mode: host
+    networks:
+      - app-network
 
   # 4. Jellyfin（VideoToolbox硬件加速）
   jellyfin:
@@ -65,8 +76,13 @@ services:
       - ./jellyfin/config:/config
       - /vol2/1000/media:/media
       - /vol2/1000/music:/music
+    ports:
+      - 8096:8096
+      - 8920:8920
     restart: unless-stopped
-    network_mode: host
+    networks:
+      - app-network
+
   # 5. Subtitle Edit（自动字幕）
   # subtitle-edit:
   #   image: alexandernst/subtitle-edit:latest
@@ -117,8 +133,11 @@ services:
     volumes:
       - /vol2/1000/music:/music
       - ./navidrome/data:/data
+    ports:
+      - "4533:4533"
     restart: unless-stopped
-    network_mode: host
+    networks:
+      - app-network
     healthcheck:
       test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:4533/ping || exit 1"]
       interval: 30s
@@ -131,15 +150,16 @@ services:
     container_name: music-tag-web
     environment:
       - TZ=Asia/Shanghai
-      - PORT=38001
-      - GUNICORN_CMD_ARGS=--bind=0.0.0.0:38001
     volumes:
       - /vol2/1000/music:/app/media:rw
       - ./music-tag-web/data:/app/data
+    ports:
+      - "3002:8001"
     restart: unless-stopped
-    network_mode: host
+    networks:
+      - app-network
     healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 38001 || exit 1"]
+      test: ["CMD-SHELL", "nc -z localhost 8001 || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -164,14 +184,17 @@ services:
   quark-auto-save:
     image: cp0204/quark-auto-save
     container_name: quark-auto-save
+    ports:
+      - "5005:5005"
     environment:
       WEBUI_USERNAME: "admin"
-      WEBUI_*: "admin123"
+      WEBUI_PASSWORD: "admin123"
     volumes:
       - ./storage/cloud/quark:/quark
       - ./quark-auto-save/config:/config
     restart: unless-stopped
-    network_mode: host
+    networks:
+      - app-network
     healthcheck:
       test: ["CMD-SHELL", "nc -z localhost 5005 || exit 1"]
       interval: 30s
@@ -197,45 +220,51 @@ services:
 
   ################################### 四、管理面板（1Panel+Lucky+Sun-Panel）###################################
   
-  1panel:
-    container_name: 1panel # 容器名
-    restart: unless-stopped
-    network_mode: host
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /var/lib/docker/volumes:/var/lib/docker/volumes
-      - ./data/1panel:/opt  # 修改为相对路径
-      - ./data/1panel/root:/root  # 修改为相对路径
-    environment:
-      - TZ=Asia/Shanghai
-    image: moelin/1panel:latest
-    labels:
-      createdBy: "Apps"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:10086/api/v1/entrance/status || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 90s
+  # 1panel:
+  #   container_name: 1panel # 容器名
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - /var/lib/docker/volumes:/var/lib/docker/volumes
+  #     - ./data/1panel:/opt  # 修改为相对路径
+  #     - ./data/1panel/root:/root  # 修改为相对路径
+  #   environment:
+  #     - TZ=Asia/Shanghai
+  #   image: moelin/1panel:latest
+  #   ports:
+  #     - "8888:10086"
+  #   labels:
+  #     createdBy: "Apps"
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -f http://localhost:10086/api/v1/entrance/status || exit 1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 90s
 
   # 12. Lucky（全能管理面板）
-  lucky:
-    image: gdy666/lucky:latest
-    container_name: lucky
-    privileged: true
-    environment:
-      - TZ=Asia/Shanghai
-    volumes:
-      - ./data/lucky/home:/root/.lucky
-      - /var/run/docker.sock:/var/run/docker.sock
-    restart: unless-stopped
-    network_mode: host
-    healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 16601 || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 90s
+  # lucky:
+  #   image: gdy666/lucky:latest
+  #   container_name: lucky
+  #   privileged: true
+  #   environment:
+  #     - TZ=Asia/Shanghai
+  #   volumes:
+  #     - ./data/lucky/home:/root/.lucky
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   ports:
+  #     - "9001:16601"
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "nc -z localhost 16601 || exit 1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 90s
   # 13. Sun-Panel（导航面板）
   # sun-panel:
   #   image: hslr/sun-panel:latest
@@ -259,15 +288,18 @@ services:
     environment:
       - TZ=Asia/Shanghai
       - ADMIN_USER=yukun
-      - ADMIN_*=Cyk920211.
-      - JWT_*=XnKZDR7OmPce9SxBjbPOqyMnMKDMdLLWNJP9iqsrYNk=
-      - DATABASE_URL=postgresql://yukun:Cyk920211.@127.0.0.1:35432/aipan
+      - ADMIN_PASSWORD=Cyk920211.
+      - JWT_SECRET=XnKZDR7OmPce9SxBjbPOqyMnMKDMdLLWNJP9iqsrYNk=
+      - DATABASE_URL=postgresql://yukun:Cyk920211.@postgres:5432/aipan
       - LOG_LEVEL=info
+    ports:
+      - "8082:3000"
     restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
-    network_mode: host
+    networks:
+      - app-network
     healthcheck:
       test: ["CMD-SHELL", "nc -z localhost 3000 || exit 1"]
       interval: 30s
@@ -289,11 +321,11 @@ services:
       - POSTGRES_PASSWORD=Cyk920211.
       - POSTGRES_DB=aipan
       - POSTGRES_INITDB_ARGS=--encoding=UTF8 --lc-collate=C --lc-ctype=C
-    command: ["postgres", "-c", "port=35432"]
     restart: unless-stopped
-    network_mode: host
+    networks:
+      - app-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -p 35432 -U yukun -d aipan"]
+      test: ["CMD-SHELL", "pg_isready -U yukun -d aipan"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -308,13 +340,16 @@ services:
     image: docker.hanxi.cc/hanxi/xiaomusic
     container_name: xiaomusic
     restart: unless-stopped
+    ports:
+      - "58090:8090"
     environment:
       XIAOMUSIC_PUBLIC_PORT: 58090
       TZ: Asia/Shanghai
     volumes:
       - /vol2/1000/music:/app/music
       - ./xiaomusic_conf:/app/conf
-    network_mode: host
+    networks:
+      - app-network
     healthcheck:
       test: ["CMD-SHELL", "nc -z localhost 8090 || exit 1"]
       interval: 30s
@@ -322,48 +357,29 @@ services:
       retries: 5
       start_period: 60s
 
-  ################################### 五、桌面浏览器 ###################################
-  kasm-chrome:
-    image: kasmweb/chrome:1.15.0
-    container_name: kasm-chrome
-    restart: unless-stopped
-    shm_size: "1g"
-    environment:
-      - TZ=Asia/Shanghai
-      - VNC_USER=browser
-      - VNC_PW=browser123
-      - DISPLAY_WIDTH=1920
-      - DISPLAY_HEIGHT=1080
-    volumes:
-      - ./browser/profile:/home/kasm-user/.config
-    network_mode: host
-    healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 6901 || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 90s
-
-  jackett:
-    image: linuxserver/jackett
-    container_name: jackett
-    hostname: jackett
-    volumes:
-      - ./jackett/config:/config
-      - /vol2/1000/media:/downloads
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Asia/Shanghai
-      - AUTO_UPDATE=true
-    restart: unless-stopped
-    network_mode: host
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9117/UI/Login || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
+  # jackett:
+  #   image: linuxserver/jackett
+  #   container_name: jackett
+  #   hostname: jackett
+  #   ports:
+  #     - "9117:9117"
+  #   volumes:
+  #     - ./jackett/config:/config
+  #     - /vol2/1000/media:/downloads
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Asia/Shanghai
+  #     - AUTO_UPDATE=true
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -f http://localhost:9117/UI/Login || exit 1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 60s
 
 networks:
   app-network:
