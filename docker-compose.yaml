@@ -50,7 +50,7 @@ services:
     container_name: nastools
     hostname: nastools
     ports:
-      - 3001:3000
+      - 30001:3000
     volumes:
       - ./nastools/config:/config
       - /vol2/1000/media:/downloads
