@@ -2,24 +2,24 @@ services:
 
   ################################### 一、影视核心（自动化+播放+整理）###################################
   # 1. Qbittorrent 下载器
-  # qbittorrent:
-  #   image: linuxserver/qbittorrent:latest
-  #   container_name: qbittorrent
-  #   environment:
-  #     - PUID=1000  # 调整为常见值
-  #     - PGID=1000  # 调整为常见值
-  #     - TZ=Asia/Shanghai
-  #     - WEBUI_PORT=8080
-  #   volumes:
-  #     - /vol2/1000/media:/downloads
-  #     - ./qbittorrent/config:/config
-  #   ports:
-  #     - 8080:8080
-  #     - 6881:6881
-  #     - 6881:6881/udp
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-network
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000  # 调整为常见值
+      - PGID=1000  # 调整为常见值
+      - TZ=Asia/Shanghai
+      - WEBUI_PORT=8080
+    volumes:
+      - /vol2/1000/media:/downloads
+      - ./qbittorrent/config:/config
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
+    networks:
+      - app-network
 
   # 2. MoviePilot-v2（影视自动化核心）
   moviepilot-v2:
