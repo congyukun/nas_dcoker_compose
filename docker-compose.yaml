@@ -151,7 +151,7 @@ services:
     ports:
       - "8008:8002"
     volumes:
-      - /vol2/1000/music::/app/media
+      - /vol2/1000/music:/app/media
       - ./music-tag-web/data:/app/data
       - /vol2/1000/music/download:/app/download
     restart: always
