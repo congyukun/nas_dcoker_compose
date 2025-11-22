@@ -151,9 +151,9 @@ services:
     ports:
       - "8008:8002"
     volumes:
-      - /path/to/your/music:/app/media
-      - /path/to/your/config:/app/data
-      - /path/to/your/download:/app/download
+      - /vol2/1000/music::/app/media
+      - ./music-tag-web/data:/app/data
+      - /vol2/1000/music/download:/app/download
     restart: always
     environment:
       - TZ=Asia/Shanghai
