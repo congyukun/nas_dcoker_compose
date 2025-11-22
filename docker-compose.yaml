@@ -145,17 +145,18 @@ services:
   #     retries: 3
   #     start_period: 30s
   # 8. Music-tag-Web（音乐标签编辑）
-  music-tag-web:
-    image: panda62/music-tag-web:latest
+  music-tag:
+    image: xhongc/music_tag_web:latest
     container_name: music-tag-web
+    ports:
+      - "8008:8002"
+    volumes:
+      - /path/to/your/music:/app/media
+      - /path/to/your/config:/app/data
+      - /path/to/your/download:/app/download
+    restart: always
     environment:
       - TZ=Asia/Shanghai
-    volumes:
-      - /vol2/1000/music:/app/media:rw
-      - ./music-tag-web/data:/app/data
-    ports:
-      - "3002:8001"
-    restart: unless-stopped
     networks:
       - app-network
     healthcheck:
@@ -385,7 +386,7 @@ services:
       # 如果需要代理，取消下面的注释并设置代理地址
       # - PROXY=socks5://proxy:7897
     volumes:
-      - pansou-cache:/app/cache
+      - ./data/pansou-cache:/app/cache
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://localhost:8888/api/health"]
       interval: 30s
@@ -435,5 +436,4 @@ networks:
   app-network:
     driver: bridge
     ipam:
-      config:
-        - subnet: 172.20.0.0/16
+      driver: default
