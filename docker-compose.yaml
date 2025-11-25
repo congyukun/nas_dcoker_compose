@@ -323,7 +323,7 @@ services:
     image: postgres:15
     container_name: postgres-aipan  # 容器名加前缀，避免冲突
     ports:
-      - "5432:5432"  # 端口映射，允许远程连接
+      - "5433:5432"  # 端口映射，允许远程连接
     volumes:
       - ./data/postgres_data:/var/lib/postgresql/data
       - ./data/postgres_init:/docker-entrypoint-initdb.d  # 初始化脚本目录，用于创建必要的数据表
