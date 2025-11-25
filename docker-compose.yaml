@@ -388,18 +388,6 @@ services:
       start_period: 10s
     networks:
       - app-network
-  # 如果需要代理，取消下面的注释
-  # proxy:
-  #   image: ghcr.io/snail007/goproxy:latest
-  #   container_name: pansou-proxy
-  #   restart: unless-stopped
-  #   command: /proxy socks -p :7897
-  #   networks:
-  #     - pansou-network
-
-volumes:
-  pansou-cache:
-    name: pansou-cache      
 
   # jackett:
   #   image: linuxserver/jackett
