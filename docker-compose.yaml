@@ -293,6 +293,9 @@ services:
       - JWT_SECRET=XnKZDR7OmPce9SxBjbPOqyMnMKDMdLLWNJP9iqsrYNk=
       - DATABASE_URL=postgresql://yukun:Cyk920211.@postgres:5432/aipan
       - LOG_LEVEL=info
+      - REDIS_URL=redis://redis:6379
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     ports:
       - "8082:3000"
     restart: unless-stopped
@@ -336,6 +339,26 @@ services:
         limits:
           cpus: "1"
           memory: "1G"
+
+  # Redis服务
+  redis:
+    image: redis:alpine
+    container_name: redis
+    volumes:
+      - ./data/redis_data:/data
+    ports:
+      - "6379:6379"
+    environment:
+      - TZ=Asia/Shanghai
+    restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
   xiaomusic:
     image: docker.hanxi.cc/hanxi/xiaomusic
