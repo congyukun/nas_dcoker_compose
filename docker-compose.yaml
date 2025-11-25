@@ -296,6 +296,10 @@ services:
       - REDIS_URL=redis://redis:6379
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      # 添加代理配置以解决外部API访问问题
+      - HTTP_PROXY=http://host.docker.internal:7890
+      - HTTPS_PROXY=http://host.docker.internal:7890
+      - NO_PROXY=localhost,127.0.0.1,postgres,redis
     ports:
       - "8082:3000"
     restart: unless-stopped
@@ -312,6 +316,8 @@ services:
       start_period: 90s
     volumes:
       - ./data/aipan_logs:/app/logs
+      # 添加配置文件挂载，便于自定义API端点
+      - ./data/aipan_config:/app/config
 
   postgres:
     image: postgres:15
