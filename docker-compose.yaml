@@ -379,10 +379,10 @@ services:
       - ASYNC_MAX_BACKGROUND_TASKS=100
       - ASYNC_CACHE_TTL_HOURS=1
       # 认证配置（可选）
-      # - AUTH_ENABLED=true
-      # - AUTH_USERS=admin:admin123,user:pass456
-      # - AUTH_TOKEN_EXPIRY=24
-      # - AUTH_JWT_SECRET=your-secret-key-here
+      - AUTH_ENABLED=true
+      - AUTH_USERS=admin:admin123,user:pass456
+      - AUTH_TOKEN_EXPIRY=24
+      - AUTH_JWT_SECRET=k9qT2xwRjRjZ1N4b2t2Z3ZhV0x6b1V3RjVwT0ZtV0I=
       # 如果需要代理，取消下面的注释并设置代理地址
       # - PROXY=socks5://proxy:7897
     volumes:
