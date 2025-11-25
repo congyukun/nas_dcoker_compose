@@ -318,9 +318,9 @@ services:
     container_name: postgres-aipan  # 容器名加前缀，避免冲突
     volumes:
       - ./data/postgres_data:/var/lib/postgresql/data
-      - ./data/postgres_init:/docker-entrypoint-initdb.d  # 新增：初始化脚本目录（可选）
+      - ./data/postgres_init:/docker-entrypoint-initdb.d  # 初始化脚本目录，用于创建必要的数据表
     environment:
-      - TZ=Asia/Shanghai  # 新增：数据库时区与应用一致
+      - TZ=Asia/Shanghai  # 数据库时区与应用一致
       - POSTGRES_USER=yukun
       - POSTGRES_PASSWORD=Cyk920211.
       - POSTGRES_DB=aipan
@@ -333,7 +333,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 30s  # 添加启动等待时间
+      start_period: 60s  # 增加启动等待时间，确保初始化脚本有足够时间执行
     deploy:
       resources:
         limits:
