@@ -401,10 +401,10 @@ services:
       - PGID=1000
       - ADMIN_USERNAME=yukun
       - ADMIN_PASSWORD=Cyk920211.
-      - AUDIO_DOWNLOAD_PATH=/app/data
+      - AUDIO_DOWNLOAD_PATH=/vol2/1000/music
       - CLEANUP_INTERVAL=300  
     volumes:
-      - /vol2/1000/music:/app/data 
+      - /vol2/1000/music:/app/data
       - ./playlistdl/config:/config
     networks:
       - app-network
