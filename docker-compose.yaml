@@ -396,14 +396,24 @@ services:
     ports:
       - "4827:5000"
     environment:
+      - TZ=Asia/Shanghai
+      - PUID=1000
+      - PGID=1000
       - ADMIN_USERNAME=yukun
       - ADMIN_PASSWORD=Cyk920211.
-      - AUDIO_DOWNLOAD_PATH=/data 
+      - AUDIO_DOWNLOAD_PATH=/app/data
       - CLEANUP_INTERVAL=300  
     volumes:
       - /vol2/1000/music:/app/data 
+      - ./playlistdl/config:/config
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 5000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
   # pansou:
   #   image: ghcr.io/fish2018/pansou-web:latest
   #   container_name: pansou
