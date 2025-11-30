@@ -10,3 +10,4 @@ navidrome/*
 qbittorrent/*
 quark-auto-save/*
 storage/*
+.vscode/*
