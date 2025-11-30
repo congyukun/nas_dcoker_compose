@@ -388,7 +388,22 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
-
+  
+  playlistdl:
+    image: tanner23456/playlistdl:v2
+    container_name: playlistdl
+    restart: unless-stopped
+    ports:
+      - "4827:5000"
+    environment:
+      - ADMIN_USERNAME=yukun
+      - ADMIN_PASSWORD=Cyk920211.
+      - AUDIO_DOWNLOAD_PATH=/data 
+      - CLEANUP_INTERVAL=300  
+    volumes:
+      - /vol2/1000/music:/app/data 
+    networks:
+      - app-network
   # pansou:
   #   image: ghcr.io/fish2018/pansou-web:latest
   #   container_name: pansou
@@ -491,6 +506,7 @@ services:
 volumes:
   pansou-data:
     driver: local
+
   # jackett:
   #   image: linuxserver/jackett
   #   container_name: jackett
