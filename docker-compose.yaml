@@ -400,7 +400,7 @@ services:
       - PUID=1000
       - PGID=1000
       - ADMIN_USERNAME=yukun
-      - ADMIN_PASSWORD=Cyk920211.
+      - ADMIN_PASSWORD=yukun12
       - AUDIO_DOWNLOAD_PATH=/data
       - CLEANUP_INTERVAL=300  
     volumes:
