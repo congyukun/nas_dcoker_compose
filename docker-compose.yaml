@@ -404,7 +404,7 @@ services:
       - AUDIO_DOWNLOAD_PATH=/data
       - CLEANUP_INTERVAL=300  
     volumes:
-      - /vol2/1000/music:/app/downloads
+      - /vol2/1000/music:/app/data
       - ./playlistdl/config:/config
     networks:
       - app-network
