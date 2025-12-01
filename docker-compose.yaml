@@ -38,8 +38,8 @@ services:
       - /vol2/1000/media:/downloads
     ports:
       - 30000:3000
-    depends_on:
-      - qbittorrent
+    # depends_on:
+    #   - qbittorrent
     restart: unless-stopped
     networks:
       - app-network
