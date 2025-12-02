@@ -309,7 +309,7 @@ services:
       - ./sunpanel/runtime:/app/runtime # 挂载日志目录
       # - /mnt/sata1-1:/os # 硬盘挂载点（根据自己需求修改）
     ports:
-      - 3002:3002
+      - 13002:3002
     restart: always
     environment:
       - TZ=Asia/Shanghai
