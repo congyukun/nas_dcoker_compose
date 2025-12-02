@@ -300,20 +300,31 @@ services:
   #     start_period: 90s
   
   # 13. Sun-Panel（导航面板）
-  # sun-panel:
-  #   image: hslr/sun-panel:latest
-  #   container_name: sun-panel
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #     - ADMIN_USER=admin
-  #     - ADMIN_PWD=admin123
-  #   volumes:
-  #     - ./data/sun-panel/data:/app/data
-  #   ports:
-  #     - 3003:3000
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-network
+  sun-panel:
+    image: "hslr/sun-panel:latest"
+    container_name: sun-panel
+    volumes:
+      - ./sunpanel/conf:/app/conf
+      - /var/run/docker.sock:/var/run/docker.sock # 挂载docker.sock
+      - ./sunpanel/runtime:/app/runtime # 挂载日志目录
+      # - /mnt/sata1-1:/os # 硬盘挂载点（根据自己需求修改）
+    ports:
+      - 3002:3002
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - app-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sunpanel.rule=Host(`sunpanel.local`)"
+      - "traefik.http.services.sunpanel.loadbalancer.server.port=3002"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
   # 14. Aipan（网盘搜索）
   aipan:
