@@ -20,7 +20,35 @@ services:
   #   restart: unless-stopped
   #   networks:
   #     - app-network
-
+  iptv-api:
+    image: guovern/iptv-api:latest
+    container_name: iptv-api
+    hostname: iptv-api
+    restart: unless-stopped
+    ports:
+      - "9000:8000"
+    volumes:
+      - ./iptv-api/config:/iptv-api/config      # 配置文件目录
+      - ./iptv-api/output:/iptv-api/output      # 输出文件目录（生成的m3u/txt文件）
+    environment:
+      - TZ=Asia/Shanghai                        # 设置时区为北京时间
+      - APP_HOST=0.0.0.0                        # 监听地址（不需要http://前缀）
+      - APP_PORT=8000                           # 应用端口
+      - UPDATE_CRON=0 0 */2 * *                 # 每两天凌晨 0 点执行更新
+      - REQUEST_TIMEOUT=10                      # 请求超时时间（秒）
+      - RETRY_COUNT=3                           # 重试次数
+      - RECENT_DAYS=30                          # 获取最近多少天的节目
+      - PUID=1000                               # 用户ID
+      - PGID=1000                               # 组ID
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+      
   # 2. MoviePilot-v2（影视自动化核心）
   moviepilot-v2:
     image: jxxghp/moviepilot-v2:latest
@@ -43,6 +71,12 @@ services:
     restart: unless-stopped
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
   # 3. Nastools（备选自动化工具）
   nastools:
@@ -61,6 +95,12 @@ services:
       - TZ=Asia/Shanghai
       - AUTO_REMOVE_TORRENT=7
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
     networks:
       - app-network
 
@@ -115,7 +155,15 @@ services:
   #     - ./filebot/config:/config
   #     - ./filebot/logs:/var/log/filebot
   #     - ./filebot/data:/data/filebot
+  #   ports:
+  #     - "8082:8080"
   #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 60s
   #   networks:
   #     - app-network
   #   # FileBot 需要特殊配置，暂时禁用避免影响其他服务
@@ -202,22 +250,6 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
-  # 11. Rustdesk（远程控制）
-  # rustdesk:
-  #   image: rustdesk/rustdesk-server:latest
-  #   container_name: rustdesk
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #   volumes:
-  #     - ./data/rustdesk/root:/root
-  #   ports:
-  #     - 21115:21115/tcp
-  #     - 21116:21116/tcp
-  #     - 21116:21116/udp
-  #     - 21117:21117/tcp
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-network
 
   ################################### 四、管理面板（1Panel+Lucky+Sun-Panel）###################################
   
@@ -266,6 +298,7 @@ services:
   #     timeout: 10s
   #     retries: 5
   #     start_period: 90s
+  
   # 13. Sun-Panel（导航面板）
   # sun-panel:
   #   image: hslr/sun-panel:latest
@@ -468,8 +501,8 @@ services:
       test: ["CMD", "/app/healthcheck.sh"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 40s
+      retries: 5
+      start_period: 60s
     networks:
       - app-network
   # 自动健康检查和重启服务（容器级别监控）
