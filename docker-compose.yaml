@@ -2,24 +2,32 @@ services:
 
   ################################### 一、影视核心（自动化+播放+整理）###################################
   # 1. Qbittorrent 下载器
-  # qbittorrent:
-  #   image: linuxserver/qbittorrent:latest
-  #   container_name: qbittorrent
-  #   environment:
-  #     - PUID=1000  # 调整为常见值
-  #     - PGID=1000  # 调整为常见值
-  #     - TZ=Asia/Shanghai
-  #     - WEBUI_PORT=8080
-  #   volumes:
-  #     - /vol2/1000/media:/downloads
-  #     - ./qbittorrent/config:/config
-  #   ports:
-  #     - 8080:8080
-  #     - 6881:6881
-  #     - 6881:6881/udp
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-network
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    hostname: qbittorrent
+    environment:
+      - PUID=1000           # 运行用户ID
+      - PGID=1000           # 运行用户组ID
+      - TZ=Asia/Shanghai
+      - WEBUI_PORT=8080     # 容器内部 WebUI 端口
+      - UMASK_SET=022       # 下载文件权限掩码（rw-r--r--）
+    volumes:
+      - /vol2/1000/media:/downloads   # 下载目录
+      - ./qbittorrent/config:/config  # 配置目录
+    ports:
+      - "8080:8080"        # WebUI
+      - "6881:6881"        # BT 监听端口 TCP
+      - "6881:6881/udp"    # BT 监听端口 UDP
+    restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
   iptv-api:
     image: guovern/iptv-api:latest
     container_name: iptv-api
@@ -65,7 +73,7 @@ services:
       - /vol2/1000/media:/media
       - /vol2/1000/media:/downloads
     ports:
-      - 30000:3000
+      - "30000:3000"
     # depends_on:
     #   - qbittorrent
     restart: unless-stopped
@@ -84,7 +92,7 @@ services:
     container_name: nastools
     hostname: nastools
     ports:
-      - 30001:3000
+      - "30001:3000"
     volumes:
       - ./nastools/config:/config
       - /vol2/1000/media:/downloads
@@ -105,93 +113,53 @@ services:
       - app-network
 
   # 4. Jellyfin（VideoToolbox硬件加速）
-  # jellyfin:
-  #   image: jellyfin/jellyfin:latest
-  #   container_name: jellyfin
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #     - PUID=1000  # 添加用户ID
-  #     - PGID=1000  # 添加组ID
-  #   volumes:
-  #     - ./jellyfin/config:/config
-  #     - /vol2/1000/media:/media
-  #     - /vol2/1000/music:/music
-  #   ports:
-  #     - 8096:8096
-  #     - 8920:8920
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-network
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - TZ=Asia/Shanghai
+      - PUID=1000  # 添加用户ID
+      - PGID=1000  # 添加组ID
+    volumes:
+      - ./jellyfin/config:/config
+      - /vol2/1000/media:/media
+      - /vol2/1000/music:/music
+    ports:
+      - "8096:8096"
+      - "8920:8920"
+    restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8096 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
-  # 5. Subtitle Edit（自动字幕）
-  # subtitle-edit:
-  #   image: alexandernst/subtitle-edit:latest
-  #   container_name: subtitle-edit
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #     - SE_AUTO_DOWNLOAD=true
-  #     - SE_LANGUAGES=zh-CN,en
-  #     - SE_INTERVAL=300
-  #   volumes:
-  #     - /vol2/1000/media:/media
-  #     - ./data/subtitle-edit/config:/config
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-network
-
-  # 6. FileBot（文件整理）
-  # 6. FileBot（文件整理）
-  # filebot:
-  #   image: rednoah/filebot:latest
-  #   container_name: filebot
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #     - LANG=C.UTF-8
-  #     - FILEBOT_OPTS=-Duser.language=zh -Duser.country=CN
-  #     - JAVA_OPTS=-Xmx1024m
-  #   volumes:
-  #     - ./media/raw:/input
-  #     - ./media/organized:/output
-  #     - ./filebot/config:/config
-  #     - ./filebot/logs:/var/log/filebot
-  #     - ./filebot/data:/data/filebot
-  #   ports:
-  #     - "8082:8080"
-  #   restart: unless-stopped
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 3
-  #     start_period: 60s
-  #   networks:
-  #     - app-network
-  #   # FileBot 需要特殊配置，暂时禁用避免影响其他服务
-  ################################### 二、音乐管理（Navidrome+Music-tag-Web）###################################
-  
   # 7. Navidrome（音乐服务器）
-  # navidrome:
-  #   image: deluan/navidrome:latest
-  #   container_name: navidrome
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #     - ND_SCANSCHEDULE=0 3 * * * # 每天凌晨3点扫描
-  #     - ND_MAXSCANSPEED=10mbps
-  #     - ND_LOGLEVEL=info
-  #   volumes:
-  #     - /vol2/1000/music:/music
-  #     - ./navidrome/data:/data
-  #   ports:
-  #     - "4533:4533"
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-network
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:4533/ping || exit 1"]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 3
-  #     start_period: 30s
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    environment:
+      - TZ=Asia/Shanghai
+      - ND_SCANSCHEDULE=0 3 * * * # 每天凌晨3点扫描
+      - ND_MAXSCANSPEED=10mbps
+      - ND_LOGLEVEL=info
+    volumes:
+      - /vol2/1000/music:/music
+      - ./navidrome/data:/data
+    ports:
+      - "4533:4533"
+    restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:4533/ping || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
   # 8. Music-tag-Web（音乐标签编辑）
   music-tag:
     image: xhongc/music_tag_web:latest
@@ -309,7 +277,7 @@ services:
       - ./sunpanel/runtime:/app/runtime # 挂载日志目录
       # - /mnt/sata1-1:/os # 硬盘挂载点（根据自己需求修改）
     ports:
-      - 13002:3002
+      - "13002:3002"
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -349,6 +317,8 @@ services:
     restart: unless-stopped
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     networks:
       - app-network
@@ -528,33 +498,32 @@ services:
       - AUTOHEAL_DEFAULT_STOP_TIMEOUT=10  # 停止容器的超时时间
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-volumes:
-  pansou-data:
-    driver: local
+    networks:
+      - app-network
 
-  # jackett:
-  #   image: linuxserver/jackett
-  #   container_name: jackett
-  #   hostname: jackett
-  #   ports:
-  #     - "9117:9117"
-  #   volumes:
-  #     - ./jackett/config:/config
-  #     - /vol2/1000/media:/downloads
-  #   environment:
-  #     - PUID=1000
-  #     - PGID=1000
-  #     - TZ=Asia/Shanghai
-  #     - AUTO_UPDATE=true
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-network
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "curl -f http://localhost:9117/UI/Login || exit 1"]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 5
-  #     start_period: 60s
+  jackett:
+    image: linuxserver/jackett
+    container_name: jackett
+    hostname: jackett
+    ports:
+      - "9117:9117"
+    volumes:
+      - ./jackett/config:/config
+      - /vol2/1000/media:/downloads
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+      - AUTO_UPDATE=true
+    restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9117/UI/Login || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
 networks:
   app-network:
