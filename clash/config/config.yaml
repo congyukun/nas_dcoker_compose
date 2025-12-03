@@ -12,7 +12,7 @@ log-level: info
 # 面板 / 外部控制端口，对应 docker-compose 中映射的 9090:9090
 external-controller: 0.0.0.0:9090
 # 建议设置一个访问密钥，防止未授权访问控制端口；先留空，确认没问题后可自行设置
-secret: ""
+secret: "123654"
 
 dns:
   enable: true
