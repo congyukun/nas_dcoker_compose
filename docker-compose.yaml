@@ -534,10 +534,20 @@ services:
       - ./clash/config:/root/.config/clash    # 配置目录，挂载 config.yaml 等
     ports:
       - "7890:7890"    # HTTP/SOCKS5 代理端口
-      - "9090:9090"    # Clash 面板 / 外部控制端口
+      - "9090:9090"    # Clash external-controller 控制端口
     environment:
       - TZ=Asia/Shanghai
     restart: unless-stopped
+    networks:
+      - app-network
+
+  # Clash Web UI（Dashboard），通过浏览器访问面板，再连接 Clash 的 9090 控制端口
+  clash-dashboard:
+    image: metacubex/mihomo-dashboard
+    container_name: clash-dashboard
+    restart: unless-stopped
+    ports:
+      - "19090:80"    # 浏览器访问面板：http://NAS内网IP:19090
     networks:
       - app-network
 

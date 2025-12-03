@@ -1,0 +1,39 @@
+# 基础 Clash 配置模板
+# 容器挂载路径：/root/.config/clash/config.yaml
+# 当前文件路径：./clash/config/config.yaml
+
+port: 7890          # HTTP/Mixed 代理端口，已在 docker-compose 中映射到宿主机 7890
+socks-port: 7891    # SOCKS5 代理端口（可选，如不需要可改为 0 或删除）
+allow-lan: true
+bind-address: 0.0.0.0
+mode: Rule          # 可改为 global / direct / rule
+log-level: info
+
+# 面板 / 外部控制端口，对应 docker-compose 中映射的 9090:9090
+external-controller: 0.0.0.0:9090
+# 建议设置一个访问密钥，防止未授权访问控制端口；先留空，确认没问题后可自行设置
+secret: ""
+
+dns:
+  enable: true
+  listen: 0.0.0.0:1053
+  default-nameserver:
+    - 223.5.5.5
+    - 1.1.1.1
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  nameserver:
+    - https://223.5.5.5/dns-query
+    - https://1.1.1.1/dns-query
+
+# 这里先留空，后续把你的节点（订阅）填到 proxies / proxy-groups 里
+proxies: []
+
+proxy-groups:
+  - name: PROXY
+    type: select
+    proxies:
+      - DIRECT
+
+rules:
+  - MATCH,DIRECT
