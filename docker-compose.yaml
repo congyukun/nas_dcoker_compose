@@ -219,30 +219,6 @@ services:
       retries: 5
       start_period: 60s
 
-  # 11. Chromium（Web 浏览器容器）
-  chromium:
-    image: registry.cn-guangzhou.aliyuncs.com/fnapp/trim-chromium:latest
-    container_name: chromium
-    security_opt:
-      - seccomp:unconfined
-    environment:
-      - PUID=1000              # 与其他容器一致的用户ID
-      - PGID=1000              # 与其他容器一致的用户组ID
-      - TZ=Asia/Shanghai       # 统一为中国时区
-      - SUBFOLDER=/chromium/
-      - LC_ALL=zh_CN.UTF-8
-      - CUSTOM_USER=admin      # Web 登录用户名（可按需修改）
-      - PASSWORD=admin123   # Web 登录PASSWORD（可按需修改为更复杂）
-    volumes:
-      - /var/apps/docker-chromium/shares/chromium/config:/config
-    ports:
-      - "13000:3000"
-      - "13001:3001"
-    shm_size: "1gb"
-    restart: unless-stopped
-    networks:
-      - app-network
-
   ################################### 四、管理面板（1Panel+Lucky+Sun-Panel）###################################
   
   # 1panel:
