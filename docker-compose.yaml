@@ -543,7 +543,7 @@ services:
 
   # Clash Web UI（Dashboard），通过浏览器访问面板，再连接 Clash 的 9090 控制端口
   clash-dashboard:
-    image: metacubex/mihomo-dashboard
+    image: hitian/clash-dashboard:latest
     container_name: clash-dashboard
     restart: unless-stopped
     ports:
