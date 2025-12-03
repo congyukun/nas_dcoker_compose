@@ -525,6 +525,10 @@ services:
       retries: 5
       start_period: 60s
 
+volumes:
+  pansou-data:
+    driver: local
+
 networks:
   app-network:
     driver: bridge
