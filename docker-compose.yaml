@@ -28,6 +28,91 @@ services:
       timeout: 10s
       retries: 3
       start_period: 60s
+
+  # 2. MoviePilot V2（影视自动化平台）
+  moviepilot:
+    stdin_open: true
+    tty: true
+    container_name: moviepilot-v2
+    hostname: moviepilot-v2
+    image: jxxghp/moviepilot-v2:latest
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    volumes:
+      - "/vol2/1000/media:/media"                              # 媒体
+      - "./moviepilot/config:/config"                          # 持久化配置
+      - "./moviepilot/core:/moviepilot/.cache/ms-playwright"   # 内核浏览器
+      # - "/tr/config/torrents:/torrents"                       # TR 种子位置
+      - "./qbittorrent/config/qBittorrent/BT_backup:/BT_backup" # QB 种子位置
+    environment:
+      - "NGINX_PORT=3000"
+      - "PORT=3001"
+      - "PUID=0"
+      - "PGID=0"
+      - "UMASK=000"
+      - "TZ=Asia/Shanghai"
+      - "SUPERUSER=admin"
+      - "SUPERUSER_PASSWORD=你的初始登录密码"
+      - "DB_TYPE=postgresql"
+      - "DB_POSTGRESQL_HOST=postgresql"
+      - "DB_POSTGRESQL_PORT=5432"
+      - "DB_POSTGRESQL_DATABASE=moviepilot"
+      - "DB_POSTGRESQL_USERNAME=moviepilot"
+      - "DB_POSTGRESQL_PASSWORD=pg_password"
+      - "CACHE_BACKEND_TYPE=redis"
+      # 缓存后端 Redis（复用全局 redis 服务）
+      - "CACHE_BACKEND_URL=redis://redis:6379/0"
+    restart: always
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # MoviePilot 专用 PostgreSQL 数据库
+  postgresql:
+    image: postgres
+    container_name: postgresql
+    restart: always
+    environment:
+      POSTGRES_DB: moviepilot
+      POSTGRES_USER: moviepilot
+      POSTGRES_PASSWORD: pg_password
+      TZ: Asia/Shanghai
+    volumes:
+      # 仅 postgresql 18.0+ 及以上版本可用，根据版本二选一即可
+      - /volume1/docker/postgresql:/var/lib/postgresql
+      # 仅 postgresql 17.6 及以下版本可用，根据版本二选一即可
+      # - /volume1/docker/postgresql/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U moviepilot -d moviepilot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # MoviePilot 数据迁移（SQLite → PostgreSQL）
+  pgloader:
+    image: dimitri/pgloader:latest
+    container_name: moviepilot-pgloader
+    volumes:
+      # MP 配置目录，包含 user.db
+      - ./moviepilot/config:/mp_config
+    command: >
+      pgloader
+      sqlite:///mp_config/user.db
+      postgresql://moviepilot:pg_password@postgresql:5432/moviepilot
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # IPTV-API（直播源聚合与接口服务）
   iptv-api:
     image: guovern/iptv-api:latest
     container_name: iptv-api
@@ -57,77 +142,6 @@ services:
       retries: 3
       start_period: 60s
       
-  # 2. MoviePilot-v2（影视自动化核心）
-  moviepilot-v2:
-    image: jxxghp/moviepilot-v2:latest
-    container_name: moviepilot-v2
-    hostname: moviepilot-v2
-    stdin_open: true
-    tty: true
-    ports:
-      - "30000:3000"
-      - "30001:3001"
-    volumes:
-      - /vol2/1000/media:/media                 # 媒体/下载目录
-      - ./moviepilot/config:/config             # 持久化配置
-      - ./moviepilot/core:/moviepilot/.cache/ms-playwright  # 内核浏览器缓存
-      - /var/run/docker.sock:/var/run/docker.sock:ro        # 重启 MP 权限
-      # - ./tr/config/torrents:/torrents                    # TR 种子位置（如使用请修改路径）
-      # - ./qbittorrent/config/BT_backup:/BT_backup         # QB 种子位置（如使用请修改路径）
-    environment:
-      - NGINX_PORT=3000
-      - PORT=3001
-      - PUID=1000
-      - PGID=1000
-      - UMASK=000
-      - TZ=Asia/Shanghai
-      - SUPERUSER=admin
-      - SUPERUSER_PASSWORD=你的初始登录密码
-      - DB_TYPE=postgresql
-      # 复用现有 postgres 服务（服务名 postgres）
-      - DB_POSTGRESQL_HOST=postgres
-      - DB_POSTGRESQL_PORT=5432
-      - DB_POSTGRESQL_DATABASE=moviepilot
-      # 这里直接使用现有 postgres 用户 yukun（与 postgres 服务保持一致）
-      - DB_POSTGRESQL_USERNAME=yukun
-      - DB_POSTGRESQL_PASSWORD=yk123456.
-      - CACHE_BACKEND_TYPE=redis
-      # 复用现有 redis 服务（无密码），使用 DB 1
-      - CACHE_BACKEND_URL=redis://redis:6379/1
-    restart: always
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-
-  # MoviePilot 使用现有 postgres / redis 服务（见下方 postgres、redis 定义）
-  # 如需改回独立数据库或缓存，可再添加专用 mp-postgresql / mp-redis 服务。
-
-  # MoviePilot 数据迁移（SQLite → PostgreSQL，一次性任务，复用现有 postgres 服务）
-  mp-pgloader:
-    image: dimitri/pgloader:latest
-    container_name: mp-pgloader
-    volumes:
-      # 挂载 MoviePilot 配置目录，内部需要能访问到 user.db
-      - ./moviepilot/config:/mp_config
-    command: >
-      pgloader
-      sqlite:///mp_config/user.db
-      postgresql://yukun:yk123456.@postgres:5432/moviepilot
-    depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - app-network
 
   # 3. Nastools（备选自动化工具）
   # nastools:
@@ -337,94 +351,7 @@ services:
       retries: 3
       start_period: 60s
 
-  # 14. Aipan（网盘搜索）
-  aipan:
-    image: unilei/aipan-netdisk-search:latest
-    container_name: aipan
-    environment:
-      - TZ=Asia/Shanghai
-      - ADMIN_USER=yukun
-      - ADMIN_PASSWORD=Cyk920211.
-      - JWT_SECRET=XnKZDR7OmPce9SxBjbPOqyMnMKDMdLLWNJP9iqsrYNk=
-      - DATABASE_URL=postgresql://yukun:yk123456.@postgres:5432/aipan
-      - LOG_LEVEL=info
-      - REDIS_URL=redis://redis:6379
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      # 添加代理配置以解决外部API访问问题
-      - HTTP_PROXY=http://host.docker.internal:7890
-      - HTTPS_PROXY=http://host.docker.internal:7890
-      - NO_PROXY=localhost,127.0.0.1,postgres,redis
-    ports:
-      - "8082:3000"
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 3000 || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 90s
-    volumes:
-      - ./data/aipan_logs:/app/logs
-      # 添加配置文件挂载，便于自定义API端点
-      - ./data/aipan_config:/app/config
-
-  postgres:
-    image: postgres:15
-    container_name: postgres-aipan  # 容器名加前缀，避免冲突
-    ports:
-      - "5433:5432"  # 端口映射，允许远程连接
-    volumes:
-      - ./data/postgres_data:/var/lib/postgresql/data
-      - ./data/postgres_init:/docker-entrypoint-initdb.d  # 初始化脚本目录，用于创建必要的数据表
-    environment:
-      - TZ=Asia/Shanghai  # 数据库时区与应用一致
-      - POSTGRES_USER=yukun
-      - POSTGRES_PASSWORD=yk123456.
-      - POSTGRES_DB=aipan
-      - POSTGRES_INITDB_ARGS=--encoding=UTF8 --lc-collate=C --lc-ctype=C
-    restart: unless-stopped
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U yukun -d aipan"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 60s  # 增加启动等待时间，确保初始化脚本有足够时间执行
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: "1G"
-
-  # 数据库迁移（Aipan：Prisma）
-  prisma-migrate:
-    image: unilei/aipan-netdisk-search:latest
-    container_name: aipan-prisma-migrate
-    restart: "no"
-    environment:
-      # 直接使用与 postgres 服务一致的账号密码
-      - POSTGRES_USER=yukun
-      - POSTGRES_PASSWORD=yk123456.
-      - POSTGRES_DB=aipan
-      - DATABASE_SCHEMA=public
-      - DATABASE_URL=postgresql://yukun:yk123456.@postgres:5432/aipan?schema=public
-      - SHADOW_DATABASE_URL=postgresql://yukun:yk123456.@postgres:5432/aipan_shadow?schema=public
-    command: ["/bin/sh", "-c", "cd /app && if [ ! -f ./prisma-esm-fix.mjs ]; then echo 'Creating prisma-esm-fix.mjs file...' && echo \"import { fileURLToPath } from 'url'; import { dirname } from 'path'; import { createRequire } from 'module'; if (typeof global.__filename === 'undefined') { global.__filename = fileURLToPath(import.meta.url); } if (typeof global.__dirname === 'undefined') { global.__dirname = dirname(global.__filename); } if (typeof global.require === 'undefined') { global.require = createRequire(import.meta.url); } console.log('[Prisma ESM Fix] 已加载 ES Module 环境修复');\" > ./prisma-esm-fix.mjs; fi && node --import=./prisma-esm-fix.mjs -e \"console.log('Running Prisma migrations with ESM fix')\" && npx prisma migrate deploy && npx prisma db seed"]
-    depends_on:
-      - postgres
-    networks:
-      - app-network
-
-  # Redis服务
+  # Redis 服务（通用缓存服务，供 MoviePilot 等组件使用）
   redis:
     image: redis:alpine
     container_name: redis
@@ -444,6 +371,7 @@ services:
       retries: 3
       start_period: 30s
 
+  # XiaoMusic（小爱同学本地音乐服务）
   xiaomusic:
     image: docker.hanxi.cc/hanxi/xiaomusic
     container_name: xiaomusic
@@ -465,6 +393,7 @@ services:
       retries: 5
       start_period: 60s
   
+  # PlaylistDL（音乐歌单批量下载工具）
   playlistdl:
     image: tanner23456/playlistdl:v2
     container_name: playlistdl
@@ -491,6 +420,7 @@ services:
       retries: 5
       start_period: 60s
   
+  # PanSou（多网盘资源聚合搜索）
   pansou:
     image: ghcr.io/fish2018/pansou-web:latest
     container_name: pansou-app
