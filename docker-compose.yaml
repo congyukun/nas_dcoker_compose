@@ -61,22 +61,45 @@ services:
   moviepilot-v2:
     image: jxxghp/moviepilot-v2:latest
     container_name: moviepilot-v2
-    environment:
-      - TZ=Asia/Shanghai
-      - MP_PORT=3000
-      - MP_DATA=/config
-      - AUTO_DELETE_TORRENT=7
-      - PUID=1000  # 添加用户ID
-      - PGID=1000  # 添加组ID
-    volumes:
-      - ./moviepilot/config:/config
-      - /vol2/1000/media:/media
-      - /vol2/1000/media:/downloads
+    hostname: moviepilot-v2
+    stdin_open: true
+    tty: true
     ports:
-      - "30000:3000"
-    # depends_on:
-    #   - qbittorrent
-    restart: unless-stopped
+      - "3000:3000"
+      - "3001:3001"
+    volumes:
+      - /vol2/1000/media:/media                 # 媒体/下载目录
+      - ./moviepilot/config:/config             # 持久化配置
+      - ./moviepilot/core:/moviepilot/.cache/ms-playwright  # 内核浏览器缓存
+      - /var/run/docker.sock:/var/run/docker.sock:ro        # 重启 MP 权限
+      # - ./tr/config/torrents:/torrents                    # TR 种子位置（如使用请修改路径）
+      # - ./qbittorrent/config/BT_backup:/BT_backup         # QB 种子位置（如使用请修改路径）
+    environment:
+      - NGINX_PORT=3000
+      - PORT=3001
+      - PUID=1000
+      - PGID=1000
+      - UMASK=000
+      - TZ=Asia/Shanghai
+      - SUPERUSER=admin
+      - SUPERUSER_PASSWORD=你的初始登录密码
+      - DB_TYPE=postgresql
+      # 复用现有 postgres 服务（服务名 postgres）
+      - DB_POSTGRESQL_HOST=postgres
+      - DB_POSTGRESQL_PORT=5432
+      - DB_POSTGRESQL_DATABASE=moviepilot
+      # 这里直接使用现有 postgres 用户 yukun（与 postgres 服务保持一致）
+      - DB_POSTGRESQL_USERNAME=yukun
+      - DB_POSTGRESQL_PASSWORD=yk123456.
+      - CACHE_BACKEND_TYPE=redis
+      # 复用现有 redis 服务（无密码），使用 DB 1
+      - CACHE_BACKEND_URL=redis://redis:6379/1
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     networks:
       - app-network
     healthcheck:
@@ -85,6 +108,26 @@ services:
       timeout: 10s
       retries: 3
       start_period: 60s
+
+  # MoviePilot 使用现有 postgres / redis 服务（见下方 postgres、redis 定义）
+  # 如需改回独立数据库或缓存，可再添加专用 mp-postgresql / mp-redis 服务。
+
+  # MoviePilot 数据迁移（SQLite → PostgreSQL，一次性任务，复用现有 postgres 服务）
+  mp-pgloader:
+    image: dimitri/pgloader:latest
+    container_name: mp-pgloader
+    volumes:
+      # 挂载 MoviePilot 配置目录，内部需要能访问到 user.db
+      - ./moviepilot/config:/mp_config
+    command: >
+      pgloader
+      sqlite:///mp_config/user.db
+      postgresql://yukun:yk123456.@postgres:5432/moviepilot
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
 
   # 3. Nastools（备选自动化工具）
   # nastools:
@@ -296,14 +339,14 @@ services:
 
   # 14. Aipan（网盘搜索）
   aipan:
-    image: unilei/aipan-netdisk-search-simple:latest
+    image: unilei/aipan-netdisk-search:latest
     container_name: aipan
     environment:
       - TZ=Asia/Shanghai
       - ADMIN_USER=yukun
       - ADMIN_PASSWORD=Cyk920211.
       - JWT_SECRET=XnKZDR7OmPce9SxBjbPOqyMnMKDMdLLWNJP9iqsrYNk=
-      - DATABASE_URL=postgresql://yukun:Cyk920211.@postgres:5432/aipan
+      - DATABASE_URL=postgresql://yukun:yk123456.@postgres:5432/aipan
       - LOG_LEVEL=info
       - REDIS_URL=redis://redis:6379
       - REDIS_HOST=redis
@@ -344,7 +387,7 @@ services:
     environment:
       - TZ=Asia/Shanghai  # 数据库时区与应用一致
       - POSTGRES_USER=yukun
-      - POSTGRES_PASSWORD=Cyk920211.
+      - POSTGRES_PASSWORD=yk123456.
       - POSTGRES_DB=aipan
       - POSTGRES_INITDB_ARGS=--encoding=UTF8 --lc-collate=C --lc-ctype=C
     restart: unless-stopped
@@ -361,6 +404,25 @@ services:
         limits:
           cpus: "1"
           memory: "1G"
+
+  # 数据库迁移（Aipan：Prisma）
+  prisma-migrate:
+    image: unilei/aipan-netdisk-search:latest
+    container_name: aipan-prisma-migrate
+    restart: "no"
+    environment:
+      # 直接使用与 postgres 服务一致的账号密码
+      - POSTGRES_USER=yukun
+      - POSTGRES_PASSWORD=yk123456.
+      - POSTGRES_DB=aipan
+      - DATABASE_SCHEMA=public
+      - DATABASE_URL=postgresql://yukun:yk123456.@postgres:5432/aipan?schema=public
+      - SHADOW_DATABASE_URL=postgresql://yukun:yk123456.@postgres:5432/aipan_shadow?schema=public
+    command: ["/bin/sh", "-c", "cd /app && if [ ! -f ./prisma-esm-fix.mjs ]; then echo 'Creating prisma-esm-fix.mjs file...' && echo \"import { fileURLToPath } from 'url'; import { dirname } from 'path'; import { createRequire } from 'module'; if (typeof global.__filename === 'undefined') { global.__filename = fileURLToPath(import.meta.url); } if (typeof global.__dirname === 'undefined') { global.__dirname = dirname(global.__filename); } if (typeof global.require === 'undefined') { global.require = createRequire(import.meta.url); } console.log('[Prisma ESM Fix] 已加载 ES Module 环境修复');\" > ./prisma-esm-fix.mjs; fi && node --import=./prisma-esm-fix.mjs -e \"console.log('Running Prisma migrations with ESM fix')\" && npx prisma migrate deploy && npx prisma db seed"]
+    depends_on:
+      - postgres
+    networks:
+      - app-network
 
   # Redis服务
   redis:
