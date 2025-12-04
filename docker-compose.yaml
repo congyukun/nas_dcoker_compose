@@ -65,8 +65,8 @@ services:
     stdin_open: true
     tty: true
     ports:
-      - "3000:3000"
-      - "3001:3001"
+      - "30000:3000"
+      - "30001:3001"
     volumes:
       - /vol2/1000/media:/media                 # 媒体/下载目录
       - ./moviepilot/config:/config             # 持久化配置
