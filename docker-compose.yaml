@@ -41,7 +41,7 @@ services:
       - "13001:3001"
     volumes:
       - "/vol2/1000/media:/media"                              # 媒体
-      - "./moviepilot/config:/config"                          # 持久化配置
+      - "./moviepilot/config-v2:/config"                       # v2 持久化配置（干净目录）
       - "./moviepilot/core:/moviepilot/.cache/ms-playwright"   # 内核浏览器
       # - "/tr/config/torrents:/torrents"                       # TR 种子位置
       - "./qbittorrent/config/qBittorrent/BT_backup:/BT_backup" # QB 种子位置
@@ -96,21 +96,21 @@ services:
       - app-network
 
   # MoviePilot 数据迁移（SQLite → PostgreSQL）
-  pgloader:
-    image: dimitri/pgloader:latest
-    container_name: moviepilot-pgloader
-    volumes:
-      # MP 配置目录，包含 user.db
-      - ./moviepilot/config:/mp_config
-    command: >
-      pgloader
-      sqlite:///mp_config/user.db
-      postgresql://moviepilot:pg_password@postgresql:5432/moviepilot
-    depends_on:
-      postgresql:
-        condition: service_healthy
-    networks:
-      - app-network
+  # pgloader:
+  #   image: dimitri/pgloader:latest
+  #   container_name: moviepilot-pgloader
+  #   volumes:
+  #     # MP 配置目录，包含 user.db
+  #     - ./moviepilot/config:/mp_config
+  #   command: >
+  #     pgloader
+  #     sqlite:///mp_config/user.db
+  #     postgresql://moviepilot:pg_password@postgresql:5432/moviepilot
+  #   depends_on:
+  #     postgresql:
+  #       condition: service_healthy
+  #   networks:
+  #     - app-network
 
   # IPTV-API（直播源聚合与接口服务）
   iptv-api:
