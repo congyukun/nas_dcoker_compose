@@ -53,7 +53,7 @@ services:
       - "UMASK=000"
       - "TZ=Asia/Shanghai"
       - "SUPERUSER=admin"
-      - "SUPERUSER_PASSWORD=你的初始登录密码"
+      - "SUPERUSER_PASSWORD=admin123"
       - "DB_TYPE=postgresql"
       - "DB_POSTGRESQL_HOST=postgresql"
       - "DB_POSTGRESQL_PORT=5432"
@@ -75,7 +75,7 @@ services:
   # MoviePilot 专用 PostgreSQL 数据库
   postgresql:
     image: postgres
-    container_name: postgresql
+    container_name: moviepilot-postgresql
     restart: always
     environment:
       POSTGRES_DB: moviepilot
