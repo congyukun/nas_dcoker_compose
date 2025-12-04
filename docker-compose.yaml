@@ -35,7 +35,6 @@ services:
     tty: true
     container_name: moviepilot-v2
     hostname: moviepilot-v2
-    network_mode: host
     volumes:
       - '/media:/media'
       - '/moviepilot-v2/config:/config'
