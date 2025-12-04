@@ -40,11 +40,11 @@ services:
       - "13000:3000"
       - "13001:3001"
     volumes:
-      - "/vol2/1000/media:/media"                              # 媒体
-      - "./moviepilot/config-v2:/config"                       # v2 持久化配置（干净目录）
-      - "./moviepilot/core:/moviepilot/.cache/ms-playwright"   # 内核浏览器
-      # - "/tr/config/torrents:/torrents"                       # TR 种子位置
-      - "./qbittorrent/config/qBittorrent/BT_backup:/BT_backup" # QB 种子位置
+      - /vol2/1000/media:/media # 媒体目录，与 qbittorrent 保持一致
+      - ./moviepilot/config:/config # MoviePilot 持久化配置
+      - ./moviepilot/core:/moviepilot/.cache/ms-playwright # 内核浏览器缓存
+      - /var/run/docker.sock:/var/run/docker.sock:ro # 重启 MP 权限
+      - ./qbittorrent/config/qBittorrent/BT_backup:/BT_backup # QB 种子位置
     environment:
       - "NGINX_PORT=3000"
       - "PORT=3001"
@@ -61,8 +61,7 @@ services:
       - "DB_POSTGRESQL_USERNAME=moviepilot"
       - "DB_POSTGRESQL_PASSWORD=pg_password"
       - "CACHE_BACKEND_TYPE=redis"
-      # 缓存后端 Redis（复用全局 redis 服务）
-      - "CACHE_BACKEND_URL=redis://redis:6379/0"
+      - "CACHE_BACKEND_URL=redis://:123456@redis:6379"
     restart: always
     depends_on:
       postgresql:
@@ -71,46 +70,6 @@ services:
         condition: service_healthy
     networks:
       - app-network
-
-  # MoviePilot 专用 PostgreSQL 数据库
-  postgresql:
-    image: postgres
-    container_name: moviepilot-postgresql
-    restart: always
-    environment:
-      POSTGRES_DB: moviepilot
-      POSTGRES_USER: moviepilot
-      POSTGRES_PASSWORD: pg_password
-      TZ: Asia/Shanghai
-    volumes:
-      # 仅 postgresql 18.0+ 及以上版本可用，根据版本二选一即可
-      - /volume1/docker/postgresql:/var/lib/postgresql
-      # 仅 postgresql 17.6 及以下版本可用，根据版本二选一即可
-      # - /volume1/docker/postgresql/data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U moviepilot -d moviepilot"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - app-network
-
-  # MoviePilot 数据迁移（SQLite → PostgreSQL）
-  # pgloader:
-  #   image: dimitri/pgloader:latest
-  #   container_name: moviepilot-pgloader
-  #   volumes:
-  #     # MP 配置目录，包含 user.db
-  #     - ./moviepilot/config:/mp_config
-  #   command: >
-  #     pgloader
-  #     sqlite:///mp_config/user.db
-  #     postgresql://moviepilot:pg_password@postgresql:5432/moviepilot
-  #   depends_on:
-  #     postgresql:
-  #       condition: service_healthy
-  #   networks:
-  #     - app-network
 
   # IPTV-API（直播源聚合与接口服务）
   iptv-api:
@@ -361,15 +320,55 @@ services:
       - "6379:6379"
     environment:
       - TZ=Asia/Shanghai
+    command: redis-server --save 600 1 --requirepass 123456
     restart: unless-stopped
     networks:
       - app-network
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 5
       start_period: 30s
+
+  # PostgreSQL（MoviePilot 专用数据库）
+  postgresql:
+    image: postgres
+    container_name: postgresql
+    restart: always
+    environment:
+      POSTGRES_DB: moviepilot
+      POSTGRES_USER: moviepilot
+      POSTGRES_PASSWORD: pg_password
+      TZ: Asia/Shanghai
+    volumes:
+      # 仅 postgresql 18.0+ 及以上版本可用，根据版本二选一即可
+      - /volume1/docker/postgresql:/var/lib/postgresql
+      # 仅 postgresql 17.6 及以下版本可用，根据版本二选一即可
+      # - /volume1/docker/postgresql/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U moviepilot -d moviepilot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # MoviePilot V2 数据迁移（SQLite -> PostgreSQL）
+  pgloader:
+    image: dimitri/pgloader:latest
+    container_name: pgloader
+    volumes:
+      - ./moviepilot/config:/mp_config
+    command: >
+      pgloader
+      sqlite:///mp_config/user.db
+      postgresql://moviepilot:pg_password@postgresql:5432/moviepilot
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    networks:
+      - app-network
 
   # XiaoMusic（小爱同学本地音乐服务）
   xiaomusic:
@@ -388,7 +387,7 @@ services:
       - app-network
     healthcheck:
       test: ["CMD-SHELL", "nc -z localhost 8090 || exit 1"]
-      interval: 30s
+      interval: 10s
       timeout: 10s
       retries: 5
       start_period: 60s
