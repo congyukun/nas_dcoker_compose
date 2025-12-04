@@ -37,8 +37,8 @@ services:
     hostname: moviepilot-v2
     image: jxxghp/moviepilot-v2:latest
     ports:
-      - "3000:3000"
-      - "3001:3001"
+      - "13000:3000"
+      - "13001:3001"
     volumes:
       - "/vol2/1000/media:/media"                              # 媒体
       - "./moviepilot/config:/config"                          # 持久化配置
