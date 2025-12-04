@@ -1,11 +1,11 @@
 mode: rule
 tproxy-port: 7896
 mixed-port: 7890
-allow-lan: false
+allow-lan: true
 log-level: info
 ipv6: true
-external-controller: ''
-secret: set-your-secret
+external-controller: 0.0.0.0:9090
+secret: "ClashDash_2025!"
 unified-delay: true
 profile:
   store-selected: true
@@ -2350,7 +2350,7 @@ proxy-groups:
   - 🇭🇰香港07|HKT|动态家宽
   - 🇭🇰香港08|HKT|动态家宽
   - 🇭🇰香港01|ICABLE|动态家宽
-  - 🇭🇰香港02|ICABLE|动态家宽
+  - 🇭🇰��港02|ICABLE|动态家宽
   - 🇭🇰香港03|ICABLE|动态家宽
   - 🇭🇰香港04|ICABLE|动态家宽
   - 🇭🇰香港05|ICABLE|动态家宽
