@@ -7,28 +7,11 @@ ipv6: true
 external-controller: ''
 secret: set-your-secret
 unified-delay: true
-external-controller-cors:
-  allow-private-network: true
-  allow-origins:
-  - tauri://localhost
-  - http://tauri.localhost
-  - https://yacd.metacubex.one
-  - https://metacubex.github.io
-  - https://board.zash.run.place
-tun:
-  enable: true
-  stack: gvisor
-  auto-route: true
-  strict-route: false
-  auto-detect-interface: true
-  dns-hijack:
-  - any:53
-external-controller-unix: /tmp/verge/verge-mihomo.sock
 profile:
   store-selected: true
 dns:
   enable: true
-  ipv6: true
+  ipv6: false
   default-nameserver:
   - 223.5.5.5
   - 119.29.29.29
@@ -48,6 +31,23 @@ dns:
     ipcidr:
     - 240.0.0.0/4
     - 0.0.0.0/32
+external-controller-cors:
+  allow-private-network: true
+  allow-origins:
+  - tauri://localhost
+  - http://tauri.localhost
+  - https://yacd.metacubex.one
+  - https://metacubex.github.io
+  - https://board.zash.run.place
+tun:
+  enable: false
+  stack: gvisor
+  auto-route: true
+  strict-route: false
+  auto-detect-interface: true
+  dns-hijack:
+  - any:53
+external-controller-unix: /tmp/verge/verge-mihomo.sock
 proxies:
 - name: 🇭🇰【请保存网址发布页获取最新网址】
   type: vmess

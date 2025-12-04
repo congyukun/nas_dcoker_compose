@@ -517,31 +517,46 @@ services:
   #     start_period: 60s
 
   ################################### 五、网络代理（Clash）###################################
-  # clash:
-  #   image: dreamacro/clash:latest
-  #   container_name: clash
-  #   hostname: clash
-  #   volumes:
-  #     - ./clash/config:/root/.config/clash    # 配置目录，挂载 config.yaml 等
-  #   ports:
-  #     - "7890:7890"    # HTTP/SOCKS5 代理端口
-  #     - "9090:9090"    # Clash external-controller 控制端口
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-network
-
-  # # Clash Web UI（Dashboard），通过浏览器访问面板，再连接 Clash 的 9090 控制端口
-  # clash-dashboard:
-  #   image: hitian/clash-dashboard:latest
-  #   container_name: clash-dashboard
-  #   restart: unless-stopped
-  #   ports:
-  #     - "19090:80"    # 浏览器访问面板：http://NAS内网IP:19090
-  #   networks:
-  #     - app-network
-
+  clash:
+    image: dreamacro/clash:latest
+    container_name: clash
+    hostname: clash
+    command: ["-f", "/clash/config/config.yaml"]  # 使用 /clash/config/config.yaml 作为配置文件
+    volumes:
+      - ./clash/config:/clash/config             # 宿主机 ./clash/config -> 容器 /clash/config
+    ports:
+      - "7890:7890"    # HTTP/SOCKS5 代理端口（供内网客户端使用）
+      - "9090:9090"    # Clash external-controller 控制端口（供面板连接）
+    environment:
+      - TZ=Asia/Shanghai
+    restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:9090 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+ 
+  # Clash Web UI（Dashboard），通过浏览器访问面板，再连接 Clash 的 9090 控制端口
+  clash-dashboard:
+    image: hitian/clash-dashboard:latest
+    container_name: clash-dashboard
+    restart: unless-stopped
+    depends_on:
+      - clash
+    ports:
+      - "19090:80"    # 浏览器访问面板：http://NAS内网IP:19090
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+ 
 volumes:
   pansou-data:
     driver: local
