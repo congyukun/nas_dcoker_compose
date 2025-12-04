@@ -62,6 +62,11 @@ services:
       - "DB_POSTGRESQL_PASSWORD=pg_password"
       - "CACHE_BACKEND_TYPE=redis"
       - "CACHE_BACKEND_URL=redis://:123456@redis:6379"
+      # 通过 Clash 代理访问外网（含 GitHub）
+      - "HTTP_PROXY=http://clash:7890"
+      - "HTTPS_PROXY=http://clash:7890"
+      # 不走代理的内网/本地地址，避免访问数据库、Redis 等也绕代理
+      - "NO_PROXY=localhost,127.0.0.1,postgresql,redis,clash,moviepilot-v2"
     restart: always
     depends_on:
       postgresql:
