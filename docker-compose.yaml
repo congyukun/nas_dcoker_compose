@@ -35,44 +35,23 @@ services:
     tty: true
     container_name: moviepilot-v2
     hostname: moviepilot-v2
-    image: jxxghp/moviepilot-v2:latest
-    ports:
-      - "13000:3000"
-      - "13001:3001"
+    network_mode: host
     volumes:
-      - /vol2/1000/media:/media # 媒体目录，与 qbittorrent 保持一致
-      - ./moviepilot/config:/config # MoviePilot 持久化配置
-      - ./moviepilot/core:/moviepilot/.cache/ms-playwright # 内核浏览器缓存
-      - /var/run/docker.sock:/var/run/docker.sock:ro # 重启 MP 权限
-      - ./qbittorrent/config/qBittorrent/BT_backup:/BT_backup # QB 种子位置
+      - '/media:/media'
+      - '/moviepilot-v2/config:/config'
+      - '/moviepilot-v2/core:/moviepilot/.cache/ms-playwright'
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
     environment:
-      - "NGINX_PORT=3000"
-      - "PORT=3001"
-      - "PUID=0"
-      - "PGID=0"
-      - "UMASK=000"
-      - "TZ=Asia/Shanghai"
-      - "SUPERUSER=admin"
-      - "SUPERUSER_PASSWORD=admin123"
-      - "DB_TYPE=postgresql"
-      - "DB_POSTGRESQL_HOST=postgresql"
-      - "DB_POSTGRESQL_PORT=5432"
-      - "DB_POSTGRESQL_DATABASE=moviepilot"
-      - "DB_POSTGRESQL_USERNAME=moviepilot"
-      - "DB_POSTGRESQL_PASSWORD=pg_password"
-      - "CACHE_BACKEND_TYPE=redis"
-      - "CACHE_BACKEND_URL=redis://:123456@redis:6379"
-      # 通过 Clash 代理访问外网（含 GitHub）
-      - "HTTP_PROXY=http://clash:7890"
-      - "HTTPS_PROXY=http://clash:7890"
-      # 不走代理的内网/本地地址，避免访问数据库、Redis 等也绕代理
-      - "NO_PROXY=localhost,127.0.0.1,postgresql,redis,clash,moviepilot-v2"
+      - 'NGINX_PORT=3000'
+      - 'PORT=3001'
+      - 'PUID=0'
+      - 'PGID=0'
+      - 'UMASK=000'
+      - 'TZ=Asia/Shanghai'
+      - 'SUPERUSER=admin' #超级管理员用户名
+      - 'SUPERUSER_PASSWORD=admin23' #超级管理员初始密码
     restart: always
-    depends_on:
-      postgresql:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+    image: jxxghp/moviepilot-v2:latest
     networks:
       - app-network
 
@@ -315,66 +294,6 @@ services:
       retries: 3
       start_period: 60s
 
-  # Redis 服务（通用缓存服务，供 MoviePilot 等组件使用）
-  redis:
-    image: redis:alpine
-    container_name: redis
-    volumes:
-      - ./data/redis_data:/data
-    ports:
-      - "6379:6379"
-    environment:
-      - TZ=Asia/Shanghai
-    command: redis-server --save 600 1 --requirepass 123456
-    restart: unless-stopped
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-
-  # PostgreSQL（MoviePilot 专用数据库）
-  postgresql:
-    image: postgres
-    container_name: postgresql
-    restart: always
-    environment:
-      POSTGRES_DB: moviepilot
-      POSTGRES_USER: moviepilot
-      POSTGRES_PASSWORD: pg_password
-      TZ: Asia/Shanghai
-    volumes:
-      # 仅 postgresql 18.0+ 及以上版本可用，根据版本二选一即可
-      - /volume1/docker/postgresql:/var/lib/postgresql
-      # 仅 postgresql 17.6 及以下版本可用，根据版本二选一即可
-      # - /volume1/docker/postgresql/data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U moviepilot -d moviepilot"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - app-network
-
-  # MoviePilot V2 数据迁移（SQLite -> PostgreSQL）
-  pgloader:
-    image: dimitri/pgloader:latest
-    container_name: pgloader
-    volumes:
-      - ./moviepilot/config:/mp_config
-    command: >
-      pgloader
-      sqlite:///mp_config/user.db
-      postgresql://moviepilot:pg_password@postgresql:5432/moviepilot
-    depends_on:
-      postgresql:
-        condition: service_healthy
-    networks:
-      - app-network
-
   # XiaoMusic（小爱同学本地音乐服务）
   xiaomusic:
     image: docker.hanxi.cc/hanxi/xiaomusic
@@ -522,45 +441,45 @@ services:
   #     start_period: 60s
 
   ################################### 五、网络代理（Clash）###################################
-  clash:
-    image: dreamacro/clash:latest
-    container_name: clash
-    hostname: clash
-    command: ["-f", "/root/.config/clash/config.yaml"]  # 使用容器内 /root/.config/clash/config.yaml 作为配置文件
-    volumes:
-      - ./clash/config:/root/.config/clash             # 宿主机 ./clash/config -> 容器 /root/.config/clash
-    ports:
-      - "7890:7890"    # HTTP/SOCKS5 代理端口（供内网客户端使用）
-      - "9090:9090"    # Clash external-controller 控制端口（供面板连接）
-    environment:
-      - TZ=Asia/Shanghai
-    restart: unless-stopped
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD-SHELL", "wget --spider -q http://localhost:9090 || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
+  # clash:
+  #   image: dreamacro/clash:latest
+  #   container_name: clash
+  #   hostname: clash
+  #   command: ["-f", "/root/.config/clash/config.yaml"]  # 使用容器内 /root/.config/clash/config.yaml 作为配置文件
+  #   volumes:
+  #     - ./clash/config:/root/.config/clash             # 宿主机 ./clash/config -> 容器 /root/.config/clash
+  #   ports:
+  #     - "7890:7890"    # HTTP/SOCKS5 代理端口（供内网客户端使用）
+  #     - "9090:9090"    # Clash external-controller 控制端口（供面板连接）
+  #   environment:
+  #     - TZ=Asia/Shanghai
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "wget --spider -q http://localhost:9090 || exit 1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 30s
  
-  # Clash Web UI（Dashboard），通过浏览器访问面板，再连接 Clash 的 9090 控制端口
-  clash-dashboard:
-    image: hitian/clash-dashboard:latest
-    container_name: clash-dashboard
-    restart: unless-stopped
-    depends_on:
-      - clash
-    ports:
-      - "19090:80"    # 浏览器访问面板：http://NAS内网IP:19090
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost/ || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
+  # # Clash Web UI（Dashboard），通过浏览器访问面板，再连接 Clash 的 9090 控制端口
+  # clash-dashboard:
+  #   image: hitian/clash-dashboard:latest
+  #   container_name: clash-dashboard
+  #   restart: unless-stopped
+  #   depends_on:
+  #     - clash
+  #   ports:
+  #     - "19090:80"    # 浏览器访问面板：http://NAS内网IP:19090
+  #   networks:
+  #     - app-network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost/ || exit 1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 30s
  
 volumes:
   pansou-data:
