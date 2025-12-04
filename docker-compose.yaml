@@ -87,55 +87,55 @@ services:
       start_period: 60s
 
   # 3. Nastools（备选自动化工具）
-  nastools:
-    image: syly948/nastools:2.9.1
-    container_name: nastools
-    hostname: nastools
-    ports:
-      - "30001:3000"
-    volumes:
-      - ./nastools/config:/config
-      - /vol2/1000/media:/downloads
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - UMASK=022
-      - TZ=Asia/Shanghai
-      - AUTO_REMOVE_TORRENT=7
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    networks:
-      - app-network
+  # nastools:
+  #   image: syly948/nastools:2.9.1
+  #   container_name: nastools
+  #   hostname: nastools
+  #   ports:
+  #     - "30001:3000"
+  #   volumes:
+  #     - ./nastools/config:/config
+  #     - /vol2/1000/media:/downloads
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - UMASK=022
+  #     - TZ=Asia/Shanghai
+  #     - AUTO_REMOVE_TORRENT=7
+  #   restart: always
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 60s
+  #   networks:
+  #     - app-network
 
   # 4. Jellyfin（VideoToolbox硬件加速）
-  jellyfin:
-    image: jellyfin/jellyfin:latest
-    container_name: jellyfin
-    environment:
-      - TZ=Asia/Shanghai
-      - PUID=1000  # 添加用户ID
-      - PGID=1000  # 添加组ID
-    volumes:
-      - ./jellyfin/config:/config
-      - /vol2/1000/media:/media
-      - /vol2/1000/music:/music
-    ports:
-      - "8096:8096"
-      - "8920:8920"
-    restart: unless-stopped
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8096 || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
+  # jellyfin:
+  #   image: jellyfin/jellyfin:latest
+  #   container_name: jellyfin
+  #   environment:
+  #     - TZ=Asia/Shanghai
+  #     - PUID=1000  # 添加用户ID
+  #     - PGID=1000  # 添加组ID
+  #   volumes:
+  #     - ./jellyfin/config:/config
+  #     - /vol2/1000/media:/media
+  #     - /vol2/1000/music:/music
+  #   ports:
+  #     - "8096:8096"
+  #     - "8920:8920"
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -f http://localhost:8096 || exit 1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+  #     start_period: 60s
 
   # 7. Navidrome（音乐服务器）
   navidrome:
@@ -501,29 +501,29 @@ services:
     networks:
       - app-network
 
-  jackett:
-    image: linuxserver/jackett
-    container_name: jackett
-    hostname: jackett
-    ports:
-      - "9117:9117"
-    volumes:
-      - ./jackett/config:/config
-      - /vol2/1000/media:/downloads
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Asia/Shanghai
-      - AUTO_UPDATE=true
-    restart: unless-stopped
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9117/UI/Login || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
+  # jackett:
+  #   image: linuxserver/jackett
+  #   container_name: jackett
+  #   hostname: jackett
+  #   ports:
+  #     - "9117:9117"
+  #   volumes:
+  #     - ./jackett/config:/config
+  #     - /vol2/1000/media:/downloads
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Asia/Shanghai
+  #     - AUTO_UPDATE=true
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -f http://localhost:9117/UI/Login || exit 1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 60s
 
   ################################### 五、网络代理（Clash）###################################
   # clash:
