@@ -521,9 +521,9 @@ services:
     image: dreamacro/clash:latest
     container_name: clash
     hostname: clash
-    command: ["-f", "/clash/config/config.yaml"]  # 使用 /clash/config/config.yaml 作为配置文件
+    command: ["-f", "/root/.config/clash/config.yaml"]  # 使用容器内 /root/.config/clash/config.yaml 作为配置文件
     volumes:
-      - ./clash/config:/clash/config             # 宿主机 ./clash/config -> 容器 /clash/config
+      - ./clash/config:/root/.config/clash             # 宿主机 ./clash/config -> 容器 /root/.config/clash
     ports:
       - "7890:7890"    # HTTP/SOCKS5 代理端口（供内网客户端使用）
       - "9090:9090"    # Clash external-controller 控制端口（供面板连接）
