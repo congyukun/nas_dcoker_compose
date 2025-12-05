@@ -38,7 +38,7 @@ services:
     tty: true
     ports:
       - "3003:3000"
-      - "3001:3001"
+      - "3011:3001" # 修改主机端口为3011，避免3001冲突
     volumes:
       - "/media:/media" #媒体
       - "/moviepilot-v2/config:/config" #持久化配置
@@ -495,7 +495,7 @@ services:
     environment:
       - TZ=Asia/Shanghai            # 时区（避免日志时间错乱）
       # Web UI默认端口1123，无需修改可删除此行
-      # - CLASH_META_UI_PORT=1123
+      - CLASH_META_UI_PORT=1123
  
 volumes:
   pansou-data:
