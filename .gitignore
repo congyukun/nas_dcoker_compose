@@ -1,15 +1,41 @@
-# Ignore all files in all subdirectories
+# --- OS & System Files ---
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+Desktop.ini
+*.log
+
+# --- Editors ---
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+
+# --- Docker Volumes & Configs ---
+# Generic storage
 data/*
-filebot/*
-jackett/*
-jellyfin/*
+storage/*
+
+# Service Directories (Config/Data/Logs)
+clash-ui/*
+iptv-api/*
 moviepilot/*
 music-tag-web/*
-nastools/*
 navidrome/*
+playlistdl/*
 qbittorrent/*
 quark-auto-save/*
-storage/*
-iptv-api/*
-.vscode/*
-clash-ui/*
+xiaomusic_conf/*
+
+# --- Sun-Panel Specific ---
+# Ignore runtime logs
+sunpanel/runtime/*
+# Ignore database and uploads
+sunpanel/conf/database/*
+sunpanel/conf/uploads/*
+# Ignore private config, but keep conf.example.ini
+sunpanel/conf/conf.ini
