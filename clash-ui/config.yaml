@@ -41,7 +41,6 @@ dns:
     - 0.0.0.0/32
 external-controller-unix: /tmp/verge/verge-mihomo.sock
 external-ui: ui
-secret: ''
 external-controller-cors:
   allow-private-network: true
   allow-origins:
@@ -2361,7 +2360,7 @@ proxy-groups:
   - 🇹🇼台湾04|HINET|动���家宽
   - 🇹🇼台湾05|HINET|动态家宽
   - 🇹🇼台湾06|HINET|动态家宽
-  - 🇹🇼台湾07|HINET|动态家宽
+  - 🇹🇼台��07|HINET|动态家宽
   - 🇹🇼台湾08|HINET|动态家宽
   - 🇺🇸美国01|纽约|高速中转
   - 🇺🇸美国02|纽约|高速中转
@@ -5368,7 +5367,7 @@ rules:
 - DOMAIN-SUFFIX,chanet.com.cn,🛑 全球拦截
 - DOMAIN-SUFFIX,chartbeat.com,🛑 全球拦���
 - DOMAIN-SUFFIX,chartboost.com,🛑 全球拦截
-- DOMAIN-SUFFIX,chengadx.com,🛑 全球拦截
+- DOMAIN-SUFFIX,chengadx.com,🛑 全球��截
 - DOMAIN-SUFFIX,chmae.com,🛑 全球拦截
 - DOMAIN-SUFFIX,clickadu.com,🛑 全球拦截
 - DOMAIN-SUFFIX,clicki.cn,🛑 全球拦截
@@ -22440,7 +22439,7 @@ rules:
 - DOMAIN-SUFFIX,zauglomo.net,🆎 AdBlock
 - DOMAIN-SUFFIX,zaugroaw.net,�� AdBlock
 - DOMAIN-SUFFIX,zaushegi.net,🆎 AdBlock
-- DOMAIN-SUFFIX,zavrotfro.com,🆎 AdBlock
+- DOMAIN-SUFFIX,zavrotfro.com,��� AdBlock
 - DOMAIN-SUFFIX,zavunuve.pro,🆎 AdBlock
 - DOMAIN-SUFFIX,zayac2volk11.com,🆎 AdBlock
 - DOMAIN-SUFFIX,zazennef.com,🆎 AdBlock
@@ -32790,7 +32789,7 @@ rules:
 - DOMAIN-SUFFIX,elqtracking.revenera.com,🆎 AdBlock
 - DOMAIN-SUFFIX,elqtracking.strayer.edu,🆎 AdBlock
 - DOMAIN-SUFFIX,elqtracking.victorops.com,🆎 AdBlock
-- DOMAIN-SUFFIX,elqtracking1.tetrapak.com,🆎 AdBlock
+- DOMAIN-SUFFIX,elqtracking1.tetrapak.com,�� AdBlock
 - DOMAIN-SUFFIX,elqtrck.motor.no,🆎 AdBlock
 - DOMAIN-SUFFIX,elqtrck.nanawall.com,🆎 AdBlock
 - DOMAIN-SUFFIX,elqtrk.ext.hp.com,🆎 AdBlock
