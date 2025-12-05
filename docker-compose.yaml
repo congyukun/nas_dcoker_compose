@@ -481,15 +481,15 @@ services:
 
   ################################### 五、网络代理（Clash）###################################
   clash:
-    image: metacubex/clash:latest  # 带Web UI的Clash Meta镜像
+    image: metacubex/mihomo:latest  # Clash Meta 已正式更名为 Mihomo
     container_name: clash-ui        # 容器名（自定义）
     restart: unless-stopped         # 开机自启+异常重启
     network_mode: host              # 核心：Host模式（直接用NAS IP和端口）
     privileged: true                # 启用特权模式（TUN模式必需）
     volumes:
-      # 持久化目录：将NAS目录映射到容器内的Clash配置目录
+      # 持久化目录：将NAS目录映射到容器内的配置目录（Mihomo 默认路径已变更为 /root/.config/mihomo）
       # 替换为你的NAS实际目录，如威联通：/share/docker/clash-ui
-      - ./clash-ui:/root/.config/clash
+      - ./clash-ui:/root/.config/mihomo
     devices:
       - /dev/net/tun:/dev/net/tun  # 挂载TUN设备（TUN模式必需）
     environment:
