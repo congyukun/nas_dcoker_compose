@@ -1,16 +1,18 @@
 mode: rule
 tproxy-port: 7896
 mixed-port: 7890
-allow-lan: false
+allow-lan: true
+bind-address: "*"
 log-level: info
 ipv6: true
 external-controller: '0.0.0.0:1123'
-secret: 123456
+external-ui: ui
+secret: "123456"
 unified-delay: true
 profile:
   store-selected: true
 tun:
-  enable: false
+  enable: true
   stack: gvisor
   auto-route: true
   strict-route: false
@@ -43,11 +45,7 @@ external-controller-unix: /tmp/verge/verge-mihomo.sock
 external-controller-cors:
   allow-private-network: true
   allow-origins:
-  - tauri://localhost
-  - http://tauri.localhost
-  - https://yacd.metacubex.one
-  - https://metacubex.github.io
-  - https://board.zash.run.place
+    - "*"
 proxies:
 - name: 🇭🇰【请保存网址发布页获取最新网址】
   type: vmess
@@ -2360,7 +2358,7 @@ proxy-groups:
   - 🇹🇼台湾01|HINET|动态家宽
   - 🇹🇼台湾02|HINET|动态家宽
   - 🇹🇼台湾03|HINET|动态家宽
-  - 🇹🇼台湾04|HINET|动态家宽
+  - 🇹🇼台湾04|HINET|���态家宽
   - 🇹🇼台湾05|HINET|动态家宽
   - 🇹🇼台湾06|HINET|动态家宽
   - 🇹🇼台湾07|HINET|动态家宽
@@ -5368,7 +5366,7 @@ rules:
 - DOMAIN-SUFFIX,cdnmaster.com,🛑 全球拦截
 - DOMAIN-SUFFIX,chance-ad.com,🛑 全球拦截
 - DOMAIN-SUFFIX,chanet.com.cn,🛑 全球拦截
-- DOMAIN-SUFFIX,chartbeat.com,🛑 全球拦截
+- DOMAIN-SUFFIX,chartbeat.com,🛑 全球���截
 - DOMAIN-SUFFIX,chartboost.com,🛑 全球拦截
 - DOMAIN-SUFFIX,chengadx.com,🛑 全球拦截
 - DOMAIN-SUFFIX,chmae.com,🛑 全球拦截
@@ -15225,7 +15223,7 @@ rules:
 - DOMAIN-SUFFIX,loxedchazan.com,🆎 AdBlock
 - DOMAIN-SUFFIX,loxitdat.com,🆎 AdBlock
 - DOMAIN-SUFFIX,loxqsrnc.xyz,🆎 AdBlock
-- DOMAIN-SUFFIX,loxtk.com,🆎 AdBlock
+- DOMAIN-SUFFIX,loxtk.com,���� AdBlock
 - DOMAIN-SUFFIX,loyalinvadeballoon.com,🆎 AdBlock
 - DOMAIN-SUFFIX,lp.ncdownloader.com,🆎 AdBlock
 - DOMAIN-SUFFIX,lpuhcdnyejf.com,🆎 AdBlock
