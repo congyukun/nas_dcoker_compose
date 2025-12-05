@@ -496,7 +496,7 @@ services:
     environment:
       - TZ=Asia/Shanghai            # 时区（避免日志时间错乱）
       # Web UI默认端口1123，无需修改可删除此行
-      - CLASH_META_UI_PORT=1123
+      # - CLASH_META_UI_PORT=1123
 
 
 volumes:
