@@ -9,7 +9,7 @@ allow-lan: true
 bind-address: "*"
 ipv6: true
 mode: rule
-external-controller: 0.0.0.0:9090
+external-controller: 0.0.0.0:1123
 external-ui: ui
 # external-controller-unix: /tmp/verge/verge-mihomo.sock
 tun:
