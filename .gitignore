@@ -30,6 +30,8 @@ playlistdl/*
 qbittorrent/*
 quark-auto-save/*
 xiaomusic_conf/*
+postgresql/*
+redis/*
 
 # --- Sun-Panel Specific ---
 # Ignore runtime logs
