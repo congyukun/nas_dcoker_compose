@@ -2471,7 +2471,7 @@ proxy-groups:
   - 🇵🇰VIP巴基斯坦|卡拉奇|中转|原生
   - 🇧🇬VIP保加利亚|东欧|中转|原生
   - 🇱🇻VIP拉脱维亚|东欧|中转|原生
-  url: http://cp.cloudflare.com/generate_204
+  url: https://cp.cloudflare.com/generate_204
   interval: 180
 - name: ⚓️其他流量
   type: select
@@ -3871,7 +3871,7 @@ proxy-groups:
   - 🇸🇬VIP新加坡08|Aperture|AGA
   - 🇹🇼VIP台湾01|大哥大Net|AGA
   - 🇹🇼VIP台湾02|大哥大Net|AGA
-  - 🇹🇼VIP台湾03|大哥大Net|AGA
+  - 🇹🇼VIP台湾03|��哥大Net|AGA
   - 🇹🇼VIP台湾04|大哥大Net|AGA
   - 🇹🇼VIP台湾05|大哥大Net|AGA
   - 🇹🇼VIP台湾06|大哥大Net|AGA
@@ -25584,7 +25584,7 @@ rules:
 - DOMAIN-SUFFIX,hqcqz2.cn,🆎 AdBlock
 - DOMAIN-SUFFIX,hqsjc.com,🆎 AdBlock
 - DOMAIN-SUFFIX,hqwlm.com,🆎 AdBlock
-- DOMAIN-SUFFIX,hqwrr.cc,🆎 AdBlock
+- DOMAIN-SUFFIX,hqwrr.cc,�� AdBlock
 - DOMAIN-SUFFIX,hqycr.cn,🆎 AdBlock
 - DOMAIN-SUFFIX,hqygz.com,🆎 AdBlock
 - DOMAIN-SUFFIX,hr44.com,🆎 AdBlock
