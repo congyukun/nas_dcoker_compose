@@ -4,7 +4,7 @@ mixed-port: 7890
 allow-lan: false
 log-level: info
 ipv6: true
-external-controller: ''
+external-controller: '0.0.0.0:1123'
 secret: 123456
 unified-delay: true
 profile:
