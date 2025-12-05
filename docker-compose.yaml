@@ -29,28 +29,95 @@ services:
       retries: 3
       start_period: 60s
 
-  # 2. MoviePilot V2（影视自动化平台）
+  # MoviePilot v2（自动化媒体中心）
   moviepilot:
-    stdin_open: true
-    tty: true
+    image: jxxghp/moviepilot-v2:latest
     container_name: moviepilot-v2
     hostname: moviepilot-v2
+    stdin_open: true
+    tty: true
+    ports:
+      - "3003:3000"
+      - "3001:3001"
     volumes:
-      - '/media:/media'
-      - '/moviepilot-v2/config:/config'
-      - '/moviepilot-v2/core:/moviepilot/.cache/ms-playwright'
-      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+      - "/media:/media" #媒体
+      - "/moviepilot-v2/config:/config" #持久化配置
+      - "/moviepilot-v2/core:/moviepilot/.cache/ms-playwright" #内核浏览器
+      - "/var/run/docker.sock:/var/run/docker.sock:ro" #重启MP权限
+      - "/tr/config/torrents:/torrents"  #TR种子位置
+      - "/qbittorrent/data/data/BT_backup:/BT_backup" #QB种子位置
     environment:
-      - 'NGINX_PORT=3000'
-      - 'PORT=3001'
-      - 'PUID=0'
-      - 'PGID=0'
-      - 'UMASK=000'
-      - 'TZ=Asia/Shanghai'
-      - 'SUPERUSER=admin' #超级管理员用户名
-      - 'SUPERUSER_PASSWORD=admin23' #超级管理员初始密码
+      - "NGINX_PORT=3000"
+      - "PORT=3001"
+      - "PUID=0"
+      - "PGID=0"
+      - "UMASK=000"
+      - "TZ=Asia/Shanghai"
+      - "SUPERUSER=admin"
+      - "SUPERUSER_PASSWORD=你的初始登录密码"
+      - "DB_TYPE=postgresql"
+      - "DB_POSTGRESQL_HOST=postgresql"
+      - "DB_POSTGRESQL_PORT=5432"
+      - "DB_POSTGRESQL_DATABASE=moviepilot"
+      - "DB_POSTGRESQL_USERNAME=moviepilot"
+      - "DB_POSTGRESQL_PASSWORD=pg_password"
+      - "CACHE_BACKEND_TYPE=redis"
+      - "CACHE_BACKEND_URL=redis://:redis_password@redis:6379"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: always
-    image: jxxghp/moviepilot-v2:latest
+    networks:
+      - app-network
+
+  redis:
+    image: redis
+    volumes:
+      - /volume1/docker/redis/data:/data
+    command: redis-server --save 600 1 --requirepass redis_password
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  postgresql:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: moviepilot
+      POSTGRES_USER: moviepilot
+      POSTGRES_PASSWORD: pg_password
+    volumes:
+      # 仅 postgresql 18.0+ 及以上版本可用，根据版本二选一即可
+      - /volume1/docker/postgresql:/var/lib/postgresql
+      # 仅 postgresql 17.6 及以下版本可用，根据版本二选一即可
+      #- /volume1/docker/postgresql/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U moviepilot -d moviepilot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  # 根据现有配置增加 sqlite -> postgresql 迁移容器
+  pgloader:
+    image: dimitri/pgloader:latest
+    volumes:
+      - ./moviepilot/config:/mp_config
+    command: >
+      pgloader
+      sqlite:///mp_config/user.db
+      postgresql://moviepilot:pg_password@postgresql:5432/moviepilot
+    depends_on:
+      postgresql:
+        condition: service_healthy
     networks:
       - app-network
 
@@ -83,33 +150,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 60s
-      
-
-  # 3. Nastools（备选自动化工具）
-  # nastools:
-  #   image: syly948/nastools:2.9.1
-  #   container_name: nastools
-  #   hostname: nastools
-  #   ports:
-  #     - "30001:3000"
-  #   volumes:
-  #     - ./nastools/config:/config
-  #     - /vol2/1000/media:/downloads
-  #   environment:
-  #     - PUID=1000
-  #     - PGID=1000
-  #     - UMASK=022
-  #     - TZ=Asia/Shanghai
-  #     - AUTO_REMOVE_TORRENT=7
-  #   restart: always
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 3
-  #     start_period: 60s
-  #   networks:
-  #     - app-network
 
   # 4. Jellyfin（VideoToolbox硬件加速）
   # jellyfin:
@@ -440,45 +480,22 @@ services:
   #     start_period: 60s
 
   ################################### 五、网络代理（Clash）###################################
-  # clash:
-  #   image: dreamacro/clash:latest
-  #   container_name: clash
-  #   hostname: clash
-  #   command: ["-f", "/root/.config/clash/config.yaml"]  # 使用容器内 /root/.config/clash/config.yaml 作为配置文件
-  #   volumes:
-  #     - ./clash/config:/root/.config/clash             # 宿主机 ./clash/config -> 容器 /root/.config/clash
-  #   ports:
-  #     - "7890:7890"    # HTTP/SOCKS5 代理端口（供内网客户端使用）
-  #     - "9090:9090"    # Clash external-controller 控制端口（供面板连接）
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-network
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "wget --spider -q http://localhost:9090 || exit 1"]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 5
-  #     start_period: 30s
- 
-  # # Clash Web UI（Dashboard），通过浏览器访问面板，再连接 Clash 的 9090 控制端口
-  # clash-dashboard:
-  #   image: hitian/clash-dashboard:latest
-  #   container_name: clash-dashboard
-  #   restart: unless-stopped
-  #   depends_on:
-  #     - clash
-  #   ports:
-  #     - "19090:80"    # 浏览器访问面板：http://NAS内网IP:19090
-  #   networks:
-  #     - app-network
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost/ || exit 1"]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 5
-  #     start_period: 30s
+  clash:
+    image: metacubex/clash:latest  # 带Web UI的Clash Meta镜像
+    container_name: clash-ui        # 容器名（自定义）
+    restart: unless-stopped         # 开机自启+异常重启
+    network_mode: host              # 核心：Host模式（直接用NAS IP和端口）
+    privileged: true                # 启用特权模式（TUN模式必需）
+    volumes:
+      # 持久化目录：将NAS目录映射到容器内的Clash配置目录
+      # 替换为你的NAS实际目录，如威联通：/share/docker/clash-ui
+      - ./clash-ui:/root/.config/clash
+    devices:
+      - /dev/net/tun:/dev/net/tun  # 挂载TUN设备（TUN模式必需）
+    environment:
+      - TZ=Asia/Shanghai            # 时区（避免日志时间错乱）
+      # Web UI默认端口1123，无需修改可删除此行
+      # - CLASH_META_UI_PORT=1123
  
 volumes:
   pansou-data:
