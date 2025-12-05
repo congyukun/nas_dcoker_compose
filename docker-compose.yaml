@@ -40,12 +40,12 @@ services:
       - "3003:3000"
       - "3011:3001" # 修改主机端口为3011，避免3001冲突
     volumes:
-      - "/media:/media" #媒体
-      - "/moviepilot-v2/config:/config" #持久化配置
-      - "/moviepilot-v2/core:/moviepilot/.cache/ms-playwright" #内核浏览器
+      - "/vol2/1000/media:/media" #媒体
+      - "./moviepilot/config:/config" #持久化配置
+      - "./moviepilot/core:/moviepilot/.cache/ms-playwright" #内核浏览器
       - "/var/run/docker.sock:/var/run/docker.sock:ro" #重启MP权限
-      - "/tr/config/torrents:/torrents"  #TR种子位置
-      - "/qbittorrent/data/data/BT_backup:/BT_backup" #QB种子位置
+      # - "/tr/config/torrents:/torrents"  #TR种子位置 (路径看起来不正确，暂时注释)
+      - "./qbittorrent/config/qBittorrent/BT_backup:/BT_backup" #QB种子位置
     environment:
       - "NGINX_PORT=3000"
       - "PORT=3001"
