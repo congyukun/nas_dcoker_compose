@@ -369,7 +369,7 @@ services:
       start_period: 30s
 
   xiaomusic:
-    image: docker.hanxi.cc/hanxi/xiaomusic
+    image: docker.hanxi.cc/hanxi/xiaomusic:latest
     container_name: xiaomusic
     restart: unless-stopped
     ports:
