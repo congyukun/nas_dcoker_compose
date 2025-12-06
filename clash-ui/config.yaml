@@ -1,0 +1,99 @@
+# 端口设置
+mixed-port: 7890
+# port: 7890 # HTTP
+# socks-port: 7891 # SOCKS5
+
+# 允许局域网连接
+allow-lan: true
+bind-address: '*'
+
+# 运行模式
+mode: rule
+
+# 日志级别
+log-level: info
+
+# IPv6 支持
+ipv6: true
+
+# 外部控制设置 (Web Dashboard)
+external-controller: '0.0.0.0:1123'
+# 访问密钥 (留空则无需密码)
+secret: ''
+# 外部 UI 路径 (容器内路径，对应 ./clash-ui/ui)
+external-ui: ui
+
+# 流量嗅探 (可选，Meta核心特性)
+sniffer:
+  enable: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+
+# DNS 配置 (Meta 推荐配置)
+dns:
+  enable: true
+  listen: 0.0.0.0:1053
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - '*'
+    - '+.lan'
+    - '+.local'
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  fallback:
+    - https://1.0.0.1/dns-query
+    - https://8.8.4.4/dns-query
+  fallback-filter:
+    geoip: true
+    ipcidr:
+      - 240.0.0.0/4
+
+# 代理组策略
+proxy-groups:
+  - name: 🚀 节点选择
+    type: select
+    use:
+      - MyProvider
+    proxies:
+      - ♻️ 自动选择
+      - DIRECT
+
+  - name: ♻️ 自动选择
+    type: url-test
+    use:
+      - MyProvider
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    proxies:
+      - DIRECT
+
+# 规则
+rules:
+  - GEOIP,LAN,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,🚀 节点选择
+
+# 订阅配置示例 (请取消注释并替换 url)
+proxy-providers:
+  MyProvider:
+    type: http
+    url: "https://103.118.42.169:21666/api/v1/client/subscribe?token=669c125595bf87f37721fcd41c777415"
+    interval: 3600
+    path: ./proxies/provider.yaml
+    health-check:
+      enable: true
+      interval: 600
+      url: http://www.gstatic.com/generate_204

@@ -5,145 +5,200 @@ services:
   qbittorrent:
     image: linuxserver/qbittorrent:latest
     container_name: qbittorrent
+    hostname: qbittorrent
     environment:
-      - PUID=1000  # 调整为常见值
-      - PGID=1000  # 调整为常见值
+      - PUID=1000           # 运行用户ID
+      - PGID=1000           # 运行用户组ID
       - TZ=Asia/Shanghai
-      - WEBUI_PORT=8080
+      - WEBUI_PORT=8080     # 容器内部 WebUI 端口
+      - UMASK_SET=022       # 下载文件权限掩码（rw-r--r--）
     volumes:
-      - /vol2/1000/media:/downloads
-      - ./qbittorrent/config:/config
+      - /vol2/1000/media:/downloads   # 下载目录
+      - ./qbittorrent/config:/config  # 配置目录
     ports:
-      - 8080:8080
-      - 6881:6881
-      - 6881:6881/udp
+      - "8080:8080"        # WebUI
+      - "6881:6881"        # BT 监听端口 TCP
+      - "6881:6881/udp"    # BT 监听端口 UDP
     restart: unless-stopped
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
-  # 2. MoviePilot-v2（影视自动化核心）
-  moviepilot-v2:
+  # MoviePilot v2（自动化媒体中心）
+  moviepilot:
     image: jxxghp/moviepilot-v2:latest
     container_name: moviepilot-v2
-    environment:
-      - TZ=Asia/Shanghai
-      - MP_PORT=3000
-      - MP_DATA=/config
-      - AUTO_DELETE_TORRENT=7
-      - PUID=1000  # 添加用户ID
-      - PGID=1000  # 添加组ID
-    volumes:
-      - ./moviepilot/config:/config
-      - /vol2/1000/media:/media
-      - /vol2/1000/media:/downloads
+    hostname: moviepilot-v2
+    stdin_open: true
+    tty: true
     ports:
-      - 30000:3000
+      - "3003:3000"
+      - "3011:3001" # 修改主机端口为3011，避免3001冲突
+    volumes:
+      - "/vol2/1000/media:/media" #媒体
+      - "./moviepilot/config:/config" #持久化配置
+      - "./moviepilot/core:/moviepilot/.cache/ms-playwright" #内核浏览器
+      - "/var/run/docker.sock:/var/run/docker.sock:ro" #重启MP权限
+      # - "/tr/config/torrents:/torrents"  #TR种子位置 (路径看起来不正确，暂时注释)
+      - "./qbittorrent/config/qBittorrent/BT_backup:/BT_backup" #QB种子位置
+    environment:
+      - "NGINX_PORT=3000"
+      - "PORT=3001"
+      - "PUID=0"
+      - "PGID=0"
+      - "UMASK=000"
+      - "TZ=Asia/Shanghai"
+      - "SUPERUSER=admin"
+      - "SUPERUSER_PASSWORD=admin123"
+      - "DB_TYPE=postgresql"
+      - "DB_POSTGRESQL_HOST=postgresql"
+      - "DB_POSTGRESQL_PORT=5432"
+      - "DB_POSTGRESQL_DATABASE=moviepilot"
+      - "DB_POSTGRESQL_USERNAME=moviepilot"
+      - "DB_POSTGRESQL_PASSWORD=pg_password"
+      - "CACHE_BACKEND_TYPE=redis"
+      - "CACHE_BACKEND_URL=redis://:redis_password@redis:6379"
     depends_on:
-      - qbittorrent
-    restart: unless-stopped
-    networks:
-      - app-network
-
-  # 3. Nastools（备选自动化工具）
-  nastools:
-    image: syly948/nastools:2.9.1
-    container_name: nastools
-    hostname: nastools
-    ports:
-      - 30001:3000
-    volumes:
-      - ./nastools/config:/config
-      - /vol2/1000/media:/downloads
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - UMASK=022
-      - TZ=Asia/Shanghai
-      - AUTO_REMOVE_TORRENT=7
+      postgresql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: always
     networks:
       - app-network
 
-  # 4. Jellyfin（VideoToolbox硬件加速）
-  jellyfin:
-    image: jellyfin/jellyfin:latest
-    container_name: jellyfin
-    environment:
-      - TZ=Asia/Shanghai
-      - PUID=1000  # 添加用户ID
-      - PGID=1000  # 添加组ID
+  redis:
+    image: redis
     volumes:
-      - ./jellyfin/config:/config
-      - /vol2/1000/media:/media
-      - /vol2/1000/music:/music
-    ports:
-      - 8096:8096
-      - 8920:8920
+      - ./redis/data:/data
+    command: redis-server --save 600 1 --requirepass redis_password
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
     networks:
       - app-network
 
-  # 5. Subtitle Edit（自动字幕）
-  # subtitle-edit:
-  #   image: alexandernst/subtitle-edit:latest
-  #   container_name: subtitle-edit
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #     - SE_AUTO_DOWNLOAD=true
-  #     - SE_LANGUAGES=zh-CN,en
-  #     - SE_INTERVAL=300
-  #   volumes:
-  #     - /vol2/1000/media:/media
-  #     - ./data/subtitle-edit/config:/config
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-network
+  postgresql:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: moviepilot
+      POSTGRES_USER: moviepilot
+      POSTGRES_PASSWORD: pg_password
+    volumes:
+      # 仅 postgresql 18.0+ 及以上版本可用，根据版本二选一即可
+      # - ./postgresql/data:/var/lib/postgresql
+      # 仅 postgresql 17.6 及以下版本可用，根据版本二选一即可
+      - ./postgresql/data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U moviepilot -d moviepilot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
 
-  # 6. FileBot（文件整理）
-  # 6. FileBot（文件整理）
-  # filebot:
-  #   image: rednoah/filebot:latest
-  #   container_name: filebot
+  # 根据现有配置增加 sqlite -> postgresql 迁移容器
+  pgloader:
+    image: dimitri/pgloader:latest
+    volumes:
+      - ./moviepilot/config:/mp_config
+    command: >
+      pgloader
+      sqlite:///mp_config/user.db
+      postgresql://moviepilot:pg_password@postgresql:5432/moviepilot
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # IPTV-API（直播源聚合与接口服务）
+  iptv-api:
+    image: guovern/iptv-api:latest
+    container_name: iptv-api
+    hostname: iptv-api
+    restart: unless-stopped
+    ports:
+      - "9000:8000"
+    volumes:
+      - ./iptv-api/config:/iptv-api/config      # 配置文件目录
+      - ./iptv-api/output:/iptv-api/output      # 输出文件目录（生成的m3u/txt文件）
+    environment:
+      - TZ=Asia/Shanghai                        # 设置时区为北京时间
+      - APP_HOST=0.0.0.0                        # 监听地址（不需要http://前缀）
+      - APP_PORT=8000                           # 应用端口
+      - UPDATE_CRON=0 0 */2 * *                 # 每两天凌晨 0 点执行更新
+      - REQUEST_TIMEOUT=10                      # 请求超时时间（秒）
+      - RETRY_COUNT=3                           # 重试次数
+      - RECENT_DAYS=30                          # 获取最近多少天的节目
+      - PUID=1000                               # 用户ID
+      - PGID=1000                               # 组ID
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # 4. Jellyfin（VideoToolbox硬件加速）
+  # jellyfin:
+  #   image: jellyfin/jellyfin:latest
+  #   container_name: jellyfin
   #   environment:
   #     - TZ=Asia/Shanghai
-  #     - LANG=C.UTF-8
-  #     - FILEBOT_OPTS=-Duser.language=zh -Duser.country=CN
-  #     - JAVA_OPTS=-Xmx1024m
+  #     - PUID=1000  # 添加用户ID
+  #     - PGID=1000  # 添加组ID
   #   volumes:
-  #     - ./media/raw:/input
-  #     - ./media/organized:/output
-  #     - ./filebot/config:/config
-  #     - ./filebot/logs:/var/log/filebot
-  #     - ./filebot/data:/data/filebot
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-network
-  #   # FileBot 需要特殊配置，暂时禁用避免影响其他服务
-  ################################### 二、音乐管理（Navidrome+Music-tag-Web）###################################
-  
-  # 7. Navidrome（音乐服务器）
-  # navidrome:
-  #   image: deluan/navidrome:latest
-  #   container_name: navidrome
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #     - ND_SCANSCHEDULE=0 3 * * * # 每天凌晨3点扫描
-  #     - ND_MAXSCANSPEED=10mbps
-  #     - ND_LOGLEVEL=info
-  #   volumes:
+  #     - ./jellyfin/config:/config
+  #     - /vol2/1000/media:/media
   #     - /vol2/1000/music:/music
-  #     - ./navidrome/data:/data
   #   ports:
-  #     - "4533:4533"
+  #     - "8096:8096"
+  #     - "8920:8920"
   #   restart: unless-stopped
   #   networks:
   #     - app-network
   #   healthcheck:
-  #     test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:4533/ping || exit 1"]
+  #     test: ["CMD-SHELL", "curl -f http://localhost:8096 || exit 1"]
   #     interval: 30s
   #     timeout: 10s
   #     retries: 3
-  #     start_period: 30s
+  #     start_period: 60s
+
+  # 7. Navidrome（音乐服务器）
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    environment:
+      - TZ=Asia/Shanghai
+      - ND_SCANSCHEDULE=0 3 * * * # 每天凌晨3点扫描
+      - ND_MAXSCANSPEED=10mbps
+      - ND_LOGLEVEL=info
+    volumes:
+      - /vol2/1000/music:/music
+      - ./navidrome/data:/data
+    ports:
+      - "4533:4533"
+    restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:4533/ping || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
   # 8. Music-tag-Web（音乐标签编辑）
   music-tag:
     image: xhongc/music_tag_web:latest
@@ -202,22 +257,6 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
-  # 11. Rustdesk（远程控制）
-  # rustdesk:
-  #   image: rustdesk/rustdesk-server:latest
-  #   container_name: rustdesk
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #   volumes:
-  #     - ./data/rustdesk/root:/root
-  #   ports:
-  #     - 21115:21115/tcp
-  #     - 21116:21116/tcp
-  #     - 21116:21116/udp
-  #     - 21117:21117/tcp
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-network
 
   ################################### 四、管理面板（1Panel+Lucky+Sun-Panel）###################################
   
@@ -266,108 +305,35 @@ services:
   #     timeout: 10s
   #     retries: 5
   #     start_period: 90s
+  
   # 13. Sun-Panel（导航面板）
-  # sun-panel:
-  #   image: hslr/sun-panel:latest
-  #   container_name: sun-panel
-  #   environment:
-  #     - TZ=Asia/Shanghai
-  #     - ADMIN_USER=admin
-  #     - ADMIN_PWD=admin123
-  #   volumes:
-  #     - ./data/sun-panel/data:/app/data
-  #   ports:
-  #     - 3003:3000
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-network
-
-  # 14. Aipan（网盘搜索）
-  aipan:
-    image: unilei/aipan-netdisk-search-simple:latest
-    container_name: aipan
+  sun-panel:
+    image: "hslr/sun-panel:latest"
+    container_name: sun-panel
+    volumes:
+      - ./sunpanel/conf:/app/conf
+      - /var/run/docker.sock:/var/run/docker.sock # 挂载docker.sock
+      - ./sunpanel/runtime:/app/runtime # 挂载日志目录
+      # - /mnt/sata1-1:/os # 硬盘挂载点（根据自己需求修改）
+    ports:
+      - "13002:3002"
+    restart: always
     environment:
       - TZ=Asia/Shanghai
-      - ADMIN_USER=yukun
-      - ADMIN_PASSWORD=Cyk920211.
-      - JWT_SECRET=XnKZDR7OmPce9SxBjbPOqyMnMKDMdLLWNJP9iqsrYNk=
-      - DATABASE_URL=postgresql://yukun:Cyk920211.@postgres:5432/aipan
-      - LOG_LEVEL=info
-      - REDIS_URL=redis://redis:6379
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      # 添加代理配置以解决外部API访问问题
-      - HTTP_PROXY=http://host.docker.internal:7890
-      - HTTPS_PROXY=http://host.docker.internal:7890
-      - NO_PROXY=localhost,127.0.0.1,postgres,redis
-    ports:
-      - "8082:3000"
-    restart: unless-stopped
-    depends_on:
-      postgres:
-        condition: service_healthy
     networks:
       - app-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sunpanel.rule=Host(`sunpanel.local`)"
+      - "traefik.http.services.sunpanel.loadbalancer.server.port=3002"
     healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 3000 || exit 1"]
+      test: ["CMD", "curl", "-f", "http://localhost:3002"]
       interval: 30s
       timeout: 10s
-      retries: 5
-      start_period: 90s
-    volumes:
-      - ./data/aipan_logs:/app/logs
-      # 添加配置文件挂载，便于自定义API端点
-      - ./data/aipan_config:/app/config
-
-  postgres:
-    image: postgres:15
-    container_name: postgres-aipan  # 容器名加前缀，避免冲突
-    ports:
-      - "5433:5432"  # 端口映射，允许远程连接
-    volumes:
-      - ./data/postgres_data:/var/lib/postgresql/data
-      - ./data/postgres_init:/docker-entrypoint-initdb.d  # 初始化脚本目录，用于创建必要的数据表
-    environment:
-      - TZ=Asia/Shanghai  # 数据库时区与应用一致
-      - POSTGRES_USER=yukun
-      - POSTGRES_PASSWORD=Cyk920211.
-      - POSTGRES_DB=aipan
-      - POSTGRES_INITDB_ARGS=--encoding=UTF8 --lc-collate=C --lc-ctype=C
-    restart: unless-stopped
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U yukun -d aipan"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 60s  # 增加启动等待时间，确保初始化脚本有足够时间执行
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: "1G"
-
-  # Redis服务
-  redis:
-    image: redis:alpine
-    container_name: redis
-    volumes:
-      - ./data/redis_data:/data
-    ports:
-      - "6379:6379"
-    environment:
-      - TZ=Asia/Shanghai
-    restart: unless-stopped
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
       retries: 3
-      start_period: 30s
+      start_period: 60s
 
+  # XiaoMusic（小爱同学本地音乐服务）
   xiaomusic:
     image: docker.hanxi.cc/hanxi/xiaomusic:latest
     container_name: xiaomusic
@@ -384,11 +350,12 @@ services:
       - app-network
     healthcheck:
       test: ["CMD-SHELL", "nc -z localhost 8090 || exit 1"]
-      interval: 30s
+      interval: 10s
       timeout: 10s
       retries: 5
       start_period: 60s
   
+  # PlaylistDL（音乐歌单批量下载工具）
   playlistdl:
     image: tanner23456/playlistdl:v2
     container_name: playlistdl
@@ -400,11 +367,11 @@ services:
       - PUID=1000
       - PGID=1000
       - ADMIN_USERNAME=yukun
-      - ADMIN_PASSWORD=Cyk920211.
+      - ADMIN_PASSWORD=yukun12
       - AUDIO_DOWNLOAD_PATH=/data
       - CLEANUP_INTERVAL=300  
     volumes:
-      - /vol2/1000/music:/data
+      - /vol2/1000/music:/app/data
       - ./playlistdl/config:/config
     networks:
       - app-network
@@ -414,36 +381,8 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
-  # pansou:
-  #   image: ghcr.io/fish2018/pansou-web:latest
-  #   container_name: pansou
-  #   restart: unless-stopped
-  #   ports:
-  #     - "8888:8888"
-  #   environment:
-  #     - PORT=8888
-  #     - CHANNELS=tgsearchers4,Aliyun_4K_Movies,bdbdndn11,yunpanx,bsbdbfjfjff,yp123pan,sbsbsnsqq,yunpanxunlei,tianyifc,BaiduCloudDisk,txtyzy,peccxinpd,gotopan,PanjClub,kkxlzy,baicaoZY,MCPH01,MCPH02,MCPH03,bdwpzhpd,ysxb48,jdjdn1111,yggpan,MCPH086,zaihuayun,Q66Share,ucwpzy,shareAliyun,alyp_1,dianyingshare,Quark_Movies,XiangxiuNBB,ydypzyfx,ucquark,xx123pan,yingshifenxiang123,zyfb123,tyypzhpd,tianyirigeng,cloudtianyi,hdhhd21,Lsp115,oneonefivewpfx,qixingzhenren,taoxgzy,Channel_Shares_115,tyysypzypd,vip115hot,wp123zy,yunpan139,yunpan189,yunpanuc,yydf_hzl,leoziyuan,pikpakpan,Q_dongman,yoyokuakeduanju,TG654TG,WFYSFX02,QukanMovie,yeqingjie_GJG666,movielover8888_film3,Baidu_netdisk,D_wusun,FLMdongtianfudi,KaiPanshare,QQZYDAPP,rjyxfx,PikPak_Share_Channel,btzhi,newproductsourcing,cctv1211,duan_ju,QuarkFree,yunpanNB,kkdj001,xxzlzn,pxyunpanxunlei,jxwpzy,kuakedongman,liangxingzhinan,xiangnikanj,solidsexydoll,guoman4K,zdqxm,kduanju,cilidianying,CBduanju,SharePanFilms,dzsgx,BooksRealm,Oscar_4Kmovies,douerpan,baidu_yppan,Q_jilupian,Netdisk_Movies,yunpanquark,ammmziyuan,ciliziyuanku,cili8888,jzmm_123pan
-  #     # 必须指定启用的插件，多个插件用逗号分隔
-  #     - ENABLED_PLUGINS=labi,zhizhen,shandian,duoduo,muou,wanou,hunhepan,jikepan,panwiki,pansearch,panta,qupansou,hdr4k,pan666,susu,thepiratebay,xuexizhinan,panyq,ouge,huban,cyg,erxiao,miaoso,fox4k,pianku,clmao,wuji,cldi,xiaozhang,libvio,leijing,xb6v,xys,ddys,hdmoli,yuhuage,u3c3,javdb,clxiong,jutoushe,sdso,xiaoji,xdyh,haisou,bixin,djgou,nyaa,xinjuc,aikanzy,qupanshe,xdpan,discourse,yunsou,qqpd,ahhhhfs,nsgame,gying,quark4k,quarksoo,sousou,ash
-  #     - CACHE_ENABLED=true
-  #     - CACHE_PATH=/app/cache
-  #     - CACHE_MAX_SIZE=100
-  #     - CACHE_TTL=60
-  #     - ASYNC_PLUGIN_ENABLED=true
-  #     - ASYNC_RESPONSE_TIMEOUT=4
-  #     - ASYNC_MAX_BACKGROUND_WORKERS=20
-  #     - ASYNC_MAX_BACKGROUND_TASKS=100
-  #     - ASYNC_CACHE_TTL_HOURS=1
-  #   volumes:
-  #     - ./data/pansou-cache:/app/cache
-  #   healthcheck:
-  #     test: ["CMD", "wget", "-q", "--spider", "http://localhost:8888/api/health"]
-  #     interval: 30s
-  #     timeout: 5s
-  #     retries: 3
-  #     start_period: 10s
-  #   networks:
-  #     - app-network
+  
+  # PanSou（多网盘资源聚合搜索）
   pansou:
     image: ghcr.io/fish2018/pansou-web:latest
     container_name: pansou-app
@@ -497,8 +436,8 @@ services:
       test: ["CMD", "/app/healthcheck.sh"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 40s
+      retries: 5
+      start_period: 60s
     networks:
       - app-network
   # 自动健康检查和重启服务（容器级别监控）
@@ -513,9 +452,8 @@ services:
       - AUTOHEAL_DEFAULT_STOP_TIMEOUT=10  # 停止容器的超时时间
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-volumes:
-  pansou-data:
-    driver: local
+    networks:
+      - app-network
 
   # jackett:
   #   image: linuxserver/jackett
@@ -540,6 +478,30 @@ volumes:
   #     timeout: 10s
   #     retries: 5
   #     start_period: 60s
+
+  ################################### 五、网络代理（Clash）###################################
+
+  clash:
+    image: metacubex/mihomo:latest  # Clash Meta 已正式更名为 Mihomo
+    container_name: clash-ui        # 容器名（自定义）
+    restart: unless-stopped         # 开机自启+异常重启
+    network_mode: host              # 核心：Host模式（直接用NAS IP和端口）
+    privileged: true                # 启用特权模式（TUN模式必需）
+    volumes:
+      # 持久化目录：将NAS目录映射到容器内的配置目录（Mihomo 默认路径已变更为 /root/.config/mihomo）
+      # 替换为你的NAS实际目录，如威联通：/share/docker/clash-ui
+      - ./clash-ui:/root/.config/mihomo
+    devices:
+      - /dev/net/tun:/dev/net/tun  # 挂载TUN设备（TUN模式必需）
+    environment:
+      - TZ=Asia/Shanghai            # 时区（避免日志时间错乱）
+      # Web UI默认端口1123，无需修改可删除此行
+      # - CLASH_META_UI_PORT=1123
+
+
+volumes:
+  pansou-data:
+    driver: local
 
 networks:
   app-network:
