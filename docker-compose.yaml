@@ -454,7 +454,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - app-network
-
+volumes:
+  pansou-data:
+    driver: local
   # jackett:
   #   image: linuxserver/jackett
   #   container_name: jackett
