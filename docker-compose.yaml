@@ -479,8 +479,38 @@ services:
   #     retries: 5
   #     start_period: 60s
 
-  ################################### 五、网络代理（Clash）###################################
+  # Lampon Omnibox
+  omnibox:
+    image: lampon/omnibox:latest
+    container_name: omnibox
+    restart: unless-stopped
+    ports:
+      - "19080:80"  # 请根据实际情况修改端口映射
+    volumes:
+      - ./omnibox/config:/config
+      - ./omnibox/data:/data
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - app-network
 
+  # MoonTV
+  moontv:
+    image: moontv:latest  # 请确认正确的镜像名称，如果为私有镜像请补充完整路径
+    container_name: moontv
+    restart: unless-stopped
+    ports:
+      - "19081:80"  # 请根据实际情况修改端口映射
+    volumes:
+      - ./moontv/config:/config
+      - ./moontv/data:/data
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - app-network
+      
+  ################################### 五、网络代理（Clash）###################################
+ 
   clash:
     image: metacubex/mihomo:latest  # Clash Meta 已正式更名为 Mihomo
     container_name: clash-ui        # 容器名（自定义）
@@ -498,10 +528,6 @@ services:
       # Web UI默认端口1123，无需修改可删除此行
       # - CLASH_META_UI_PORT=1123
 
-
-volumes:
-  pansou-data:
-    driver: local
 
 networks:
   app-network:
