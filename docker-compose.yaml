@@ -30,96 +30,96 @@ services:
       start_period: 60s
 
   # MoviePilot v2（自动化媒体中心）
-  moviepilot:
-    image: jxxghp/moviepilot-v2:latest
-    container_name: moviepilot-v2
-    hostname: moviepilot-v2
-    stdin_open: true
-    tty: true
-    ports:
-      - "3003:3000"
-      - "3011:3001" # 修改主机端口为3011，避免3001冲突
-    volumes:
-      - "/vol2/1000/media:/media" #媒体
-      - "./moviepilot/config:/config" #持久化配置
-      - "./moviepilot/core:/moviepilot/.cache/ms-playwright" #内核浏览器
-      - "/var/run/docker.sock:/var/run/docker.sock:ro" #重启MP权限
-      # - "/tr/config/torrents:/torrents"  #TR种子位置 (路径看起来不正确，暂时注释)
-      - "./qbittorrent/config/qBittorrent/BT_backup:/BT_backup" #QB种子位置
-    environment:
-      - "NGINX_PORT=3000"
-      - "PORT=3001"
-      - "PUID=0"
-      - "PGID=0"
-      - "UMASK=000"
-      - "TZ=Asia/Shanghai"
-      - "SUPERUSER=admin"
-      - "SUPERUSER_PASSWORD=admin123"
-      - "DB_TYPE=postgresql"
-      - "DB_POSTGRESQL_HOST=postgresql"
-      - "DB_POSTGRESQL_PORT=5432"
-      - "DB_POSTGRESQL_DATABASE=moviepilot"
-      - "DB_POSTGRESQL_USERNAME=moviepilot"
-      - "DB_POSTGRESQL_PASSWORD=pg_password"
-      - "CACHE_BACKEND_TYPE=redis"
-      - "CACHE_BACKEND_URL=redis://:redis_password@redis:6379"
-    depends_on:
-      postgresql:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    restart: always
-    networks:
-      - app-network
+  # moviepilot:
+  #   image: jxxghp/moviepilot-v2:latest
+  #   container_name: moviepilot-v2
+  #   hostname: moviepilot-v2
+  #   stdin_open: true
+  #   tty: true
+  #   ports:
+  #     - "3003:3000"
+  #     - "3011:3001" # 修改主机端口为3011，避免3001冲突
+  #   volumes:
+  #     - "/vol2/1000/media:/media" #媒体
+  #     - "./moviepilot/config:/config" #持久化配置
+  #     - "./moviepilot/core:/moviepilot/.cache/ms-playwright" #内核浏览器
+  #     - "/var/run/docker.sock:/var/run/docker.sock:ro" #重启MP权限
+  #     # - "/tr/config/torrents:/torrents"  #TR种子位置 (路径看起来不正确，暂时注释)
+  #     - "./qbittorrent/config/qBittorrent/BT_backup:/BT_backup" #QB种子位置
+  #   environment:
+  #     - "NGINX_PORT=3000"
+  #     - "PORT=3001"
+  #     - "PUID=0"
+  #     - "PGID=0"
+  #     - "UMASK=000"
+  #     - "TZ=Asia/Shanghai"
+  #     - "SUPERUSER=admin"
+  #     - "SUPERUSER_PASSWORD=admin123"
+  #     - "DB_TYPE=postgresql"
+  #     - "DB_POSTGRESQL_HOST=postgresql"
+  #     - "DB_POSTGRESQL_PORT=5432"
+  #     - "DB_POSTGRESQL_DATABASE=moviepilot"
+  #     - "DB_POSTGRESQL_USERNAME=moviepilot"
+  #     - "DB_POSTGRESQL_PASSWORD=pg_password"
+  #     - "CACHE_BACKEND_TYPE=redis"
+  #     - "CACHE_BACKEND_URL=redis://:redis_password@redis:6379"
+  #   depends_on:
+  #     postgresql:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   restart: always
+  #   networks:
+  #     - app-network
 
-  redis:
-    image: redis
-    volumes:
-      - ./redis/data:/data
-    command: redis-server --save 600 1 --requirepass redis_password
-    healthcheck:
-      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
-    networks:
-      - app-network
+  # redis:
+  #   image: redis
+  #   volumes:
+  #     - ./redis/data:/data
+  #   command: redis-server --save 600 1 --requirepass redis_password
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
 
-  postgresql:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_DB: moviepilot
-      POSTGRES_USER: moviepilot
-      POSTGRES_PASSWORD: pg_password
-    volumes:
-      # 仅 postgresql 18.0+ 及以上版本可用，根据版本二选一即可
-      # - ./postgresql/data:/var/lib/postgresql
-      # 仅 postgresql 17.6 及以下版本可用，根据版本二选一即可
-      - ./postgresql/data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U moviepilot -d moviepilot"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - app-network
+  # postgresql:
+  #   image: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_DB: moviepilot
+  #     POSTGRES_USER: moviepilot
+  #     POSTGRES_PASSWORD: pg_password
+  #   volumes:
+  #     # 仅 postgresql 18.0+ 及以上版本可用，根据版本二选一即可
+  #     # - ./postgresql/data:/var/lib/postgresql
+  #     # 仅 postgresql 17.6 及以下版本可用，根据版本二选一即可
+  #     - ./postgresql/data:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U moviepilot -d moviepilot"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - app-network
 
-  # 根据现有配置增加 sqlite -> postgresql 迁移容器
-  pgloader:
-    image: dimitri/pgloader:latest
-    volumes:
-      - ./moviepilot/config:/mp_config
-    command: >
-      pgloader
-      sqlite:///mp_config/user.db
-      postgresql://moviepilot:pg_password@postgresql:5432/moviepilot
-    depends_on:
-      postgresql:
-        condition: service_healthy
-    networks:
-      - app-network
+  # # 根据现有配置增加 sqlite -> postgresql 迁移容器
+  # pgloader:
+  #   image: dimitri/pgloader:latest
+  #   volumes:
+  #     - ./moviepilot/config:/mp_config
+  #   command: >
+  #     pgloader
+  #     sqlite:///mp_config/user.db
+  #     postgresql://moviepilot:pg_password@postgresql:5432/moviepilot
+  #   depends_on:
+  #     postgresql:
+  #       condition: service_healthy
+  #   networks:
+  #     - app-network
 
   # IPTV-API（直播源聚合与接口服务）
   iptv-api:
