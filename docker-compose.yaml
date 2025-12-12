@@ -485,7 +485,7 @@ services:
     container_name: omnibox
     restart: unless-stopped
     ports:
-      - "19080:80"  # 请根据实际情况修改端口映射
+      - "7023:7023"  # 请根据实际情况修改端口映射
     volumes:
       - ./omnibox/config:/config
       - ./omnibox/data:/data
