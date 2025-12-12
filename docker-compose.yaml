@@ -454,9 +454,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - app-network
-volumes:
-  pansou-data:
-    driver: local
+
   # jackett:
   #   image: linuxserver/jackett
   #   container_name: jackett
@@ -529,7 +527,9 @@ volumes:
       - TZ=Asia/Shanghai            # 时区（避免日志时间错乱）
       # Web UI默认端口1123，无需修改可删除此行
       # - CLASH_META_UI_PORT=1123
-
+volumes:
+  pansou-data:
+    driver: local
 
 networks:
   app-network:
