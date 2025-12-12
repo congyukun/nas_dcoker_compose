@@ -503,37 +503,37 @@ services:
       start_period: 60s
 
   # MoonTV Core
-  moontv-core:
-    image: ghcr.io/lunatechlab/moontv:latest
-    container_name: moontv-core
-    restart: unless-stopped
-    ports:
-      - '3000:3000'
-    environment:
-      - USERNAME=admin
-      - PASSWORD=admin_password
-      - NEXT_PUBLIC_STORAGE_TYPE=redis
-      - REDIS_URL=redis://moontv-redis:6379
-      - NEXT_PUBLIC_ENABLE_REGISTER=true
-      - TZ=Asia/Shanghai
-    networks:
-      - app-network
-    depends_on:
-      - moontv-redis
-    # 如需自定义配置，可挂载文件
-    # volumes:
-    #   - ./moontv/config.json:/app/config.json:ro
+  # moontv-core:
+  #   image: ghcr.io/lunatechlab/moontv:latest
+  #   container_name: moontv-core
+  #   restart: unless-stopped
+  #   ports:
+  #     - '3000:3000'
+  #   environment:
+  #     - USERNAME=admin
+  #     - PASSWORD=admin_password
+  #     - NEXT_PUBLIC_STORAGE_TYPE=redis
+  #     - REDIS_URL=redis://moontv-redis:6379
+  #     - NEXT_PUBLIC_ENABLE_REGISTER=true
+  #     - TZ=Asia/Shanghai
+  #   networks:
+  #     - app-network
+  #   depends_on:
+  #     - moontv-redis
+  #   # 如需自定义配置，可挂载文件
+  #   # volumes:
+  #   #   - ./moontv/config.json:/app/config.json:ro
 
-  # MoonTV Redis
-  moontv-redis:
-    image: redis:alpine
-    container_name: moontv-redis
-    restart: unless-stopped
-    networks:
-      - app-network
-    # 如需持久化
-    # volumes:
-    #   - ./moontv/data:/data
+  # # MoonTV Redis
+  # moontv-redis:
+  #   image: redis:alpine
+  #   container_name: moontv-redis
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+  #   # 如需持久化
+  #   # volumes:
+  #   #   - ./moontv/data:/data
 
       
   ################################### 五、网络代理（Clash）###################################
