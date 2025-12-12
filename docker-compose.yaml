@@ -335,7 +335,7 @@ services:
 
   # XiaoMusic（小爱同学本地音乐服务）
   xiaomusic:
-    image: docker.hanxi.cc/hanxi/xiaomusic
+    image: docker.hanxi.cc/hanxi/xiaomusic:latest
     container_name: xiaomusic
     restart: unless-stopped
     ports:
