@@ -269,8 +269,6 @@ services:
       - ./cloudsaver/data:/app/data
       - ./cloudsaver/config:/app/config
     environment:
-      - HTTP_PROXY=http://192.168.1.13:7890
-      - HTTPS_PROXY=http://192.168.1.13:7890
       - TZ=Asia/Shanghai
     restart: unless-stopped
     networks:
@@ -565,8 +563,11 @@ services:
     image: metacubex/mihomo:latest  # Clash Meta 已正式更名为 Mihomo
     container_name: clash-ui        # 容器名（自定义）
     restart: unless-stopped         # 开机自启+异常重启
-    network_mode: host              # 核心：Host模式（直接用NAS IP和端口）
     privileged: true                # 启用特权模式（TUN模式必需）
+    ports:
+      - "7890:7890"                 # 混合代理端口（HTTP + SOCKS5）
+      - "1123:1123"                 # Web UI 管理端口
+      - "1053:1053"                 # DNS 端口
     volumes:
       # 持久化目录：将NAS目录映射到容器内的配置目录（Mihomo 默认路径已变更为 /root/.config/mihomo）
       # 替换为你的NAS实际目录，如威联通：/share/docker/clash-ui
@@ -575,8 +576,8 @@ services:
       - /dev/net/tun:/dev/net/tun  # 挂载TUN设备（TUN模式必需）
     environment:
       - TZ=Asia/Shanghai            # 时区（避免日志时间错乱）
-      # Web UI默认端口1123，无需修改可删除此行
-      # - CLASH_META_UI_PORT=1123
+    networks:
+      - app-network
 volumes:
   pansou-data:
     driver: local
