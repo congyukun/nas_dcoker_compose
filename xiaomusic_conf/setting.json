@@ -23,7 +23,7 @@
   "music_path_depth": 10,
   "disable_httpauth": true,
   "httpauth_username": "",
-  "httpauth_password": "",
+  "httpauth_password": "Cyk0211.",
   "music_list_url": "https://gist.githubusercontent.com/hanxi/dda82d964a28f8110f8fba81c3ff8314/raw/example.json",
   "music_list_json": "",
   "custom_play_list_json": "",
@@ -114,8 +114,8 @@
       "hardware": "OH2P",
       "name": "Xiaomi 智能音箱 Pro",
       "play_type": 2,
-      "cur_music": "张学友张学友的歌",
-      "cur_playlist": "全部"
+      "cur_music": "周杰伦的双截棍",
+      "cur_playlist": "最近新增"
     }
   },
   "group_list": "",
