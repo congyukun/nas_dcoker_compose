@@ -279,6 +279,83 @@ services:
       timeout: 10s
       retries: 3
       start_period: 60s
+
+  # PanCheck（网盘链接检测系统）
+  pancheck:
+    image: lampon/pancheck:latest
+    container_name: pancheck
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+      - SERVER_MODE=release
+      - SERVER_CORS_ORIGINS=*
+      - DATABASE_TYPE=mysql
+      - DATABASE_HOST=mysql
+      - DATABASE_PORT=3306
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=root123
+      - DATABASE_DATABASE=pancheck
+      - DATABASE_CHARSET=utf8mb4
+      - CHECKER_DEFAULT_CONCURRENCY=5
+      - CHECKER_TIMEOUT=30
+      - REDIS_ENABLED=true
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - REDIS_DB=0
+      - REDIS_INVALID_TTL=168
+      - ADMIN_PASSWORD=admin123
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./pancheck/data:/app/data
+    restart: unless-stopped
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # PanCheck MySQL 数据库
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root123
+      - MYSQL_DATABASE=pancheck
+      - MYSQL_CHARACTER_SET_SERVER=utf8mb4
+      - MYSQL_COLLATION_SERVER=utf8mb4_unicode_ci
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./pancheck/mysql_data:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-root123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PanCheck Redis
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   ################################### 四、管理面板（1Panel+Lucky+Sun-Panel）###################################
   
   # 1panel:
