@@ -30,96 +30,96 @@ services:
       start_period: 60s
 
   # MoviePilot v2（自动化媒体中心）
-  moviepilot:
-    image: jxxghp/moviepilot-v2:latest
-    container_name: moviepilot-v2
-    hostname: moviepilot-v2
-    stdin_open: true
-    tty: true
-    ports:
-      - "3003:3000"
-      - "3011:3001" # 修改主机端口为3011，避免3001冲突
-    volumes:
-      - "/vol2/1000/media:/media" #媒体
-      - "./moviepilot/config:/config" #持久化配置
-      - "./moviepilot/core:/moviepilot/.cache/ms-playwright" #内核浏览器
-      - "/var/run/docker.sock:/var/run/docker.sock:ro" #重启MP权限
-      # - "/tr/config/torrents:/torrents"  #TR种子位置 (路径看起来不正确，暂时注释)
-      - "./qbittorrent/config/qBittorrent/BT_backup:/BT_backup" #QB种子位置
-    environment:
-      - "NGINX_PORT=3000"
-      - "PORT=3001"
-      - "PUID=0"
-      - "PGID=0"
-      - "UMASK=000"
-      - "TZ=Asia/Shanghai"
-      - "SUPERUSER=admin"
-      - "SUPERUSER_PASSWORD=admin123"
-      - "DB_TYPE=postgresql"
-      - "DB_POSTGRESQL_HOST=postgresql"
-      - "DB_POSTGRESQL_PORT=5432"
-      - "DB_POSTGRESQL_DATABASE=moviepilot"
-      - "DB_POSTGRESQL_USERNAME=moviepilot"
-      - "DB_POSTGRESQL_PASSWORD=pg_password"
-      - "CACHE_BACKEND_TYPE=redis"
-      - "CACHE_BACKEND_URL=redis://:redis_password@redis:6379"
-    depends_on:
-      postgresql:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    restart: always
-    networks:
-      - app-network
+  # moviepilot:
+  #   image: jxxghp/moviepilot-v2:latest
+  #   container_name: moviepilot-v2
+  #   hostname: moviepilot-v2
+  #   stdin_open: true
+  #   tty: true
+  #   ports:
+  #     - "3003:3000"
+  #     - "3011:3001" # 修改主机端口为3011，避免3001冲突
+  #   volumes:
+  #     - "/vol2/1000/media:/media" #媒体
+  #     - "./moviepilot/config:/config" #持久化配置
+  #     - "./moviepilot/core:/moviepilot/.cache/ms-playwright" #内核浏览器
+  #     - "/var/run/docker.sock:/var/run/docker.sock:ro" #重启MP权限
+  #     # - "/tr/config/torrents:/torrents"  #TR种子位置 (路径看起来不正确，暂时注释)
+  #     - "./qbittorrent/config/qBittorrent/BT_backup:/BT_backup" #QB种子位置
+  #   environment:
+  #     - "NGINX_PORT=3000"
+  #     - "PORT=3001"
+  #     - "PUID=0"
+  #     - "PGID=0"
+  #     - "UMASK=000"
+  #     - "TZ=Asia/Shanghai"
+  #     - "SUPERUSER=admin"
+  #     - "SUPERUSER_PASSWORD=admin123"
+  #     - "DB_TYPE=postgresql"
+  #     - "DB_POSTGRESQL_HOST=postgresql"
+  #     - "DB_POSTGRESQL_PORT=5432"
+  #     - "DB_POSTGRESQL_DATABASE=moviepilot"
+  #     - "DB_POSTGRESQL_USERNAME=moviepilot"
+  #     - "DB_POSTGRESQL_PASSWORD=pg_password"
+  #     - "CACHE_BACKEND_TYPE=redis"
+  #     - "CACHE_BACKEND_URL=redis://:redis_password@redis:6379"
+  #   depends_on:
+  #     postgresql:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   restart: always
+  #   networks:
+  #     - app-network
 
-  redis:
-    image: redis
-    volumes:
-      - ./redis/data:/data
-    command: redis-server --save 600 1 --requirepass redis_password
-    healthcheck:
-      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
-    networks:
-      - app-network
+  # redis:
+  #   image: redis
+  #   volumes:
+  #     - ./redis/data:/data
+  #   command: redis-server --save 600 1 --requirepass redis_password
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
 
-  postgresql:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_DB: moviepilot
-      POSTGRES_USER: moviepilot
-      POSTGRES_PASSWORD: pg_password
-    volumes:
-      # 仅 postgresql 18.0+ 及以上版本可用，根据版本二选一即可
-      # - ./postgresql/data:/var/lib/postgresql
-      # 仅 postgresql 17.6 及以下版本可用，根据版本二选一即可
-      - ./postgresql/data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U moviepilot -d moviepilot"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - app-network
+  # postgresql:
+  #   image: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_DB: moviepilot
+  #     POSTGRES_USER: moviepilot
+  #     POSTGRES_PASSWORD: pg_password
+  #   volumes:
+  #     # 仅 postgresql 18.0+ 及以上版本可用，根据版本二选一即可
+  #     # - ./postgresql/data:/var/lib/postgresql
+  #     # 仅 postgresql 17.6 及以下版本可用，根据版本二选一即可
+  #     - ./postgresql/data:/var/lib/postgresql/data
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U moviepilot -d moviepilot"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - app-network
 
-  # 根据现有配置增加 sqlite -> postgresql 迁移容器
-  pgloader:
-    image: dimitri/pgloader:latest
-    volumes:
-      - ./moviepilot/config:/mp_config
-    command: >
-      pgloader
-      sqlite:///mp_config/user.db
-      postgresql://moviepilot:pg_password@postgresql:5432/moviepilot
-    depends_on:
-      postgresql:
-        condition: service_healthy
-    networks:
-      - app-network
+  # # 根据现有配置增加 sqlite -> postgresql 迁移容器
+  # pgloader:
+  #   image: dimitri/pgloader:latest
+  #   volumes:
+  #     - ./moviepilot/config:/mp_config
+  #   command: >
+  #     pgloader
+  #     sqlite:///mp_config/user.db
+  #     postgresql://moviepilot:pg_password@postgresql:5432/moviepilot
+  #   depends_on:
+  #     postgresql:
+  #       condition: service_healthy
+  #   networks:
+  #     - app-network
 
   # IPTV-API（直播源聚合与接口服务）
   iptv-api:
@@ -485,29 +485,56 @@ services:
     container_name: omnibox
     restart: unless-stopped
     ports:
-      - "19080:80"  # 请根据实际情况修改端口映射
+      - "7023:7023"  # 请根据实际情况修改端口映射
     volumes:
       - ./omnibox/config:/config
       - ./omnibox/data:/data
     environment:
       - TZ=Asia/Shanghai
+      - PUID=1000
+      - PGID=1000
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 80 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
 
-  # MoonTV
-  moontv:
-    image: moontv:latest  # 请确认正确的镜像名称，如果为私有镜像请补充完整路径
-    container_name: moontv
-    restart: unless-stopped
-    ports:
-      - "19081:80"  # 请根据实际情况修改端口映射
-    volumes:
-      - ./moontv/config:/config
-      - ./moontv/data:/data
-    environment:
-      - TZ=Asia/Shanghai
-    networks:
-      - app-network
+  # MoonTV Core
+  # moontv-core:
+  #   image: ghcr.io/lunatechlab/moontv:latest
+  #   container_name: moontv-core
+  #   restart: unless-stopped
+  #   ports:
+  #     - '3000:3000'
+  #   environment:
+  #     - USERNAME=admin
+  #     - PASSWORD=admin_password
+  #     - NEXT_PUBLIC_STORAGE_TYPE=redis
+  #     - REDIS_URL=redis://moontv-redis:6379
+  #     - NEXT_PUBLIC_ENABLE_REGISTER=true
+  #     - TZ=Asia/Shanghai
+  #   networks:
+  #     - app-network
+  #   depends_on:
+  #     - moontv-redis
+  #   # 如需自定义配置，可挂载文件
+  #   # volumes:
+  #   #   - ./moontv/config.json:/app/config.json:ro
+
+  # # MoonTV Redis
+  # moontv-redis:
+  #   image: redis:alpine
+  #   container_name: moontv-redis
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+  #   # 如需持久化
+  #   # volumes:
+  #   #   - ./moontv/data:/data
+
       
   ################################### 五、网络代理（Clash）###################################
  
@@ -527,7 +554,9 @@ services:
       - TZ=Asia/Shanghai            # 时区（避免日志时间错乱）
       # Web UI默认端口1123，无需修改可删除此行
       # - CLASH_META_UI_PORT=1123
-
+volumes:
+  pansou-data:
+    driver: local
 
 networks:
   app-network:
