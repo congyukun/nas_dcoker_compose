@@ -668,6 +668,43 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  # 19. Solara-Music（音乐流媒体服务）
+  solara-music:
+    image: xiaosahuogui/solara-music:latest 
+    container_name: solara-music
+    hostname: solara-music
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - SOLARA_PASSWORD=solara123
+      - SESSION_SECRET=KLmlKDruIBRYjrT5ct7B3xqG25ZF2p59
+      - TZ=${TZ}
+    volumes:
+      - ./solara-music/logs:/app/logs
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 3001 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+
   ################################### 五、网络代理（Clash）###################################
   # 19. Clash（网络代理）
   clash:
