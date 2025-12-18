@@ -173,48 +173,7 @@ services:
     networks:
       - app-network
 
-  # 6. IPTV-API（直播源聚合与接口服务）
-  iptv-api:
-    image: guovern/iptv-api:latest
-    container_name: iptv-api
-    hostname: iptv-api
-    restart: always
-    ports:
-      - "${IPTV_API_PORT}:8000"
-    volumes:
-      - ./iptv-api/config:/iptv-api/config
-      - ./iptv-api/output:/iptv-api/output
-    environment:
-      - TZ=${TZ}
-      - APP_HOST=0.0.0.0
-      - APP_PORT=8000
-      - UPDATE_CRON=0 0 */2 * *
-      - REQUEST_TIMEOUT=10
-      - RETRY_COUNT=3
-      - RECENT_DAYS=30
-      - PUID=${PUID}
-      - PGID=${PGID}
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8000/ || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-        reservations:
-          memory: 128M
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-
-  # 7. Navidrome（音乐服务器）
+  # 6. Navidrome（音乐服务器）
   navidrome:
     image: deluan/navidrome:latest
     container_name: navidrome
@@ -250,7 +209,7 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # 8. Music-tag-Web（音乐标签编辑）
+  # 7. Music-tag-Web（音乐标签编辑）
   music-tag:
     image: xhongc/music_tag_web:latest
     container_name: music-tag-web
@@ -285,7 +244,7 @@ services:
         max-file: "3"
 
   ################################### 二、实用工具（云盘+转存+搜索）###################################
-  # 9. Quark-auto-save（夸克自动转存）
+  # 8. Quark-auto-save（夸克自动转存）
   quark-auto-save:
     image: cp0204/quark-auto-save:latest
     container_name: quark-auto-save
@@ -320,7 +279,7 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # 10. CloudSaver（云盘资源保存）
+  # 9. CloudSaver（云盘资源保存）
   cloudsaver:
     image: jiangrui1994/cloudsaver:latest
     container_name: cloud-saver
@@ -353,7 +312,7 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # 11. PanCheck（网盘链接检测系统）
+  # 10. PanCheck（网盘链接检测系统）
   pancheck:
     image: lampon/pancheck:latest
     container_name: pancheck
@@ -409,7 +368,7 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # 12. MySQL（PanCheck 专用数据库）
+  # 11. MySQL（PanCheck 专用数据库）
   mysql:
     image: mysql:8.0
     container_name: mysql
@@ -443,7 +402,7 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # 13. PanSou（多网盘资源聚合搜索）
+  # 12. PanSou（多网盘资源聚合搜索）
   pansou:
     image: ghcr.io/fish2018/pansou-web:latest
     container_name: pansou-app
@@ -498,7 +457,7 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # 14. AutoHeal（自动健康检查和重启服务）
+  # 13. AutoHeal（自动健康检查和重启服务）
   autoheal:
     image: willfarrell/autoheal:latest
     container_name: pansou-autoheal
@@ -520,7 +479,7 @@ services:
         reservations:
           memory: 32M
 
-  # 15. Omnibox（Lampon 全能工具箱）
+  # 14. Omnibox（Lampon 全能工具箱）
   omnibox:
     image: lampon/omnibox:latest
     container_name: omnibox
@@ -556,7 +515,7 @@ services:
         max-file: "3"
 
   ################################### 三、管理面板（Sun-Panel）###################################
-  # 16. Sun-Panel（导航面板）
+  # 15. Sun-Panel（导航面板）
   sun-panel:
     image: hslr/sun-panel:latest
     container_name: sun-panel
@@ -595,7 +554,7 @@ services:
         max-file: "3"
 
   ################################### 四、音乐服务（XiaoMusic + PlaylistDL）###################################
-  # 17. XiaoMusic（小爱同学本地音乐服务）
+  # 16. XiaoMusic（小爱同学本地音乐服务）
   xiaomusic:
     image: docker.hanxi.cc/hanxi/xiaomusic:latest
     container_name: xiaomusic
@@ -629,7 +588,7 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # 18. PlaylistDL（音乐歌单批量下载工具）
+  # 17. PlaylistDL（音乐歌单批量下载工具）
   playlistdl:
     image: tanner23456/playlistdl:v2
     container_name: playlistdl
@@ -668,7 +627,7 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # 19. Solara-Music（音乐流媒体服务）
+  # 18. Solara-Music（音乐流媒体服务）
   solara-music:
     image: xiaosahuogui/solara-music:latest
     container_name: solara-music
@@ -705,7 +664,7 @@ services:
         max-file: "3"
 
   ################################### 五、网络代理（Clash）###################################
-  # 20. Clash（网络代理）
+  # 19. Clash（网络代理）
   clash:
     image: metacubex/mihomo:latest
     container_name: clash-ui
