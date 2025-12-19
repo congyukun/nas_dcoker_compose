@@ -488,12 +488,9 @@ services:
     ports:
       - "${OMNIBOX_PORT}:7023"
     volumes:
-      - ./omnibox/config:/config
-      - ./omnibox/data:/data
+      - ./omnibox/data:/app/data
     environment:
       - TZ=${TZ}
-      - PUID=${PUID}
-      - PGID=${PGID}
     networks:
       - app-network
     healthcheck:
