@@ -291,6 +291,9 @@ services:
       - ./cloudsaver/config:/app/config
     environment:
       - TZ=${TZ}
+      - HTTP_PROXY=http://clash-ui:7890
+      - HTTPS_PROXY=http://clash-ui:7890
+      - NO_PROXY=localhost,127.0.0.1
     restart: always
     networks:
       - app-network
@@ -673,6 +676,8 @@ services:
     privileged: true
     ports:
       - "${CLASH_PROXY_PORT}:7890"
+      - "7891:7891"  # SOCKS5 端口
+      - "7892:7892"  # HTTP 端口
       - "${CLASH_UI_PORT}:1123"
       - "${CLASH_DNS_PORT}:1053"
     volumes:
