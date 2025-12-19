@@ -556,7 +556,7 @@ services:
   ################################### 四、音乐服务（XiaoMusic + PlaylistDL）###################################
   # 16. XiaoMusic（小爱同学本地音乐服务）
   xiaomusic:
-    image: ghcr.io/hanxi/xiaomusic:latest
+    image: hanxi/xiaomusic:latest
     container_name: xiaomusic
     hostname: xiaomusic
     restart: always
