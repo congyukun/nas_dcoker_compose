@@ -256,8 +256,9 @@ services:
       - WEBUI_PASSWORD=${QUARK_WEBUI_PASSWORD}
       - TZ=${TZ}
     volumes:
-      - ./storage/cloud/quark:/quark
-      - ./quark-auto-save/config:/config
+      - ./quark-auto-save/config:/app/config
+      - ./quark-auto-save/media:/media
+
     restart: always
     networks:
       - app-network
