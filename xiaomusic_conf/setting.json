@@ -88,7 +88,7 @@
     "测试自定义口令",
     "测试链接"
   ],
-  "use_music_api": false,
+  "use_music_api": true,
   "use_music_audio_id": "1582971365183456177",
   "use_music_id": "355454500",
   "log_file": "xiaomusic.log.txt",
@@ -114,16 +114,19 @@
       "hardware": "OH2P",
       "name": "Xiaomi 智能音箱 Pro",
       "play_type": 2,
-      "cur_music": "周杰伦的双截棍",
-      "cur_playlist": "最近新增"
+      "cur_music": "周杰伦晴天",
+      "cur_playlist": "全部",
+      "playlist2music": {
+        "全部": "周杰伦晴天"
+      }
     }
   },
   "group_list": "",
   "remove_id3tag": false,
-  "convert_to_mp3": false,
+  "convert_to_mp3": true,
   "delay_sec": 0,
   "continue_play": false,
-  "enable_file_watch": false,
+  "enable_file_watch": true,
   "file_watch_debounce": 10,
   "pull_ask_sec": 1,
   "enable_pull_ask": true,

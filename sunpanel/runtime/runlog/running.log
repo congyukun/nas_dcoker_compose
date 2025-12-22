@@ -157,3 +157,71 @@
 2025-12-16T14:10:06.856+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
 2025-12-16T14:10:06.868+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
 2025-12-16T14:10:06.868+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-16T14:33:42.103+0800	INFO	lang/lang.go:20	输出语言文件: lang/zh-cn.ini
+2025-12-16T14:33:42.255+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-16T14:33:42.256+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-16T14:33:42.256+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-16T17:33:44.700+0800	INFO	lang/lang.go:20	输出语言文件: lang/zh-cn.ini
+2025-12-16T17:33:44.894+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-16T17:33:44.895+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-16T17:33:44.895+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-17T21:08:06.490+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-17T21:08:06.495+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-17T21:08:06.495+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-18T08:25:57.179+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-18T08:25:57.220+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-18T08:25:57.221+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-18T10:49:45.400+0800	INFO	lang/lang.go:20	输出语言文件: lang/zh-cn.ini
+2025-12-18T10:49:45.616+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-18T10:49:45.617+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-18T10:49:45.617+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-18T18:59:07.703+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-18T18:59:07.779+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-18T18:59:07.779+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-19T08:44:54.163+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-19T08:44:54.196+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-19T08:44:54.196+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-19T11:25:43.796+0800	INFO	lang/lang.go:20	输出语言文件: lang/zh-cn.ini
+2025-12-19T11:25:44.692+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-19T11:25:44.708+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-19T11:25:44.709+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-19T11:27:51.345+0800	INFO	lang/lang.go:20	输出语言文件: lang/zh-cn.ini
+2025-12-19T11:27:51.789+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-19T11:27:51.790+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-19T11:27:51.790+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-19T11:40:33.626+0800	INFO	lang/lang.go:20	输出语言文件: lang/zh-cn.ini
+2025-12-19T11:40:33.909+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-19T11:40:33.915+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-19T11:40:33.915+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-19T13:54:49.586+0800	INFO	lang/lang.go:20	输出语言文件: lang/zh-cn.ini
+2025-12-19T13:54:50.028+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-19T13:54:50.039+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-19T13:54:50.039+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-19T14:01:04.399+0800	ERROR	panel/itemIcon.go:345	acquisition failed: get ico error:parse "192.168.1.13:4567": first path segment in URL cannot contain colon
+2025-12-19T14:01:05.465+0800	ERROR	panel/itemIcon.go:345	acquisition failed: get ico error:parse "192.168.1.13:4567": first path segment in URL cannot contain colon
+2025-12-19T15:55:00.040+0800	INFO	lang/lang.go:20	输出语言文件: lang/zh-cn.ini
+2025-12-19T15:55:00.321+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-19T15:55:00.322+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-19T15:55:00.322+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-19T16:50:33.892+0800	INFO	lang/lang.go:20	输出语言文件: lang/zh-cn.ini
+2025-12-19T16:50:34.259+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-19T16:50:34.261+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-19T16:50:34.261+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-19T16:58:51.978+0800	INFO	lang/lang.go:20	输出语言文件: lang/zh-cn.ini
+2025-12-19T16:58:52.221+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-19T16:58:52.231+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-19T16:58:52.231+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-19T17:01:17.481+0800	INFO	lang/lang.go:20	输出语言文件: lang/zh-cn.ini
+2025-12-19T17:01:17.684+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-19T17:01:17.685+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-19T17:01:17.685+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-21T09:37:58.482+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-21T09:37:58.514+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-21T09:37:58.514+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-21T16:42:51.626+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-21T16:42:51.838+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-21T16:42:51.839+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-21T18:01:41.679+0800	INFO	lang/lang.go:20	输出语言文件: lang/zh-cn.ini
+2025-12-21T18:01:41.926+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-21T18:01:41.928+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-21T18:01:41.928+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
