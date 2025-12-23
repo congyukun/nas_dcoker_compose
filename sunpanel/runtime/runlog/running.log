@@ -225,3 +225,11 @@
 2025-12-21T18:01:41.926+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
 2025-12-21T18:01:41.928+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
 2025-12-21T18:01:41.928+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-22T16:02:52.724+0800	INFO	lang/lang.go:20	输出语言文件: lang/zh-cn.ini
+2025-12-22T16:02:53.074+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-22T16:02:53.086+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-22T16:02:53.086+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
+2025-12-22T16:32:06.851+0800	INFO	lang/lang.go:20	输出语言文件: lang/zh-cn.ini
+2025-12-22T16:32:07.052+0800	INFO	biz/proAuth.go:100	Use PRO Auth Host: default
+2025-12-22T16:32:07.054+0800	INFO	router/A_ENTER.go:42	Sun-Panel is Started.
+2025-12-22T16:32:07.054+0800	INFO	router/A_ENTER.go:44	HTTP: 0.0.0.0:3002
