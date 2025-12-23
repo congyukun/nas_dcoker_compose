@@ -525,7 +525,7 @@ services:
     environment:
       - UMASK=022
       - TZ=${TZ}
-    restart: unless-stopped
+    restart: always
     networks:
       - app-network
     healthcheck:
