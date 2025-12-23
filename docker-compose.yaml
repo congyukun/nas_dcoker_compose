@@ -512,8 +512,46 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  # 15. CloudNAS（CloudDrive2 云盘挂载）
+  cloudnas:
+    image: cloudnas/clouddrive2
+    container_name: clouddrive2-compose
+    hostname: clouddrive2
+    environment:
+      - TZ=${TZ}
+      - CLOUDDRIVE_HOME=/Config
+    volumes:
+      - ./clouddrive2/CloudNAS:/CloudNAS:shared
+      - ./clouddrive2/Config:/Config
+    devices:
+      - /dev/fuse:/dev/fuse
+    ports:
+      - "${CLOUDDRIVE_PORT}:19798"
+    restart: unless-stopped
+    pid: "host"
+    privileged: true
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 19798 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   ################################### 三、管理面板（Sun-Panel）###################################
-  # 15. Sun-Panel（导航面板）
+  # 16. Sun-Panel（导航面板）
   sun-panel:
     image: hslr/sun-panel:latest
     container_name: sun-panel
