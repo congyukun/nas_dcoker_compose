@@ -1,5 +1,3 @@
-version: '3'
-
 services:
 
   ################################### 一、影视核心（自动化+播放+整理）###################################
@@ -217,13 +215,13 @@ services:
     # pull_policy: never          # 重要！使用本地镜像，不从远程拉取
     container_name: music-scraper
     ports:
-      - "7301:7301"
+      - "${MUSIC_SCRAPER_PORT}:7301"
     volumes:
       - ${MUSIC_PATH}:/app/music    # 音乐文件夹路径
-      - ./music-scraper/data:/app/data      # 数据持久化
+      - ./music-scraper/data:/app/data            # 数据持久化
     environment:
       - TZ=Asia/Shanghai
-    restart: always
+    restart: unless-stopped
     networks:
       - app-network
     healthcheck:
