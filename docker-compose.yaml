@@ -211,7 +211,7 @@ services:
 
   # 7. Music-Scraper（音乐刮削器）
   music-scraper:
-    image: music-scraper:1.0.3-amd64
+    image: minzgo/music-scraper:latest
     # pull_policy: never          # 重要！使用本地镜像，不从远程拉取
     container_name: music-scraper
     ports:
