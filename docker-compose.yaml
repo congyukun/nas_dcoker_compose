@@ -1,3 +1,5 @@
+version: '3'
+
 services:
 
   ################################### 一、影视核心（自动化+播放+整理）###################################
@@ -156,22 +158,22 @@ services:
         max-file: "3"
 
   # 5. PgLoader（SQLite -> PostgreSQL 迁移工具，一次性使用）
-  pgloader:
-    image: dimitri/pgloader:latest
-    container_name: pgloader
-    profiles:
-      - migration
-    volumes:
-      - ./moviepilot/config:/mp_config
-    command: >
-      pgloader
-      sqlite:///mp_config/user.db
-      postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgresql:5432/${POSTGRES_DB}
-    depends_on:
-      postgresql:
-        condition: service_healthy
-    networks:
-      - app-network
+  # pgloader:
+  #   image: dimitri/pgloader:latest
+  #   container_name: pgloader
+  #   profiles:
+  #     - migration
+  #   volumes:
+  #     - ./moviepilot/config:/mp_config
+  #   command: >
+  #     pgloader
+  #     sqlite:///mp_config/user.db
+  #     postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgresql:5432/${POSTGRES_DB}
+  #   depends_on:
+  #     postgresql:
+  #       condition: service_healthy
+  #   networks:
+  #     - app-network
 
   # 6. Navidrome（音乐服务器）
   navidrome:
@@ -209,24 +211,23 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # 7. Music-tag-Web（音乐标签编辑）
-  music-tag:
-    image: xhongc/music_tag_web:latest
-    container_name: music-tag-web
-    hostname: music-tag-web
+  # 7. Music-Scraper（音乐刮削器）
+  music-scraper:
+    image: music-scraper:1.0.3-amd64
+    # pull_policy: never          # 重要！使用本地镜像，不从远程拉取
+    container_name: music-scraper
     ports:
-      - "${MUSIC_TAG_PORT}:8002"
+      - "7301:7301"
     volumes:
-      - ${MUSIC_PATH}:/app/media
-      - ./music-tag-web/data:/app/data
-      - ${MUSIC_PATH}/download:/app/download
-    restart: always
+      - ${MUSIC_PATH}:/app/music    # 音乐文件夹路径
+      - ./music-scraper/data:/app/data      # 数据持久化
     environment:
-      - TZ=${TZ}
+      - TZ=Asia/Shanghai
+    restart: always
     networks:
       - app-network
     healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 8002 || exit 1"]
+      test: ["CMD-SHELL", "nc -z localhost 7301 || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -242,6 +243,40 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+  # 8. Music-tag-Web（音乐标签编辑）
+  # music-tag:
+  #   image: xhongc/music_tag_web:latest
+  #   container_name: music-tag-web
+  #   hostname: music-tag-web
+  #   ports:
+  #     - "${MUSIC_TAG_PORT}:8002"
+  #   volumes:
+  #     - ${MUSIC_PATH}:/app/media
+  #     - ./music-tag-web/data:/app/data
+  #     - ${MUSIC_PATH}/download:/app/download
+  #   restart: always
+  #   environment:
+  #     - TZ=${TZ}
+  #   networks:
+  #     - app-network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "nc -z localhost 8002 || exit 1"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 5
+  #     start_period: 60s
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         memory: 1G
+  #       reservations:
+  #         memory: 256M
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
 
   ################################### 二、实用工具（云盘+转存+搜索）###################################
   # 8. Quark-auto-save（夸克自动转存）
