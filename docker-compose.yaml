@@ -14,7 +14,7 @@ services:
       - UMASK_SET=022
     volumes:
       - ${MEDIA_PATH}:/downloads
-      - ./qbittorrent/config:/config
+      - ./services/qbittorrent/config:/config
     ports:
       - "${QBITTORRENT_WEBUI_PORT}:8080"
       - "${QBITTORRENT_BT_PORT}:6881"
@@ -52,10 +52,10 @@ services:
       - "${MOVIEPILOT_API_PORT}:3001"
     volumes:
       - ${MEDIA_PATH}:/media
-      - ./moviepilot/config:/config
-      - ./moviepilot/core:/moviepilot/.cache/ms-playwright
+      - ./services/moviepilot/config:/config
+      - ./services/moviepilot/core:/moviepilot/.cache/ms-playwright
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./qbittorrent/config/qBittorrent/BT_backup:/BT_backup
+      - ./services/qbittorrent/config/qBittorrent/BT_backup:/BT_backup
     environment:
       - NGINX_PORT=3000
       - PORT=3001
@@ -104,7 +104,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - TZ=${TZ}
     volumes:
-      - ./postgresql/data:/var/lib/postgresql/data
+      - ./services/postgresql/data:/var/lib/postgresql/data
     restart: always
     networks:
       - app-network
@@ -132,7 +132,7 @@ services:
     container_name: redis
     hostname: redis
     volumes:
-      - ./redis/data:/data
+      - ./services/redis/data:/data
     command: redis-server --save 600 1 --requirepass ${REDIS_PASSWORD} --maxmemory ${REDIS_MAXMEMORY} --maxmemory-policy allkeys-lru
     restart: always
     networks:
@@ -162,7 +162,7 @@ services:
   #   profiles:
   #     - migration
   #   volumes:
-  #     - ./moviepilot/config:/mp_config
+  #     - ./services/moviepilot/config:/mp_config
   #   command: >
   #     pgloader
   #     sqlite:///mp_config/user.db
@@ -185,7 +185,7 @@ services:
       - ND_LOGLEVEL=info
     volumes:
       - ${MUSIC_PATH}:/music:ro
-      - ./navidrome/data:/data
+      - ./services/navidrome/data:/data
     ports:
       - "${NAVIDROME_PORT}:4533"
     restart: always
@@ -218,7 +218,7 @@ services:
       - "${MUSIC_SCRAPER_PORT}:7301"
     volumes:
       - ${MUSIC_PATH}:/app/music    # 音乐文件夹路径
-      - ./music-scraper/data:/app/data            # 数据持久化
+      - ./services/music-scraper/data:/app/data            # 数据持久化
     environment:
       - TZ=Asia/Shanghai
     restart: unless-stopped
@@ -251,7 +251,7 @@ services:
   #     - "${MUSIC_TAG_PORT}:8002"
   #   volumes:
   #     - ${MUSIC_PATH}:/app/media
-  #     - ./music-tag-web/data:/app/data
+  #     - ./services/music-tag-web/data:/app/data
   #     - ${MUSIC_PATH}/download:/app/download
   #   restart: always
   #   environment:
@@ -289,8 +289,8 @@ services:
       - WEBUI_PASSWORD=${QUARK_WEBUI_PASSWORD}
       - TZ=${TZ}
     volumes:
-      - ./quark-auto-save/config:/app/config
-      - ./quark-auto-save/media:/media
+      - ./services/quark-auto-save/config:/app/config
+      - ./services/quark-auto-save/media:/media
 
     restart: always
     networks:
@@ -321,8 +321,8 @@ services:
     ports:
       - "${CLOUDSAVER_PORT}:8008"
     volumes:
-      - ./cloudsaver/data:/app/data
-      - ./cloudsaver/config:/app/config
+      - ./services/cloudsaver/data:/app/data
+      - ./services/cloudsaver/config:/app/config
     environment:
       - TZ=${TZ}
     restart: always
@@ -375,7 +375,7 @@ services:
       - ADMIN_PASSWORD=${PANCHECK_ADMIN_PASSWORD}
       - TZ=${TZ}
     volumes:
-      - ./pancheck/data:/app/data
+      - ./services/pancheck/data:/app/data
     restart: always
     depends_on:
       mysql:
@@ -414,7 +414,7 @@ services:
       - MYSQL_COLLATION_SERVER=utf8mb4_unicode_ci
       - TZ=${TZ}
     volumes:
-      - ./pancheck/mysql_data:/var/lib/mysql
+      - ./services/pancheck/mysql_data:/var/lib/mysql
     restart: always
     networks:
       - app-network
@@ -522,7 +522,7 @@ services:
     ports:
       - "${OMNIBOX_PORT}:7023"
     volumes:
-      - ./omnibox/data:/app/data
+      - ./services/omnibox/data:/app/data
     environment:
       - TZ=${TZ}
     networks:
@@ -554,7 +554,7 @@ services:
     ports:
       - "${OPENLIST_PORT}:5244"
     volumes:
-      - ./openlist/data:/opt/openlist/data
+      - ./services/openlist/data:/opt/openlist/data
     environment:
       - UMASK=022
       - TZ=${TZ}
@@ -588,8 +588,8 @@ services:
       - TZ=${TZ}
       - CLOUDDRIVE_HOME=/Config
     volumes:
-      - ./clouddrive2/CloudNAS:/CloudNAS:shared
-      - ./clouddrive2/Config:/Config
+      - ./services/clouddrive2/CloudNAS:/CloudNAS:shared
+      - ./services/clouddrive2/Config:/Config
     devices:
       - /dev/fuse:/dev/fuse
     ports:
@@ -624,9 +624,9 @@ services:
     container_name: sun-panel
     hostname: sun-panel
     volumes:
-      - ./sunpanel/conf:/app/conf
+      - ./services/sunpanel/conf:/app/conf
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./sunpanel/runtime:/app/runtime
+      - ./services/sunpanel/runtime:/app/runtime
     ports:
       - "${SUNPANEL_PORT}:3002"
     restart: always
@@ -670,7 +670,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ${MUSIC_PATH}:/app/music:ro
-      - ./xiaomusic_conf:/app/conf
+      - ./services/xiaomusic_conf:/app/conf
     networks:
       - app-network
     healthcheck:
@@ -709,7 +709,7 @@ services:
       - CLEANUP_INTERVAL=300
     volumes:
       - ${MUSIC_PATH}:/app/data
-      - ./playlistdl/config:/config
+      - ./services/playlistdl/config:/config
     networks:
       - app-network
     healthcheck:
@@ -745,7 +745,7 @@ services:
       - SESSION_SECRET=${SOLARA_SESSION_SECRET}
       - TZ=${TZ}
     volumes:
-      - ./solara-music/logs:/app/logs
+      - ./services/solara-music/logs:/app/logs
     networks:
       - app-network
     healthcheck:
@@ -781,7 +781,7 @@ services:
       - "${CLASH_UI_PORT}:1123"
       - "${CLASH_DNS_PORT}:1053"
     volumes:
-      - ./clash-ui:/root/.config/mihomo
+      - ./services/clash-ui:/root/.config/mihomo
     devices:
       - /dev/net/tun:/dev/net/tun
     environment:
@@ -817,7 +817,7 @@ services:
   #     - PUID=${PUID}
   #     - PGID=${PGID}
   #   volumes:
-  #     - ./jellyfin/config:/config
+  #     - ./services/jellyfin/config:/config
   #     - ${MEDIA_PATH}:/media:ro
   #     - ${MUSIC_PATH}:/music:ro
   #   ports:

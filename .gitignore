@@ -17,27 +17,10 @@ Desktop.ini
 
 # --- Docker Volumes & Configs ---
 # Generic storage
-data/*
 storage/*
 
-# Service Directories (Config/Data/Logs)
-clash-ui/*
-iptv-api/*
-moviepilot/*
-music-tag-web/*
-navidrome/*
-playlistdl/*
-qbittorrent/*
-quark-auto-save/*
-xiaomusic_conf/*
-postgresql/*
-redis/*
-
-# --- Sun-Panel Specific ---
-# Ignore runtime logs
-sunpanel/runtime/*
-# Ignore database and uploads
-sunpanel/conf/database/*
-sunpanel/conf/uploads/*
-# Ignore private config, but keep conf.example.ini
-sunpanel/conf/conf.ini
+# Service Directories (All services under services/)
+services/*
+# Keep example configs if any
+!services/**/conf.example.ini
+!services/**/.gitkeep
