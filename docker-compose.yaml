@@ -725,7 +725,6 @@ services:
         reservations:
           memory: 256M
     logging:
-      driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
@@ -766,7 +765,47 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  # 21. QM-Music（私人音乐服务器）
+  qm-music:
+    image: qmmusic/qm-music:latest
+    container_name: qm-music
+    hostname: qm-music
+    restart: unless-stopped
+    ports:
+      - "${QM_MUSIC_PORT}:6688"
+    volumes:
+      - ${MUSIC_PATH}:/data/qm-music/music_dir
+      - ./services/qm-music/db:/data/qm-music/db
+      - ./services/qm-music/cache:/data/qm-music/cache
+    environment:
+      - QM_FFMPEG_ENABLE=true
+      - TZ=Asia/Shanghai
+      - QM_SPOTIFY_ENABLE=false
+      - QM_LASTFM_ENABLE=false
+      - QM_LASTFM_API_KEY=08f4010ba35e07b006f7533187cb6b33
+      - QM_REFRESH_AUTO=true
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 6688 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   ################################### 五、网络代理（Clash）###################################
+  # 22. Clash（网络代理）
   # 21. Clash（网络代理）
   clash:
     image: metacubex/mihomo:latest

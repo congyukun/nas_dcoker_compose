@@ -93,6 +93,7 @@ docker compose logs -f [service-name]
 - **XiaoMusic**: 小爱同学本地音乐服务
 - **PlaylistDL**: 音乐歌单批量下载工具
 - **Solara-Music**: 在线音乐流媒体服务
+- **QM-Music**: 私人音乐服务器，支持Subsonic API和中文曲库
 
 ### 云盘工具
 - **Quark-auto-save**: 夸克网盘自动转存
