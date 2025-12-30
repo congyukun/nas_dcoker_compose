@@ -804,9 +804,41 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  ################################### 五、网络代理（Clash）###################################
-  # 22. Clash（网络代理）
-  # 21. Clash（网络代理）
+  ################################### 五、自动化任务（Qinglong）###################################
+  # 22. Qinglong（青龙面板 - 定时任务管理）
+  qinglong:
+    image: registry.cn-guangzhou.aliyuncs.com/fnapp/whyour_qinglong:latest
+    container_name: qinglong
+    hostname: qinglong
+    restart: always
+    volumes:
+      - ./services/qinglong/data:/ql/data
+    ports:
+      - "${QINGLONG_PORT}:5700"
+    environment:
+      - TZ=${TZ}
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 5700 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: ${QINGLONG_MEM_LIMIT}
+        reservations:
+          memory: ${QINGLONG_MEM_RESERVATION}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  ################################### 六、网络代理（Clash）###################################
+  # 23. Clash（网络代理）
   clash:
     image: metacubex/mihomo:latest
     container_name: clash-ui

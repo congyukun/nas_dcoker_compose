@@ -15,8 +15,6 @@ Desktop.ini
 !.vscode/extensions.json
 .idea/
 
-# --- Environment & Secrets ---
-.env
 
 # --- Docker Volumes & Configs ---
 # Generic storage
