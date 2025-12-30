@@ -836,9 +836,47 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+  # 23. Firefox（Web 浏览器）
+  firefox:
+    image: linuxserver/firefox:latest
+    container_name: firefox
+    hostname: firefox
+    restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - FIREFOX_CLI=https://www.baidu.com
+    volumes:
+      - ./services/firefox/config:/config
+    ports:
+      - "${FIREFOX_PORT}:3000"
+      - "${FIREFOX_HTTPS_PORT}:3001"
+    shm_size: "1gb"
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: ${FIREFOX_MEM_LIMIT}
+        reservations:
+          memory: ${FIREFOX_MEM_RESERVATION}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   ################################### 六、网络代理（Clash）###################################
-  # 23. Clash（网络代理）
+  # 24. Clash（网络代理）
   clash:
     image: metacubex/mihomo:latest
     container_name: clash-ui
@@ -1033,3 +1071,4 @@ networks:
       driver: default
       config:
         - subnet: ${NETWORK_SUBNET}/16
+
