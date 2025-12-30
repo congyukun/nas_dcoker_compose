@@ -837,10 +837,49 @@ services:
         max-size: "10m"
         max-file: "3"
   # 23. Firefox（Web 浏览器）
-  firefox:
-    image: linuxserver/firefox:latest
-    container_name: firefox
-    hostname: firefox
+  # firefox:
+    # image: linuxserver/firefox:latest
+    # container_name: firefox
+    # hostname: firefox
+    # restart: unless-stopped
+    # security_opt:
+    #   - seccomp:unconfined
+    # environment:
+    #   - PUID=${PUID}
+    #   - PGID=${PGID}
+    #   - TZ=${TZ}
+    #   - FIREFOX_CLI=https://www.baidu.com
+    # volumes:
+    #   - ./services/firefox/config:/config
+    # ports:
+    #   - "${FIREFOX_PORT}:3000"
+    #   - "${FIREFOX_HTTPS_PORT}:3001"
+    # shm_size: "1gb"
+    # networks:
+    #   - app-network
+    # healthcheck:
+    #   test: ["CMD-SHELL", "nc -z localhost 3000 || exit 1"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
+    #   start_period: 60s
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: ${FIREFOX_MEM_LIMIT}
+    #     reservations:
+    #       memory: ${FIREFOX_MEM_RESERVATION}
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m"
+    #     max-file: "3"
+
+  # 24. Chromium（Web 浏览器）
+  chromium:
+    image: linuxserver/chromium:latest
+    container_name: chromium
+    hostname: chromium
     restart: unless-stopped
     security_opt:
       - seccomp:unconfined
@@ -848,12 +887,12 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - FIREFOX_CLI=https://www.baidu.com
+      - CHROME_CLI=https://www.baidu.com
     volumes:
-      - ./services/firefox/config:/config
+      - ./services/chromium/config:/config
     ports:
-      - "${FIREFOX_PORT}:3000"
-      - "${FIREFOX_HTTPS_PORT}:3001"
+      - "${CHROMIUM_PORT}:3000"
+      - "${CHROMIUM_HTTPS_PORT}:3001"
     shm_size: "1gb"
     networks:
       - app-network
@@ -866,9 +905,9 @@ services:
     deploy:
       resources:
         limits:
-          memory: ${FIREFOX_MEM_LIMIT}
+          memory: ${CHROMIUM_MEM_LIMIT}
         reservations:
-          memory: ${FIREFOX_MEM_RESERVATION}
+          memory: ${CHROMIUM_MEM_RESERVATION}
     logging:
       driver: "json-file"
       options:
