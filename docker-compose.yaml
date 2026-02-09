@@ -404,7 +404,7 @@ services:
 
   # 11. MySQL（PanCheck 专用数据库）
   mysql:
-    image: mysql:8.0
+    image: mysql:latest
     container_name: mysql
     hostname: mysql
     environment:
@@ -414,8 +414,7 @@ services:
       - MYSQL_COLLATION_SERVER=utf8mb4_unicode_ci
       - TZ=${TZ}
     volumes:
-      - ./services/pancheck/mysql_data:/var/lib/mysql
-      - ./services/pancheck/mysql_config/my.cnf:/etc/mysql/conf.d/my.cnf:ro
+      - ./services/mysql/mysql_data:/var/lib/mysql
     restart: always
     networks:
       - app-network
