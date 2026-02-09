@@ -25,3 +25,6 @@ services/*
 # Keep example configs if any
 !services/**/conf.example.ini
 !services/**/.gitkeep
+# Keep MySQL config files
+!services/pancheck/mysql_config/
+!services/pancheck/mysql_config/my.cnf

@@ -415,6 +415,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ./services/pancheck/mysql_data:/var/lib/mysql
+      - ./services/pancheck/mysql_config/my.cnf:/etc/mysql/conf.d/my.cnf:ro
     restart: always
     networks:
       - app-network
