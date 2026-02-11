@@ -253,7 +253,7 @@ services:
       - DB_PORT=3306
       - DB_NAME=sqmusicv3
       - DB_USERNAME=root
-      - DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - DB_PASSWORD=sqmusicv3
       - TZ=${TZ}
     volumes:
       - ${MUSIC_PATH}:/music
@@ -473,7 +473,7 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # 11. MySQL（PanCheck 专用数据库）
+  # 11. MySQL（PanCheck + SQMusic 共享数据库）
   mysql:
     image: mysql:latest
     container_name: mysql
@@ -486,6 +486,7 @@ services:
       - TZ=${TZ}
     volumes:
       - ./services/mysql/mysql_data:/var/lib/mysql
+      # - ./services/mysql/init:/docker-entrypoint-initdb.d
     restart: always
     networks:
       - app-network
