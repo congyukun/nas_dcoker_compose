@@ -82,12 +82,28 @@ EOF
 
 # 检查 Docker 和 Docker Compose 是否安装
 check_requirements() {
-    if ! command -v docker &> /dev/null; then
+    # 设置 docker 命令路径
+    DOCKER_CMD=""
+    
+    # 按优先级检查 docker 命令
+    if command -v docker >/dev/null 2>&1; then
+        DOCKER_CMD="docker"
+    elif [ -x "/usr/bin/docker" ]; then
+        DOCKER_CMD="/usr/bin/docker"
+    elif [ -x "/usr/local/bin/docker" ]; then
+        DOCKER_CMD="/usr/local/bin/docker"
+    fi
+    
+    # 如果没有找到 docker 命令
+    if [ -z "$DOCKER_CMD" ]; then
         print_error "Docker 未安装，请先安装 Docker"
         exit 1
     fi
+    
+    print_info "使用 Docker 命令: $DOCKER_CMD"
 
-    if ! docker compose version &> /dev/null; then
+    # 检查 docker compose 是否可用
+    if ! $DOCKER_CMD compose version >/dev/null 2>&1; then
         print_error "Docker Compose 未安装或版本过低，请升级到 Docker Compose V2"
         exit 1
     fi
@@ -96,7 +112,7 @@ check_requirements() {
 # 启动服务（不包括 Clash）
 start_services() {
     print_info "启动所有服务（不包括 Clash）..."
-    docker compose -f "$COMPOSE_FILE" up -d
+    $DOCKER_CMD compose -f "$COMPOSE_FILE" up -d
     print_success "服务启动完成"
 }
 
@@ -104,7 +120,7 @@ start_services() {
 start_all_services() {
     print_info "启动所有服务（包括 Clash）..."
     if [ -f "$CLASH_FILE" ]; then
-        docker compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" up -d
+        $DOCKER_CMD compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" up -d
         print_success "所有服务启动完成"
     else
         print_warning "未找到 $CLASH_FILE，仅启动普通服务"
@@ -119,7 +135,7 @@ start_clash() {
         exit 1
     fi
     print_info "启动 Clash 服务..."
-    docker compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" up -d clash
+    $DOCKER_CMD compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" up -d clash
     print_success "Clash 服务启动完成"
 }
 
@@ -127,9 +143,9 @@ start_clash() {
 stop_services() {
     print_info "停止所有服务..."
     if [ -f "$CLASH_FILE" ]; then
-        docker compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" down
+        $DOCKER_CMD compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" down
     else
-        docker compose -f "$COMPOSE_FILE" down
+        $DOCKER_CMD compose -f "$COMPOSE_FILE" down
     fi
     print_success "所有服务已停止"
 }
@@ -141,14 +157,14 @@ stop_clash() {
         exit 1
     fi
     print_info "停止 Clash 服务..."
-    docker compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" stop clash
+    $DOCKER_CMD compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" stop clash
     print_success "Clash 服务已停止"
 }
 
 # 重启服务（不包括 Clash）
 restart_services() {
     print_info "重启所有服务（不包括 Clash）..."
-    docker compose -f "$COMPOSE_FILE" restart
+    $DOCKER_CMD compose -f "$COMPOSE_FILE" restart
     print_success "服务重启完成"
 }
 
@@ -156,7 +172,7 @@ restart_services() {
 restart_all_services() {
     print_info "重启所有服务（包括 Clash）..."
     if [ -f "$CLASH_FILE" ]; then
-        docker compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" restart
+        $DOCKER_CMD compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" restart
         print_success "所有服务重启完成"
     else
         print_warning "未找到 $CLASH_FILE，仅重启普通服务"
@@ -171,7 +187,7 @@ restart_clash() {
         exit 1
     fi
     print_info "重启 Clash 服务..."
-    docker compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" restart clash
+    $DOCKER_CMD compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" restart clash
     print_success "Clash 服务重启完成"
 }
 
@@ -179,9 +195,9 @@ restart_clash() {
 show_status() {
     print_info "查看服务状态..."
     if [ -f "$CLASH_FILE" ]; then
-        docker compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" ps
+        $DOCKER_CMD compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" ps
     else
-        docker compose -f "$COMPOSE_FILE" ps
+        $DOCKER_CMD compose -f "$COMPOSE_FILE" ps
     fi
 }
 
@@ -189,9 +205,9 @@ show_status() {
 show_logs() {
     print_info "查看服务日志（Ctrl+C 退出）..."
     if [ -f "$CLASH_FILE" ]; then
-        docker compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" logs -f
+        $DOCKER_CMD compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" logs -f
     else
-        docker compose -f "$COMPOSE_FILE" logs -f
+        $DOCKER_CMD compose -f "$COMPOSE_FILE" logs -f
     fi
 }
 
@@ -202,15 +218,15 @@ show_clash_logs() {
         exit 1
     fi
     print_info "查看 Clash 日志（Ctrl+C 退出）..."
-    docker compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" logs -f clash
+    $DOCKER_CMD compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" logs -f clash
 }
 
 # 拉取最新镜像
 pull_images() {
     print_info "拉取最新镜像..."
-    docker compose -f "$COMPOSE_FILE" pull
+    $DOCKER_CMD compose -f "$COMPOSE_FILE" pull
     if [ -f "$CLASH_FILE" ]; then
-        docker compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" pull clash
+        $DOCKER_CMD compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" pull clash
     fi
     print_success "镜像拉取完成"
 }
@@ -221,9 +237,9 @@ update_services() {
     pull_images
     print_info "重启服务以应用更新..."
     if [ -f "$CLASH_FILE" ]; then
-        docker compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" up -d
+        $DOCKER_CMD compose -f "$COMPOSE_FILE" -f "$CLASH_FILE" up -d
     else
-        docker compose -f "$COMPOSE_FILE" up -d
+        $DOCKER_CMD compose -f "$COMPOSE_FILE" up -d
     fi
     print_success "服务更新完成"
 }
@@ -235,7 +251,7 @@ clean_resources() {
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         print_info "清理未使用的资源..."
-        docker system prune -a --volumes -f
+        $DOCKER_CMD system prune -a --volumes -f
         print_success "清理完成"
     else
         print_info "已取消清理操作"
