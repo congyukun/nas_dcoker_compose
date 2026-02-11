@@ -13,6 +13,7 @@ nas_dcoker_compose/
 │   ├── moviepilot/        # 影视自动化管理
 │   ├── postgresql/        # PostgreSQL 数据库
 │   ├── redis/             # Redis 缓存
+│   ├── mysql/             # MySQL 数据库
 │   ├── navidrome/         # 音乐服务器
 │   ├── music-scraper/     # 音乐刮削器
 │   ├── quark-auto-save/   # 夸克自动转存
@@ -25,6 +26,9 @@ nas_dcoker_compose/
 │   ├── xiaomusic_conf/    # 小爱音乐配置
 │   ├── playlistdl/        # 歌单下载工具
 │   ├── solara-music/      # 音乐流媒体
+│   ├── qm-music/          # QM音乐服务器
+│   ├── qinglong/          # 青龙面板
+│   ├── chromium/          # Chromium浏览器
 │   └── clash-ui/          # 网络代理
 └── storage/               # 通用存储目录
 ```
@@ -107,9 +111,17 @@ docker compose logs -f [service-name]
 - **Omnibox**: Lampon 全能工具箱 - `http://your-ip:7023`
 - **OpenList**: 文件列表服务 - `http://your-ip:5244`
 - **Sun-Panel**: 导航面板 - `http://your-ip:13002`
+- **Qinglong**: 青龙面板（定时任务管理）- `http://your-ip:15700`
+- **AutoHeal**: 自动健康检查和重启服务（后台服务）
+
+### 浏览器服务
+- **Chromium**: Web 浏览器 - `http://your-ip:3102` (HTTP) / `https://your-ip:3103` (HTTPS)
 
 ### 网络服务
 - **Clash**: 网络代理服务 - `http://your-ip:1123` (UI) / `http://your-ip:7890` (代理端口)
+
+### 数据库服务
+- **MySQL**: 数据库服务（PanCheck + SQMusic 共享，内部服务）
 
 ## 🔧 维护命令
 
