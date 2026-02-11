@@ -59,7 +59,23 @@ cp env.smple .env
 
 ### 3. 启动服务
 
-#### 方式一：使用管理脚本（推荐）
+#### 方式一：使用 Makefile（推荐）⭐
+
+```bash
+# 启动所有服务（不包括 Clash）
+make start
+
+# 启动所有服务（包括 Clash）
+make start-all
+
+# 仅启动 Clash
+make start-clash
+
+# 查看帮助信息
+make help
+```
+
+#### 方式二：使用管理脚本
 
 ```bash
 # 赋予脚本执行权限（首次使用）
@@ -78,7 +94,7 @@ chmod +x manage.sh
 ./manage.sh --help
 ```
 
-#### 方式二：使用 Docker Compose 命令
+#### 方式三：使用 Docker Compose 命令
 
 启动所有服务（不包括 Clash）：
 
@@ -152,62 +168,135 @@ docker compose logs -f [service-name]
 
 ### 网络服务
 - **Clash**: 网络代理服务 - `http://your-ip:1123` (UI) / `http://your-ip:7890` (代理端口)
+## 🔧 服务管理
 
-### 数据库服务
-- **MySQL**: 数据库服务（PanCheck + SQMusic 共享，内部服务）
+项目提供了两种管理方式：[`Makefile`](Makefile:1)（推荐）和 [`manage.sh`](manage.sh:1) 脚本。
 
-## 🔧 管理脚本使用
+### 方式一：使用 Makefile（推荐）⭐
 
-项目提供了 [`manage.sh`](manage.sh:1) 脚本，方便管理所有 Docker 服务。
-
-### 常用命令
+#### 常用命令
 
 ```bash
 # 启动服务
-./manage.sh start              # 启动所有服务（不包括 Clash）
-./manage.sh start-all          # 启动所有服务（包括 Clash）
-./manage.sh start-clash        # 仅启动 Clash
+make start              # 启动所有服务（不包括 Clash）
+make start-all          # 启动所有服务（包括 Clash）
+make start-clash        # 仅启动 Clash
 
 # 停止服务
-./manage.sh stop               # 停止所有服务
-./manage.sh stop-clash         # 仅停止 Clash
+make stop               # 停止所有服务
+make stop-clash         # 仅停止 Clash
 
 # 重启服务
-./manage.sh restart            # 重启所有服务（不包括 Clash）
-./manage.sh restart-all        # 重启所有服务（包括 Clash）
-./manage.sh restart-clash      # 仅重启 Clash
+make restart            # 重启所有服务（不包括 Clash）
+make restart-all        # 重启所有服务（包括 Clash）
+make restart-clash      # 仅重启 Clash
 
 # 查看状态和日志
-./manage.sh status             # 查看所有服务状态
-./manage.sh logs               # 查看所有服务日志
-./manage.sh logs-clash         # 查看 Clash 日志
+make status             # 查看所有服务状态
+make stats              # 查看服务资源使用情况
+make list               # 列出所有可用服务
+make logs               # 查看所有服务日志
+make logs-clash         # 查看 Clash 日志
 
 # 更新服务
-./manage.sh pull               # 拉取最新镜像
-./manage.sh update             # 更新并重启服务
+make pull               # 拉取最新镜像
+make update             # 更新并重启服务
 
 # 其他操作
-./manage.sh clean              # 清理未使用的资源
-./manage.sh backup             # 备份服务配置和数据
+make clean              # 清理未使用的资源
+make backup             # 备份服务配置和数据
 ```
 
-### 单个服务管理
+#### 单个服务管理
 
 ```bash
 # 启动单个服务
-./manage.sh service start qbittorrent
+make service-start SERVICE=qbittorrent
 
 # 停止单个服务
-./manage.sh service stop moviepilot
+make service-stop SERVICE=moviepilot
 
 # 重启单个服务
-./manage.sh service restart navidrome
+make service-restart SERVICE=navidrome
 
 # 查看单个服务日志
-./manage.sh service logs sqmusic_web
+make service-logs SERVICE=sqmusic_web
+
+# 进入服务容器
+make service-exec SERVICE=mysql
+
+# 在容器中执行命令
+make service-exec SERVICE=mysql CMD=bash
+make service-exec SERVICE=mysql CMD="mysql -uroot -p"
 ```
 
-### 查看帮助
+#### 查看帮助
+
+```bash
+make help
+```
+
+### 方式二：使用管理脚本
+
+#### 常用命令
+
+```bash
+# 启动服务
+bash manage.sh start              # 启动所有服务（不包括 Clash）
+bash manage.sh start-all          # 启动所有服务（包括 Clash）
+bash manage.sh start-clash        # 仅启动 Clash
+
+# 停止服务
+bash manage.sh stop               # 停止所有服务
+bash manage.sh stop-clash         # 仅停止 Clash
+
+# 重启服务
+bash manage.sh restart            # 重启所有服务（不包括 Clash）
+bash manage.sh restart-all        # 重启所有服务（包括 Clash）
+bash manage.sh restart-clash      # 仅重启 Clash
+
+# 查看状态和日志
+bash manage.sh status             # 查看所有服务状态
+bash manage.sh stats              # 查看服务资源使用情况
+bash manage.sh list               # 列出所有可用服务
+bash manage.sh logs               # 查看所有服务日志
+bash manage.sh logs-clash         # 查看 Clash 日志
+
+# 更新服务
+bash manage.sh pull               # 拉取最新镜像
+bash manage.sh update             # 更新并重启服务
+
+# 其他操作
+bash manage.sh clean              # 清理未使用的资源
+bash manage.sh backup             # 备份服务配置和数据
+```
+
+#### 单个服务管理
+
+```bash
+# 启动单个服务
+bash manage.sh service start qbittorrent
+
+# 停止单个服务
+bash manage.sh service stop moviepilot
+
+# 重启单个服务
+bash manage.sh service restart navidrome
+
+# 查看单个服务日志
+bash manage.sh service logs sqmusic_web
+
+# 进入服务容器或执行命令
+bash manage.sh service exec mysql
+bash manage.sh service exec mysql bash
+bash manage.sh service exec mysql "mysql -uroot -p"
+```
+
+#### 查看帮助
+
+```bash
+bash manage.sh --help
+```
 
 ```bash
 ./manage.sh --help

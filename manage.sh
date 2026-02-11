@@ -51,6 +51,8 @@ ${YELLOW}命令:${NC}
     ${GREEN}restart-all${NC}     重启所有服务（包括 Clash）
     ${GREEN}restart-clash${NC}   仅重启 Clash 服务
     ${GREEN}status${NC}          查看所有服务状态
+    ${GREEN}stats${NC}           查看服务资源使用情况
+    ${GREEN}list${NC}            列出所有可用服务
     ${GREEN}logs${NC}            查看所有服务日志
     ${GREEN}logs-clash${NC}      查看 Clash 服务日志
     ${GREEN}pull${NC}            拉取最新镜像
@@ -64,6 +66,8 @@ ${YELLOW}服务管理示例:${NC}
     ./manage.sh service stop moviepilot       # 停止 moviepilot
     ./manage.sh service restart navidrome     # 重启 navidrome
     ./manage.sh service logs sqmusic_web      # 查看 sqmusic_web 日志
+    ./manage.sh service exec mysql bash       # 进入 mysql 容器执行 bash
+    ./manage.sh service exec mysql "mysql -uroot -p"  # 在 mysql 容器中执行命令
 
 ${YELLOW}其他选项:${NC}
     ${GREEN}-h, --help${NC}      显示此帮助信息
@@ -282,6 +286,27 @@ backup_services() {
     fi
 }
 
+# 列出所有服务
+list_services() {
+    print_info "可用的服务列表："
+    echo ""
+    $DOCKER_CMD compose -f "$COMPOSE_FILE" config --services | sort | while read service; do
+        echo "  - $service"
+    done
+    echo ""
+    if [ -f "$CLASH_FILE" ]; then
+        print_info "Clash 服务（需使用 -f docker-compose.clash.yaml）："
+        echo "  - clash"
+        echo ""
+    fi
+}
+
+# 查看服务资源使用情况
+show_stats() {
+    print_info "服务资源使用情况："
+    $DOCKER_CMD stats --no-stream --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}"
+}
+
 # 管理单个服务
 manage_service() {
     local action=$1
@@ -289,33 +314,44 @@ manage_service() {
     
     if [ -z "$service" ]; then
         print_error "请指定服务名称"
-        echo "用法: ./manage.sh service [start|stop|restart|logs] <服务名>"
+        echo "用法: ./manage.sh service [start|stop|restart|logs|exec] <服务名> [命令]"
         exit 1
     fi
     
     case $action in
         start)
             print_info "启动服务: $service"
-            docker compose -f "$COMPOSE_FILE" up -d "$service"
+            $DOCKER_CMD compose -f "$COMPOSE_FILE" up -d "$service"
             print_success "服务 $service 启动完成"
             ;;
         stop)
             print_info "停止服务: $service"
-            docker compose -f "$COMPOSE_FILE" stop "$service"
+            $DOCKER_CMD compose -f "$COMPOSE_FILE" stop "$service"
             print_success "服务 $service 已停止"
             ;;
         restart)
             print_info "重启服务: $service"
-            docker compose -f "$COMPOSE_FILE" restart "$service"
+            $DOCKER_CMD compose -f "$COMPOSE_FILE" restart "$service"
             print_success "服务 $service 重启完成"
             ;;
         logs)
             print_info "查看服务日志: $service（Ctrl+C 退出）"
-            docker compose -f "$COMPOSE_FILE" logs -f "$service"
+            $DOCKER_CMD compose -f "$COMPOSE_FILE" logs -f "$service"
+            ;;
+        exec)
+            shift 2
+            if [ -z "$1" ]; then
+                print_info "进入服务容器: $service"
+                $DOCKER_CMD compose -f "$COMPOSE_FILE" exec "$service" /bin/sh || \
+                $DOCKER_CMD compose -f "$COMPOSE_FILE" exec "$service" /bin/bash
+            else
+                print_info "在服务 $service 中执行命令: $*"
+                $DOCKER_CMD compose -f "$COMPOSE_FILE" exec "$service" "$@"
+            fi
             ;;
         *)
             print_error "未知操作: $action"
-            echo "支持的操作: start, stop, restart, logs"
+            echo "支持的操作: start, stop, restart, logs, exec"
             exit 1
             ;;
     esac
@@ -353,6 +389,12 @@ main() {
         status)
             show_status
             ;;
+        stats)
+            show_stats
+            ;;
+        list)
+            list_services
+            ;;
         logs)
             show_logs
             ;;
@@ -372,7 +414,7 @@ main() {
             backup_services
             ;;
         service)
-            manage_service "${2:-}" "${3:-}"
+            manage_service "${2:-}" "${@:3}"
             ;;
         -h|--help|help)
             show_help
@@ -395,3 +437,4 @@ main() {
 
 # 运行主函数
 main "$@"
+
