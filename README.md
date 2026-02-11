@@ -82,33 +82,34 @@ docker compose logs -f [service-name]
 ## 📦 服务说明
 
 ### 影视核心服务
-- **Qbittorrent**: BT/PT 下载器
-- **MoviePilot v2**: 自动化媒体管理中心
-- **PostgreSQL**: MoviePilot 数据库
-- **Redis**: 缓存服务（MoviePilot + PanCheck 共享）
+- **Qbittorrent**: BT/PT 下载器 - `http://your-ip:8080`
+- **MoviePilot v2**: 自动化媒体管理中心 - `http://your-ip:3003`
+- **PostgreSQL**: MoviePilot 数据库（内部服务）
+- **Redis**: 缓存服务（MoviePilot + PanCheck 共享，内部服务）
 
 ### 音乐服务
-- **Navidrome**: 音乐流媒体服务器
-- **Music-Scraper**: 音乐元数据刮削器
-- **XiaoMusic**: 小爱同学本地音乐服务
-- **PlaylistDL**: 音乐歌单批量下载工具
-- **Solara-Music**: 在线音乐流媒体服务
-- **QM-Music**: 私人音乐服务器，支持Subsonic API和中文曲库
+- **Navidrome**: 音乐流媒体服务器 - `http://your-ip:4533`
+- **Music-Scraper**: 音乐元数据刮削器 - `http://your-ip:7301`
+- **SQMusic**: 简单音乐播放器 - `http://your-ip:8222`
+- **XiaoMusic**: 小爱同学本地音乐服务 - `http://your-ip:58090`
+- **PlaylistDL**: 音乐歌单批量下载工具 - `http://your-ip:4827`
+- **Solara-Music**: 在线音乐流媒体服务 - `http://your-ip:3012`
+- **QM-Music**: 私人音乐服务器，支持Subsonic API和中文曲库 - `http://your-ip:6688`
 
 ### 云盘工具
-- **Quark-auto-save**: 夸克网盘自动转存
-- **CloudSaver**: 云盘资源保存工具
-- **PanCheck**: 网盘链接检测系统
-- **PanSou**: 多网盘资源聚合搜索
-- **CloudNAS**: CloudDrive2 云盘挂载
+- **Quark-auto-save**: 夸克网盘自动转存 - `http://your-ip:5005`
+- **CloudSaver**: 云盘资源保存工具 - `http://your-ip:8009`
+- **PanCheck**: 网盘链接检测系统 - `http://your-ip:8081`
+- **PanSou**: 多网盘资源聚合搜索 - `http://your-ip:8888`
+- **CloudNAS**: CloudDrive2 云盘挂载 - `http://your-ip:19798`
 
 ### 实用工具
-- **Omnibox**: Lampon 全能工具箱
-- **OpenList**: 文件列表服务
-- **Sun-Panel**: 导航面板
+- **Omnibox**: Lampon 全能工具箱 - `http://your-ip:7023`
+- **OpenList**: 文件列表服务 - `http://your-ip:5244`
+- **Sun-Panel**: 导航面板 - `http://your-ip:13002`
 
 ### 网络服务
-- **Clash**: 网络代理服务
+- **Clash**: 网络代理服务 - `http://your-ip:1123` (UI) / `http://your-ip:7890` (代理端口)
 
 ## 🔧 维护命令
 
@@ -148,7 +149,7 @@ docker system prune -a
 
 ## 📄 许可证
 
-# 对你有用请我喝杯coffee
+# 如果对你有用请我喝杯coffee
 
 <img src="微信图片_20260210164647_68_158.png" width="200"/> <img src="微信图片_20260210164646_67_158.jpg" width="200"/>
 
