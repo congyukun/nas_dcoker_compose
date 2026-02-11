@@ -59,6 +59,27 @@ cp env.smple .env
 
 ### 3. 启动服务
 
+#### 方式一：使用管理脚本（推荐）
+
+```bash
+# 赋予脚本执行权限（首次使用）
+chmod +x manage.sh
+
+# 启动所有服务（不包括 Clash）
+./manage.sh start
+
+# 启动所有服务（包括 Clash）
+./manage.sh start-all
+
+# 仅启动 Clash
+./manage.sh start-clash
+
+# 查看帮助信息
+./manage.sh --help
+```
+
+#### 方式二：使用 Docker Compose 命令
+
 启动所有服务（不包括 Clash）：
 
 ```bash
@@ -135,7 +156,64 @@ docker compose logs -f [service-name]
 ### 数据库服务
 - **MySQL**: 数据库服务（PanCheck + SQMusic 共享，内部服务）
 
-## 🔧 维护命令
+## 🔧 管理脚本使用
+
+项目提供了 [`manage.sh`](manage.sh:1) 脚本，方便管理所有 Docker 服务。
+
+### 常用命令
+
+```bash
+# 启动服务
+./manage.sh start              # 启动所有服务（不包括 Clash）
+./manage.sh start-all          # 启动所有服务（包括 Clash）
+./manage.sh start-clash        # 仅启动 Clash
+
+# 停止服务
+./manage.sh stop               # 停止所有服务
+./manage.sh stop-clash         # 仅停止 Clash
+
+# 重启服务
+./manage.sh restart            # 重启所有服务（不包括 Clash）
+./manage.sh restart-all        # 重启所有服务（包括 Clash）
+./manage.sh restart-clash      # 仅重启 Clash
+
+# 查看状态和日志
+./manage.sh status             # 查看所有服务状态
+./manage.sh logs               # 查看所有服务日志
+./manage.sh logs-clash         # 查看 Clash 日志
+
+# 更新服务
+./manage.sh pull               # 拉取最新镜像
+./manage.sh update             # 更新并重启服务
+
+# 其他操作
+./manage.sh clean              # 清理未使用的资源
+./manage.sh backup             # 备份服务配置和数据
+```
+
+### 单个服务管理
+
+```bash
+# 启动单个服务
+./manage.sh service start qbittorrent
+
+# 停止单个服务
+./manage.sh service stop moviepilot
+
+# 重启单个服务
+./manage.sh service restart navidrome
+
+# 查看单个服务日志
+./manage.sh service logs sqmusic_web
+```
+
+### 查看帮助
+
+```bash
+./manage.sh --help
+```
+
+## 🔧 维护命令（手动方式）
 
 ### 停止服务
 
