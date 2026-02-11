@@ -16,6 +16,9 @@ Desktop.ini
 .idea/
 .env
 
+# --- Docker Compose Override Files ---
+# Clash 独立配置文件（包含敏感信息，不提交到 Git）
+docker-compose.clash.yaml
 
 # --- Docker Volumes & Configs ---
 # Generic storage

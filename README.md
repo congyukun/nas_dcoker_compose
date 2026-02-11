@@ -59,7 +59,7 @@ cp env.smple .env
 
 ### 3. 启动服务
 
-启动所有服务：
+启动所有服务（不包括 Clash）：
 
 ```bash
 docker compose up -d
@@ -69,6 +69,18 @@ docker compose up -d
 
 ```bash
 docker compose up -d qbittorrent moviepilot
+```
+
+启动包含 Clash 的所有服务：
+
+```bash
+docker compose -f docker-compose.yaml -f docker-compose.clash.yaml up -d
+```
+
+仅启动 Clash 服务：
+
+```bash
+docker compose -f docker-compose.yaml -f docker-compose.clash.yaml up -d clash
 ```
 
 ### 4. 查看服务状态
@@ -151,6 +163,48 @@ docker system prune -a
 3. **端口冲突**: 启动前请确保配置的端口未被占用
 4. **资源限制**: 已为各服务配置了内存限制，可根据实际情况调整
 5. **健康检查**: 大部分服务都配置了健康检查，确保服务正常运行
+6. **Clash 独立配置**: Clash 服务已独立到 `docker-compose.clash.yaml`，该文件已添加到 `.gitignore`，不会提交到 Git
+
+## 🌐 Clash 网络代理配置
+
+Clash 服务已独立到 `docker-compose.clash.yaml` 文件中，避免将代理配置提交到 Git。
+
+### 首次使用
+
+1. 复制 Clash 配置文件（如果不存在）：
+```bash
+cp docker-compose.clash.yaml.example docker-compose.clash.yaml  # 如果有示例文件
+```
+
+2. 配置 Clash 订阅或规则文件到 `./services/clash-ui/` 目录
+
+3. 启动 Clash 服务：
+```bash
+docker compose -f docker-compose.yaml -f docker-compose.clash.yaml up -d clash
+```
+
+### 管理 Clash 服务
+
+```bash
+# 启动 Clash
+docker compose -f docker-compose.yaml -f docker-compose.clash.yaml up -d clash
+
+# 停止 Clash
+docker compose -f docker-compose.yaml -f docker-compose.clash.yaml stop clash
+
+# 查看 Clash 日志
+docker compose -f docker-compose.yaml -f docker-compose.clash.yaml logs -f clash
+
+# 重启 Clash
+docker compose -f docker-compose.yaml -f docker-compose.clash.yaml restart clash
+```
+
+### Clash 访问地址
+
+- **Web UI**: `http://your-ip:1123`
+- **HTTP 代理**: `http://your-ip:7890`
+- **SOCKS5 代理**: `socks5://your-ip:7891`
+- **DNS 服务**: `your-ip:1053`
 
 ## 🔐 安全建议
 
