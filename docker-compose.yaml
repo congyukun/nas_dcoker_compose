@@ -597,6 +597,15 @@ services:
       - ./services/omnibox/data:/app/data
     environment:
       - TZ=${TZ}
+      - DATABASE_TYPE=mysql
+      - DATABASE_HOST=mysql
+      - DATABASE_PORT=3306
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - DATABASE_DATABASE=omnibox
+    depends_on:
+      mysql:
+        condition: service_healthy
     networks:
       - app-network
     healthcheck:
