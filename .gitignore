@@ -29,3 +29,8 @@ services/*
 # Keep example configs if any
 !services/**/conf.example.ini
 !services/**/.gitkeep
+
+# --- Data Directories ---
+data/
+.vscode
+.gitignore
