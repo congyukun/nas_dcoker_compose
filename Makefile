@@ -153,7 +153,7 @@ logs-clash: check-docker ## 查看 Clash 服务日志
 PROXY_HOST ?= 127.0.0.1
 PROXY_HTTP_PORT ?= 7890
 PROXY_SOCKS_PORT ?= 7891
-CLASH_API_PORT ?= 1123
+CLASH_API_PORT ?= 9090
 
 .PHONY: clash-refresh
 clash-refresh: ## 刷新 Clash 代理订阅
