@@ -549,11 +549,15 @@ help: ## 显示此帮助信息
 	@echo "  make service-exec SERVICE=mysql           # 进入服务容器"
 	@echo "  make service-exec SERVICE=mysql CMD=bash  # 在容器中执行命令"
 	@echo ""
-	@echo "$(YELLOW)Clash 服务管理:$(NC)"
-	@echo "  make service-start SERVICE=clash          # 启动 Clash 服务"
-	@echo "  make service-update SERVICE=clash         # 更新 Clash 服务"
+	@echo "$(YELLOW)Clash 代理管理:$(NC)"
+	@echo "  make clash-refresh                        # 刷新代理订阅"
+	@echo "  make clash-nodes                          # 查看代理节点列表"
+	@echo "  make clash-switch NODE=节点名             # 切换代理节点"
+	@echo "  make clash-healthcheck                    # 触发节点健康检查"
+	@echo "  make test-proxy                           # 测试代理连通性"
+	@echo "  make test-proxy-detail                    # 详细代理测试"
 	@echo ""
 
 .PHONY: version
 version: ## 显示版本信息
-	@echo "NAS Docker Compose Makefile v1.1.0"
+	@echo "NAS Docker Compose Makefile v1.2.0"
