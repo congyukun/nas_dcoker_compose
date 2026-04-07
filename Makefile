@@ -147,11 +147,74 @@ logs-clash: check-docker ## 查看 Clash 服务日志
 	@echo "$(BLUE)[INFO]$(NC) 查看 Clash 日志（Ctrl+C 退出）..."
 	@$(COMPOSE) -f $(COMPOSE_FILE) -f $(CLASH_FILE) logs -f clash
 
+##@ 网络测试
+
+# 默认代理配置（可通过环境变量覆盖）
+PROXY_HOST ?= 127.0.0.1
+PROXY_HTTP_PORT ?= 7890
+PROXY_SOCKS_PORT ?= 7891
+TEST_URL ?= https://www.google.com
+
+.PHONY: test-proxy
+test-proxy: ## 测试代理连通性 (用法: make test-proxy [PROXY_HOST=IP] [PROXY_HTTP_PORT=端口])
+	@echo "$(BLUE)[INFO]$(NC) 测试代理连通性..."
+	@echo "$(BLUE)[INFO]$(NC) 代理地址: $(PROXY_HOST):$(PROXY_HTTP_PORT)"
+	@echo "$(BLUE)[INFO]$(NC) 测试 URL: $(TEST_URL)"
+	@echo ""
+	@echo "$(YELLOW)--- HTTP 代理测试 ---$(NC)"
+	@if curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) $(TEST_URL) 2>/dev/null | grep -q "200\|301\|302"; then \
+		echo "$(GREEN)[SUCCESS]$(NC) HTTP 代理连接成功"; \
+		echo "$(BLUE)[INFO]$(NC) 响应时间: $$(curl -s -o /dev/null -w "%{time_total}s" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) $(TEST_URL) 2>/dev/null)"; \
+	else \
+		echo "$(RED)[FAILED]$(NC) HTTP 代理连接失败"; \
+	fi
+	@echo ""
+	@echo "$(YELLOW)--- SOCKS5 代理测试 ---$(NC)"
+	@if curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 -x socks5://$(PROXY_HOST):$(PROXY_SOCKS_PORT) $(TEST_URL) 2>/dev/null | grep -q "200\|301\|302"; then \
+		echo "$(GREEN)[SUCCESS]$(NC) SOCKS5 代理连接成功"; \
+		echo "$(BLUE)[INFO]$(NC) 响应时间: $$(curl -s -o /dev/null -w "%{time_total}s" --connect-timeout 10 -x socks5://$(PROXY_HOST):$(PROXY_SOCKS_PORT) $(TEST_URL) 2>/dev/null)"; \
+	else \
+		echo "$(RED)[FAILED]$(NC) SOCKS5 代理连接失败"; \
+	fi
+
+.PHONY: test-proxy-detail
+test-proxy-detail: ## 详细测试代理连通性（显示更多信息）
+	@echo "$(BLUE)[INFO]$(NC) 详细代理测试..."
+	@echo "$(BLUE)[INFO]$(NC) 代理地址: $(PROXY_HOST):$(PROXY_HTTP_PORT)"
+	@echo ""
+	@echo "$(YELLOW)--- 测试国内网站 (baidu.com) ---$(NC)"
+	@curl -s -o /dev/null -w "HTTP Code: %{http_code}, Time: %{time_total}s\n" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://www.baidu.com 2>/dev/null || echo "$(RED)[FAILED]$(NC) 连接失败"
+	@echo ""
+	@echo "$(YELLOW)--- 测试 Google ---$(NC)"
+	@curl -s -o /dev/null -w "HTTP Code: %{http_code}, Time: %{time_total}s\n" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://www.google.com 2>/dev/null || echo "$(RED)[FAILED]$(NC) 连接失败"
+	@echo ""
+	@echo "$(YELLOW)--- 测试 GitHub ---$(NC)"
+	@curl -s -o /dev/null -w "HTTP Code: %{http_code}, Time: %{time_total}s\n" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://github.com 2>/dev/null || echo "$(RED)[FAILED]$(NC) 连接失败"
+	@echo ""
+	@echo "$(YELLOW)--- 测试 YouTube ---$(NC)"
+	@curl -s -o /dev/null -w "HTTP Code: %{http_code}, Time: %{time_total}s\n" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://www.youtube.com 2>/dev/null || echo "$(RED)[FAILED]$(NC) 连接失败"
+	@echo ""
+	@echo "$(YELLOW)--- 获取代理出口 IP ---$(NC)"
+	@echo "出口 IP: $$(curl -s --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://api.ipify.org 2>/dev/null || echo '获取失败')"
+
+.PHONY: test-direct
+test-direct: ## 测试直连网络（不使用代理）
+	@echo "$(BLUE)[INFO]$(NC) 测试直连网络..."
+	@echo ""
+	@echo "$(YELLOW)--- 测试国内网站 (baidu.com) ---$(NC)"
+	@curl -s -o /dev/null -w "HTTP Code: %{http_code}, Time: %{time_total}s\n" --connect-timeout 10 https://www.baidu.com 2>/dev/null || echo "$(RED)[FAILED]$(NC) 连接失败"
+	@echo ""
+	@echo "$(YELLOW)--- 测试 Google ---$(NC)"
+	@curl -s -o /dev/null -w "HTTP Code: %{http_code}, Time: %{time_total}s\n" --connect-timeout 10 https://www.google.com 2>/dev/null || echo "$(RED)[FAILED]$(NC) 连接失败"
+	@echo ""
+	@echo "$(YELLOW)--- 获取本机出口 IP ---$(NC)"
+	@echo "出口 IP: $$(curl -s --connect-timeout 10 https://api.ipify.org 2>/dev/null || echo '获取失败')"
+
 ##@ 维护操作
 
 .PHONY: pull
-pull: check-docker ## 拉取最新镜像
-	@echo "$(BLUE)[INFO]$(NC) 拉取最新镜像..."
+pull: check-docker ## 拉取所有最新镜像
+	@echo "$(BLUE)[INFO]$(NC) 拉取所有最新镜像..."
 	@$(COMPOSE) -f $(COMPOSE_FILE) pull
 	@if [ -f "$(CLASH_FILE)" ]; then \
 		$(COMPOSE) -f $(COMPOSE_FILE) -f $(CLASH_FILE) pull clash; \
@@ -159,7 +222,7 @@ pull: check-docker ## 拉取最新镜像
 	@echo "$(GREEN)[SUCCESS]$(NC) 镜像拉取完成"
 
 .PHONY: update
-update: pull ## 更新并重启服务
+update: pull ## 更新并重启所有服务
 	@echo "$(BLUE)[INFO]$(NC) 重启服务以应用更新..."
 	@if [ -f "$(CLASH_FILE)" ]; then \
 		$(COMPOSE) -f $(COMPOSE_FILE) -f $(CLASH_FILE) up -d; \
@@ -198,15 +261,33 @@ backup: ## 备份服务配置和数据
 
 ##@ 单个服务管理
 
+# 内部函数：获取正确的 compose 命令（支持 Clash 服务）
+define get_compose_cmd
+$(if $(filter clash,$(SERVICE)),\
+	$(if $(shell [ -f "$(CLASH_FILE)" ] && echo yes),\
+		$(COMPOSE) -f $(COMPOSE_FILE) -f $(CLASH_FILE),\
+		$(error $(RED)[ERROR]$(NC) 未找到 $(CLASH_FILE) 文件)),\
+	$(COMPOSE) -f $(COMPOSE_FILE))
+endef
+
 .PHONY: service-start
 service-start: check-docker ## 启动单个服务 (用法: make service-start SERVICE=服务名)
 	@if [ -z "$(SERVICE)" ]; then \
 		echo "$(RED)[ERROR]$(NC) 请指定服务名称"; \
 		echo "用法: make service-start SERVICE=服务名"; \
+		echo "提示: 使用 make list 查看所有可用服务"; \
 		exit 1; \
 	fi
 	@echo "$(BLUE)[INFO]$(NC) 启动服务: $(SERVICE)"
-	@$(COMPOSE) -f $(COMPOSE_FILE) up -d $(SERVICE)
+	@if [ "$(SERVICE)" = "clash" ]; then \
+		if [ ! -f "$(CLASH_FILE)" ]; then \
+			echo "$(RED)[ERROR]$(NC) 未找到 $(CLASH_FILE) 文件"; \
+			exit 1; \
+		fi; \
+		$(COMPOSE) -f $(COMPOSE_FILE) -f $(CLASH_FILE) up -d $(SERVICE); \
+	else \
+		$(COMPOSE) -f $(COMPOSE_FILE) up -d $(SERVICE); \
+	fi
 	@echo "$(GREEN)[SUCCESS]$(NC) 服务 $(SERVICE) 启动完成"
 
 .PHONY: service-stop
@@ -214,10 +295,19 @@ service-stop: check-docker ## 停止单个服务 (用法: make service-stop SERV
 	@if [ -z "$(SERVICE)" ]; then \
 		echo "$(RED)[ERROR]$(NC) 请指定服务名称"; \
 		echo "用法: make service-stop SERVICE=服务名"; \
+		echo "提示: 使用 make list 查看所有可用服务"; \
 		exit 1; \
 	fi
 	@echo "$(BLUE)[INFO]$(NC) 停止服务: $(SERVICE)"
-	@$(COMPOSE) -f $(COMPOSE_FILE) stop $(SERVICE)
+	@if [ "$(SERVICE)" = "clash" ]; then \
+		if [ ! -f "$(CLASH_FILE)" ]; then \
+			echo "$(RED)[ERROR]$(NC) 未找到 $(CLASH_FILE) 文件"; \
+			exit 1; \
+		fi; \
+		$(COMPOSE) -f $(COMPOSE_FILE) -f $(CLASH_FILE) stop $(SERVICE); \
+	else \
+		$(COMPOSE) -f $(COMPOSE_FILE) stop $(SERVICE); \
+	fi
 	@echo "$(GREEN)[SUCCESS]$(NC) 服务 $(SERVICE) 已停止"
 
 .PHONY: service-restart
@@ -225,36 +315,134 @@ service-restart: check-docker ## 重启单个服务 (用法: make service-restar
 	@if [ -z "$(SERVICE)" ]; then \
 		echo "$(RED)[ERROR]$(NC) 请指定服务名称"; \
 		echo "用法: make service-restart SERVICE=服务名"; \
+		echo "提示: 使用 make list 查看所有可用服务"; \
 		exit 1; \
 	fi
 	@echo "$(BLUE)[INFO]$(NC) 重启服务: $(SERVICE)"
-	@$(COMPOSE) -f $(COMPOSE_FILE) restart $(SERVICE)
+	@if [ "$(SERVICE)" = "clash" ]; then \
+		if [ ! -f "$(CLASH_FILE)" ]; then \
+			echo "$(RED)[ERROR]$(NC) 未找到 $(CLASH_FILE) 文件"; \
+			exit 1; \
+		fi; \
+		$(COMPOSE) -f $(COMPOSE_FILE) -f $(CLASH_FILE) restart $(SERVICE); \
+	else \
+		$(COMPOSE) -f $(COMPOSE_FILE) restart $(SERVICE); \
+	fi
 	@echo "$(GREEN)[SUCCESS]$(NC) 服务 $(SERVICE) 重启完成"
+
+.PHONY: service-pull
+service-pull: check-docker ## 拉取单个服务的最新镜像 (用法: make service-pull SERVICE=服务名)
+	@if [ -z "$(SERVICE)" ]; then \
+		echo "$(RED)[ERROR]$(NC) 请指定服务名称"; \
+		echo "用法: make service-pull SERVICE=服务名"; \
+		echo "提示: 使用 make list 查看所有可用服务"; \
+		exit 1; \
+	fi
+	@echo "$(BLUE)[INFO]$(NC) 拉取服务镜像: $(SERVICE)"
+	@if [ "$(SERVICE)" = "clash" ]; then \
+		if [ ! -f "$(CLASH_FILE)" ]; then \
+			echo "$(RED)[ERROR]$(NC) 未找到 $(CLASH_FILE) 文件"; \
+			exit 1; \
+		fi; \
+		$(COMPOSE) -f $(COMPOSE_FILE) -f $(CLASH_FILE) pull $(SERVICE); \
+	else \
+		$(COMPOSE) -f $(COMPOSE_FILE) pull $(SERVICE); \
+	fi
+	@echo "$(GREEN)[SUCCESS]$(NC) 服务 $(SERVICE) 镜像拉取完成"
+
+.PHONY: service-update
+service-update: check-docker ## 更新单个服务（拉取镜像并重启）(用法: make service-update SERVICE=服务名)
+	@if [ -z "$(SERVICE)" ]; then \
+		echo "$(RED)[ERROR]$(NC) 请指定服务名称"; \
+		echo "用法: make service-update SERVICE=服务名"; \
+		echo "提示: 使用 make list 查看所有可用服务"; \
+		exit 1; \
+	fi
+	@echo "$(BLUE)[INFO]$(NC) 更新服务: $(SERVICE)"
+	@echo "$(BLUE)[INFO]$(NC) 步骤 1/2: 拉取最新镜像..."
+	@if [ "$(SERVICE)" = "clash" ]; then \
+		if [ ! -f "$(CLASH_FILE)" ]; then \
+			echo "$(RED)[ERROR]$(NC) 未找到 $(CLASH_FILE) 文件"; \
+			exit 1; \
+		fi; \
+		$(COMPOSE) -f $(COMPOSE_FILE) -f $(CLASH_FILE) pull $(SERVICE); \
+		echo "$(BLUE)[INFO]$(NC) 步骤 2/2: 重新创建并启动容器..."; \
+		$(COMPOSE) -f $(COMPOSE_FILE) -f $(CLASH_FILE) up -d $(SERVICE); \
+	else \
+		$(COMPOSE) -f $(COMPOSE_FILE) pull $(SERVICE); \
+		echo "$(BLUE)[INFO]$(NC) 步骤 2/2: 重新创建并启动容器..."; \
+		$(COMPOSE) -f $(COMPOSE_FILE) up -d $(SERVICE); \
+	fi
+	@echo "$(GREEN)[SUCCESS]$(NC) 服务 $(SERVICE) 更新完成"
 
 .PHONY: service-logs
 service-logs: check-docker ## 查看单个服务日志 (用法: make service-logs SERVICE=服务名)
 	@if [ -z "$(SERVICE)" ]; then \
 		echo "$(RED)[ERROR]$(NC) 请指定服务名称"; \
 		echo "用法: make service-logs SERVICE=服务名"; \
+		echo "提示: 使用 make list 查看所有可用服务"; \
 		exit 1; \
 	fi
 	@echo "$(BLUE)[INFO]$(NC) 查看服务日志: $(SERVICE)（Ctrl+C 退出）"
-	@$(COMPOSE) -f $(COMPOSE_FILE) logs -f $(SERVICE)
+	@if [ "$(SERVICE)" = "clash" ]; then \
+		if [ ! -f "$(CLASH_FILE)" ]; then \
+			echo "$(RED)[ERROR]$(NC) 未找到 $(CLASH_FILE) 文件"; \
+			exit 1; \
+		fi; \
+		$(COMPOSE) -f $(COMPOSE_FILE) -f $(CLASH_FILE) logs -f $(SERVICE); \
+	else \
+		$(COMPOSE) -f $(COMPOSE_FILE) logs -f $(SERVICE); \
+	fi
+
+.PHONY: service-status
+service-status: check-docker ## 查看单个服务状态 (用法: make service-status SERVICE=服务名)
+	@if [ -z "$(SERVICE)" ]; then \
+		echo "$(RED)[ERROR]$(NC) 请指定服务名称"; \
+		echo "用法: make service-status SERVICE=服务名"; \
+		echo "提示: 使用 make list 查看所有可用服务"; \
+		exit 1; \
+	fi
+	@echo "$(BLUE)[INFO]$(NC) 查看服务状态: $(SERVICE)"
+	@if [ "$(SERVICE)" = "clash" ]; then \
+		if [ ! -f "$(CLASH_FILE)" ]; then \
+			echo "$(RED)[ERROR]$(NC) 未找到 $(CLASH_FILE) 文件"; \
+			exit 1; \
+		fi; \
+		$(COMPOSE) -f $(COMPOSE_FILE) -f $(CLASH_FILE) ps $(SERVICE); \
+	else \
+		$(COMPOSE) -f $(COMPOSE_FILE) ps $(SERVICE); \
+	fi
 
 .PHONY: service-exec
 service-exec: check-docker ## 进入服务容器 (用法: make service-exec SERVICE=服务名 [CMD=命令])
 	@if [ -z "$(SERVICE)" ]; then \
 		echo "$(RED)[ERROR]$(NC) 请指定服务名称"; \
 		echo "用法: make service-exec SERVICE=服务名 [CMD=命令]"; \
+		echo "提示: 使用 make list 查看所有可用服务"; \
 		exit 1; \
 	fi
-	@if [ -z "$(CMD)" ]; then \
-		echo "$(BLUE)[INFO]$(NC) 进入服务容器: $(SERVICE)"; \
-		$(COMPOSE) -f $(COMPOSE_FILE) exec $(SERVICE) /bin/sh || \
-		$(COMPOSE) -f $(COMPOSE_FILE) exec $(SERVICE) /bin/bash; \
+	@if [ "$(SERVICE)" = "clash" ]; then \
+		if [ ! -f "$(CLASH_FILE)" ]; then \
+			echo "$(RED)[ERROR]$(NC) 未找到 $(CLASH_FILE) 文件"; \
+			exit 1; \
+		fi; \
+		if [ -z "$(CMD)" ]; then \
+			echo "$(BLUE)[INFO]$(NC) 进入服务容器: $(SERVICE)"; \
+			$(COMPOSE) -f $(COMPOSE_FILE) -f $(CLASH_FILE) exec $(SERVICE) /bin/sh || \
+			$(COMPOSE) -f $(COMPOSE_FILE) -f $(CLASH_FILE) exec $(SERVICE) /bin/bash; \
+		else \
+			echo "$(BLUE)[INFO]$(NC) 在服务 $(SERVICE) 中执行命令: $(CMD)"; \
+			$(COMPOSE) -f $(COMPOSE_FILE) -f $(CLASH_FILE) exec $(SERVICE) $(CMD); \
+		fi; \
 	else \
-		echo "$(BLUE)[INFO]$(NC) 在服务 $(SERVICE) 中执行命令: $(CMD)"; \
-		$(COMPOSE) -f $(COMPOSE_FILE) exec $(SERVICE) $(CMD); \
+		if [ -z "$(CMD)" ]; then \
+			echo "$(BLUE)[INFO]$(NC) 进入服务容器: $(SERVICE)"; \
+			$(COMPOSE) -f $(COMPOSE_FILE) exec $(SERVICE) /bin/sh || \
+			$(COMPOSE) -f $(COMPOSE_FILE) exec $(SERVICE) /bin/bash; \
+		else \
+			echo "$(BLUE)[INFO]$(NC) 在服务 $(SERVICE) 中执行命令: $(CMD)"; \
+			$(COMPOSE) -f $(COMPOSE_FILE) exec $(SERVICE) $(CMD); \
+		fi; \
 	fi
 
 ##@ 帮助信息
@@ -269,14 +457,21 @@ help: ## 显示此帮助信息
 	@awk 'BEGIN {FS = ":.*##"; printf ""} /^[a-zA-Z_-]+:.*?##/ { printf "  $(GREEN)%-18s$(NC) %s\n", $$1, $$2 } /^##@/ { printf "\n$(YELLOW)%s$(NC)\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 	@echo ""
 	@echo "$(YELLOW)单个服务管理示例:$(NC)"
-	@echo "  make service-start SERVICE=qbittorrent"
-	@echo "  make service-stop SERVICE=moviepilot"
-	@echo "  make service-restart SERVICE=navidrome"
-	@echo "  make service-logs SERVICE=sqmusic_web"
-	@echo "  make service-exec SERVICE=mysql"
-	@echo "  make service-exec SERVICE=mysql CMD=bash"
+	@echo "  make service-start SERVICE=qbittorrent    # 启动单个服务"
+	@echo "  make service-stop SERVICE=moviepilot      # 停止单个服务"
+	@echo "  make service-restart SERVICE=navidrome    # 重启单个服务"
+	@echo "  make service-pull SERVICE=jellyfin        # 拉取单个服务镜像"
+	@echo "  make service-update SERVICE=qbittorrent   # 更新单个服务（拉取镜像+重启）"
+	@echo "  make service-status SERVICE=mysql         # 查看单个服务状态"
+	@echo "  make service-logs SERVICE=sqmusic_web     # 查看单个服务日志"
+	@echo "  make service-exec SERVICE=mysql           # 进入服务容器"
+	@echo "  make service-exec SERVICE=mysql CMD=bash  # 在容器中执行命令"
+	@echo ""
+	@echo "$(YELLOW)Clash 服务管理:$(NC)"
+	@echo "  make service-start SERVICE=clash          # 启动 Clash 服务"
+	@echo "  make service-update SERVICE=clash         # 更新 Clash 服务"
 	@echo ""
 
 .PHONY: version
 version: ## 显示版本信息
-	@echo "NAS Docker Compose Makefile v1.0.0"
+	@echo "NAS Docker Compose Makefile v1.1.0"
