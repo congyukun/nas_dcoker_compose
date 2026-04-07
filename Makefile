@@ -153,62 +153,144 @@ logs-clash: check-docker ## 查看 Clash 服务日志
 PROXY_HOST ?= 127.0.0.1
 PROXY_HTTP_PORT ?= 7890
 PROXY_SOCKS_PORT ?= 7891
-TEST_URL ?= https://www.google.com
+CLASH_API_PORT ?= 1123
+
+.PHONY: clash-refresh
+clash-refresh: ## 刷新 Clash 代理订阅
+	@echo "$(BLUE)[INFO]$(NC) 刷新 Clash 代理订阅..."
+	@if ! nc -z $(PROXY_HOST) $(CLASH_API_PORT) 2>/dev/null; then \
+		echo "$(RED)[ERROR]$(NC) Clash API 端口 $(CLASH_API_PORT) 未开放，请确认 Clash 服务已启动"; \
+		exit 1; \
+	fi
+	@echo "$(BLUE)[INFO]$(NC) 正在更新订阅: MyProvider"
+	@RESULT=$$(curl -s -X PUT "http://$(PROXY_HOST):$(CLASH_API_PORT)/providers/proxies/MyProvider" 2>/dev/null); \
+	if [ -z "$$RESULT" ] || [ "$$RESULT" = "{}" ]; then \
+		echo "$(GREEN)[SUCCESS]$(NC) 订阅刷新成功"; \
+	else \
+		echo "$(YELLOW)[WARNING]$(NC) 订阅刷新返回: $$RESULT"; \
+	fi
+	@echo "$(BLUE)[INFO]$(NC) 等待节点健康检查..."
+	@sleep 2
+	@echo "$(BLUE)[INFO]$(NC) 获取可用节点数量..."
+	@PROXIES=$$(curl -s "http://$(PROXY_HOST):$(CLASH_API_PORT)/providers/proxies/MyProvider" 2>/dev/null | grep -o '"name"' | wc -l); \
+	echo "$(GREEN)[INFO]$(NC) 当前可用节点数: $$PROXIES"
+
+.PHONY: clash-nodes
+clash-nodes: ## 查看 Clash 代理节点列表
+	@echo "$(BLUE)[INFO]$(NC) 获取 Clash 代理节点..."
+	@if ! nc -z $(PROXY_HOST) $(CLASH_API_PORT) 2>/dev/null; then \
+		echo "$(RED)[ERROR]$(NC) Clash API 端口 $(CLASH_API_PORT) 未开放"; \
+		exit 1; \
+	fi
+	@curl -s "http://$(PROXY_HOST):$(CLASH_API_PORT)/proxies" 2>/dev/null | \
+		python3 -c "import sys,json; d=json.load(sys.stdin); proxies=d.get('proxies',{}); \
+		print('可用代理组:'); \
+		[print(f'  - {k}') for k in proxies.keys() if proxies[k].get('type') in ['Selector','URLTest','Fallback']]" 2>/dev/null || \
+		echo "$(YELLOW)[INFO]$(NC) 请访问 http://$(PROXY_HOST):$(CLASH_API_PORT)/ui 查看详细节点信息"
+
+.PHONY: clash-switch
+clash-switch: ## 切换 Clash 代理节点 (用法: make clash-switch NODE=节点名)
+	@if [ -z "$(NODE)" ]; then \
+		echo "$(RED)[ERROR]$(NC) 请指定节点名称"; \
+		echo "用法: make clash-switch NODE=节点名"; \
+		echo "提示: 使用 make clash-nodes 查看可用节点"; \
+		exit 1; \
+	fi
+	@echo "$(BLUE)[INFO]$(NC) 切换代理节点到: $(NODE)"
+	@RESULT=$$(curl -s -X PUT -H "Content-Type: application/json" \
+		-d '{"name":"$(NODE)"}' \
+		"http://$(PROXY_HOST):$(CLASH_API_PORT)/proxies/🚀 节点选择" 2>/dev/null); \
+	if [ -z "$$RESULT" ] || [ "$$RESULT" = "{}" ]; then \
+		echo "$(GREEN)[SUCCESS]$(NC) 节点切换成功"; \
+	else \
+		echo "$(RED)[FAILED]$(NC) 节点切换失败: $$RESULT"; \
+	fi
+
+.PHONY: clash-healthcheck
+clash-healthcheck: ## 触发 Clash 节点健康检查
+	@echo "$(BLUE)[INFO]$(NC) 触发节点健康检查..."
+	@curl -s -X GET "http://$(PROXY_HOST):$(CLASH_API_PORT)/providers/proxies/MyProvider/healthcheck" 2>/dev/null
+	@echo "$(GREEN)[SUCCESS]$(NC) 健康检查已触发，请稍后查看节点延迟"
 
 .PHONY: test-proxy
 test-proxy: ## 测试代理连通性 (用法: make test-proxy [PROXY_HOST=IP] [PROXY_HTTP_PORT=端口])
 	@echo "$(BLUE)[INFO]$(NC) 测试代理连通性..."
-	@echo "$(BLUE)[INFO]$(NC) 代理地址: $(PROXY_HOST):$(PROXY_HTTP_PORT)"
-	@echo "$(BLUE)[INFO]$(NC) 测试 URL: $(TEST_URL)"
+	@echo "$(BLUE)[INFO]$(NC) 代理地址: $(PROXY_HOST):$(PROXY_HTTP_PORT) (HTTP), $(PROXY_HOST):$(PROXY_SOCKS_PORT) (SOCKS5)"
 	@echo ""
-	@echo "$(YELLOW)--- HTTP 代理测试 ---$(NC)"
-	@if curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) $(TEST_URL) 2>/dev/null | grep -q "200\|301\|302"; then \
-		echo "$(GREEN)[SUCCESS]$(NC) HTTP 代理连接成功"; \
-		echo "$(BLUE)[INFO]$(NC) 响应时间: $$(curl -s -o /dev/null -w "%{time_total}s" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) $(TEST_URL) 2>/dev/null)"; \
+	@echo "$(YELLOW)=== 1. 代理端口检测 ===$(NC)"
+	@if nc -z $(PROXY_HOST) $(PROXY_HTTP_PORT) 2>/dev/null; then \
+		echo "$(GREEN)[OK]$(NC) HTTP 代理端口 $(PROXY_HTTP_PORT) 已开放"; \
 	else \
-		echo "$(RED)[FAILED]$(NC) HTTP 代理连接失败"; \
+		echo "$(RED)[FAILED]$(NC) HTTP 代理端口 $(PROXY_HTTP_PORT) 未开放"; \
+	fi
+	@if nc -z $(PROXY_HOST) $(PROXY_SOCKS_PORT) 2>/dev/null; then \
+		echo "$(GREEN)[OK]$(NC) SOCKS5 代理端口 $(PROXY_SOCKS_PORT) 已开放"; \
+	else \
+		echo "$(RED)[FAILED]$(NC) SOCKS5 代理端口 $(PROXY_SOCKS_PORT) 未开放"; \
 	fi
 	@echo ""
-	@echo "$(YELLOW)--- SOCKS5 代理测试 ---$(NC)"
-	@if curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 -x socks5://$(PROXY_HOST):$(PROXY_SOCKS_PORT) $(TEST_URL) 2>/dev/null | grep -q "200\|301\|302"; then \
-		echo "$(GREEN)[SUCCESS]$(NC) SOCKS5 代理连接成功"; \
-		echo "$(BLUE)[INFO]$(NC) 响应时间: $$(curl -s -o /dev/null -w "%{time_total}s" --connect-timeout 10 -x socks5://$(PROXY_HOST):$(PROXY_SOCKS_PORT) $(TEST_URL) 2>/dev/null)"; \
+	@echo "$(YELLOW)=== 2. 代理基本功能测试（国内网站）===$(NC)"
+	@HTTP_CODE=$$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 5 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://www.baidu.com 2>/dev/null); \
+	if [ "$$HTTP_CODE" = "200" ]; then \
+		echo "$(GREEN)[SUCCESS]$(NC) HTTP 代理正常工作 (baidu.com -> HTTP $$HTTP_CODE)"; \
 	else \
-		echo "$(RED)[FAILED]$(NC) SOCKS5 代理连接失败"; \
+		echo "$(RED)[FAILED]$(NC) HTTP 代理无法访问 baidu.com (HTTP $$HTTP_CODE)"; \
 	fi
+	@SOCKS_CODE=$$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 5 -x socks5://$(PROXY_HOST):$(PROXY_SOCKS_PORT) https://www.baidu.com 2>/dev/null); \
+	if [ "$$SOCKS_CODE" = "200" ]; then \
+		echo "$(GREEN)[SUCCESS]$(NC) SOCKS5 代理正常工作 (baidu.com -> HTTP $$SOCKS_CODE)"; \
+	else \
+		echo "$(RED)[FAILED]$(NC) SOCKS5 代理无法访问 baidu.com (HTTP $$SOCKS_CODE)"; \
+	fi
+	@echo ""
+	@echo "$(YELLOW)=== 3. 代理翻墙功能测试（国外网站）===$(NC)"
+	@GOOGLE_CODE=$$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://www.google.com 2>/dev/null); \
+	if echo "$$GOOGLE_CODE" | grep -qE "^(200|301|302)$$"; then \
+		echo "$(GREEN)[SUCCESS]$(NC) Google 访问成功 (HTTP $$GOOGLE_CODE)"; \
+	else \
+		echo "$(YELLOW)[WARNING]$(NC) Google 访问失败 (HTTP $$GOOGLE_CODE) - 请检查代理节点配置"; \
+	fi
+	@GITHUB_CODE=$$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://github.com 2>/dev/null); \
+	if echo "$$GITHUB_CODE" | grep -qE "^(200|301|302)$$"; then \
+		echo "$(GREEN)[SUCCESS]$(NC) GitHub 访问成功 (HTTP $$GITHUB_CODE)"; \
+	else \
+		echo "$(YELLOW)[WARNING]$(NC) GitHub 访问失败 (HTTP $$GITHUB_CODE) - 请检查代理节点配置"; \
+	fi
+	@echo ""
+	@echo "$(BLUE)[INFO]$(NC) 提示: 如果国内网站正常但国外网站失败，请检查 Clash 代理节点是否可用"
 
 .PHONY: test-proxy-detail
-test-proxy-detail: ## 详细测试代理连通性（显示更多信息）
+test-proxy-detail: ## 详细测试代理连通性（显示响应时间）
 	@echo "$(BLUE)[INFO]$(NC) 详细代理测试..."
 	@echo "$(BLUE)[INFO]$(NC) 代理地址: $(PROXY_HOST):$(PROXY_HTTP_PORT)"
 	@echo ""
-	@echo "$(YELLOW)--- 测试国内网站 (baidu.com) ---$(NC)"
-	@curl -s -o /dev/null -w "HTTP Code: %{http_code}, Time: %{time_total}s\n" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://www.baidu.com 2>/dev/null || echo "$(RED)[FAILED]$(NC) 连接失败"
+	@echo "$(YELLOW)--- 测试国内网站 ---$(NC)"
+	@echo -n "百度: "; curl -s -o /dev/null -w "HTTP %{http_code}, 耗时 %{time_total}s\n" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://www.baidu.com 2>/dev/null || echo "连接失败"
+	@echo -n "淘宝: "; curl -s -o /dev/null -w "HTTP %{http_code}, 耗时 %{time_total}s\n" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://www.taobao.com 2>/dev/null || echo "连接失败"
 	@echo ""
-	@echo "$(YELLOW)--- 测试 Google ---$(NC)"
-	@curl -s -o /dev/null -w "HTTP Code: %{http_code}, Time: %{time_total}s\n" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://www.google.com 2>/dev/null || echo "$(RED)[FAILED]$(NC) 连接失败"
-	@echo ""
-	@echo "$(YELLOW)--- 测试 GitHub ---$(NC)"
-	@curl -s -o /dev/null -w "HTTP Code: %{http_code}, Time: %{time_total}s\n" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://github.com 2>/dev/null || echo "$(RED)[FAILED]$(NC) 连接失败"
-	@echo ""
-	@echo "$(YELLOW)--- 测试 YouTube ---$(NC)"
-	@curl -s -o /dev/null -w "HTTP Code: %{http_code}, Time: %{time_total}s\n" --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://www.youtube.com 2>/dev/null || echo "$(RED)[FAILED]$(NC) 连接失败"
+	@echo "$(YELLOW)--- 测试国外网站 ---$(NC)"
+	@echo -n "Google: "; curl -s -o /dev/null -w "HTTP %{http_code}, 耗时 %{time_total}s\n" --connect-timeout 15 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://www.google.com 2>/dev/null || echo "连接失败"
+	@echo -n "GitHub: "; curl -s -o /dev/null -w "HTTP %{http_code}, 耗时 %{time_total}s\n" --connect-timeout 15 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://github.com 2>/dev/null || echo "连接失败"
+	@echo -n "YouTube: "; curl -s -o /dev/null -w "HTTP %{http_code}, 耗时 %{time_total}s\n" --connect-timeout 15 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://www.youtube.com 2>/dev/null || echo "连接失败"
+	@echo -n "Twitter: "; curl -s -o /dev/null -w "HTTP %{http_code}, 耗时 %{time_total}s\n" --connect-timeout 15 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://twitter.com 2>/dev/null || echo "连接失败"
 	@echo ""
 	@echo "$(YELLOW)--- 获取代理出口 IP ---$(NC)"
-	@echo "出口 IP: $$(curl -s --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://api.ipify.org 2>/dev/null || echo '获取失败')"
+	@echo -n "出口 IP: "; curl -s --connect-timeout 10 -x http://$(PROXY_HOST):$(PROXY_HTTP_PORT) https://api.ipify.org 2>/dev/null || echo "获取失败"
+	@echo ""
 
 .PHONY: test-direct
 test-direct: ## 测试直连网络（不使用代理）
 	@echo "$(BLUE)[INFO]$(NC) 测试直连网络..."
 	@echo ""
-	@echo "$(YELLOW)--- 测试国内网站 (baidu.com) ---$(NC)"
-	@curl -s -o /dev/null -w "HTTP Code: %{http_code}, Time: %{time_total}s\n" --connect-timeout 10 https://www.baidu.com 2>/dev/null || echo "$(RED)[FAILED]$(NC) 连接失败"
+	@echo "$(YELLOW)--- 测试国内网站 ---$(NC)"
+	@echo -n "百度: "; curl -s -o /dev/null -w "HTTP %{http_code}, 耗时 %{time_total}s\n" --connect-timeout 10 https://www.baidu.com 2>/dev/null || echo "连接失败"
 	@echo ""
-	@echo "$(YELLOW)--- 测试 Google ---$(NC)"
-	@curl -s -o /dev/null -w "HTTP Code: %{http_code}, Time: %{time_total}s\n" --connect-timeout 10 https://www.google.com 2>/dev/null || echo "$(RED)[FAILED]$(NC) 连接失败"
+	@echo "$(YELLOW)--- 测试国外网站（直连）---$(NC)"
+	@echo -n "Google: "; curl -s -o /dev/null -w "HTTP %{http_code}, 耗时 %{time_total}s\n" --connect-timeout 10 https://www.google.com 2>/dev/null || echo "连接失败"
 	@echo ""
 	@echo "$(YELLOW)--- 获取本机出口 IP ---$(NC)"
-	@echo "出口 IP: $$(curl -s --connect-timeout 10 https://api.ipify.org 2>/dev/null || echo '获取失败')"
+	@echo -n "出口 IP: "; curl -s --connect-timeout 10 https://api.ipify.org 2>/dev/null || echo "获取失败"
+	@echo ""
 
 ##@ 维护操作
 
