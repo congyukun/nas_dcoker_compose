@@ -236,7 +236,7 @@ test-proxy: ## 测试代理连通性 (用法: make test-proxy [PROXY_HOST=IP] [P
 	else \
 		echo "$(RED)[FAILED]$(NC) HTTP 代理无法访问 baidu.com (HTTP $$HTTP_CODE)"; \
 	fi
-	@SOCKS_CODE=$$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 5 -x socks5://$(PROXY_HOST):$(PROXY_SOCKS_PORT) https://www.baidu.com 2>/dev/null); \
+	@SOCKS_CODE=$$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 5 -x socks5h://$(PROXY_HOST):$(PROXY_SOCKS_PORT) https://www.baidu.com 2>/dev/null); \
 	if [ "$$SOCKS_CODE" = "200" ]; then \
 		echo "$(GREEN)[SUCCESS]$(NC) SOCKS5 代理正常工作 (baidu.com -> HTTP $$SOCKS_CODE)"; \
 	else \
