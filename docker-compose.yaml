@@ -666,40 +666,7 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  ################################### 四、音乐服务（XiaoMusic + PlaylistDL）###################################
-  # 18. XiaoMusic（小爱同学本地音乐服务）
-  xiaomusic:
-    image: hanxi/xiaomusic:latest
-    container_name: xiaomusic
-    hostname: xiaomusic
-    restart: always
-    ports:
-      - "${XIAOMUSIC_PORT}:8090"
-    environment:
-      - XIAOMUSIC_PUBLIC_PORT=${XIAOMUSIC_PORT}
-      - TZ=${TZ}
-    volumes:
-      - ${MUSIC_PATH}:/app/music:ro
-      - ./services/xiaomusic_conf:/app/conf
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD-SHELL", "nc -z localhost 8090 || exit 1"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-        reservations:
-          memory: 128M
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+  ################################### 四、音乐服务（ PlaylistDL）###################################
 
   # 19. PlaylistDL（音乐歌单批量下载工具）
   playlistdl:
